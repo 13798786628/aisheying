@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>WedScene · 客户登录</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+    html, body { min-height: 100vh; }
+    body {
+      font-family: 'Space Grotesk', 'Noto Sans SC', system-ui, sans-serif;
+      color: #1c1917;
+      background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(232,180,168,0.55), transparent 60%),
+        radial-gradient(900px 500px at -10% 110%, rgba(244,212,197,0.6), transparent 55%),
+        linear-gradient(180deg, #fff4ed 0%, #f5e6d8 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 20px 24px;
+    }
+    .font-cn { font-family: 'Noto Sans SC', system-ui, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .serif-em { font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 400; color: rgba(28,25,23,0.7); }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 36px;
+      color: #1c1917;
+      text-decoration: none;
+    }
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(145deg, #3a2722, #5d3d33);
+      display: grid;
+      place-items: center;
+      color: #fff7ed;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 0.02em;
+      overflow: hidden;
+    }
+    .brand-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .brand-name {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+    .brand-name strong {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .brand-name span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: rgba(28,25,23,0.5);
+      margin-top: 2px;
+    }
+
+    main {
+      width: 100%;
+      max-width: 440px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card {
+      background: rgba(255, 250, 245, 0.85);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border: 1px solid rgba(58, 39, 34, 0.08);
+      border-radius: 24px;
+      padding: 36px 32px 32px;
+      box-shadow: 0 32px 80px -32px rgba(58, 39, 34, 0.32), 0 8px 24px -16px rgba(58, 39, 34, 0.15);
+    }
+
+    .card-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .card-eyebrow {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(58, 39, 34, 0.08);
+      color: rgba(58, 39, 34, 0.7);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      margin-bottom: 14px;
+    }
+    .card-title {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #1c1917;
+      margin-bottom: 8px;
+    }
+    .card-title em { display: inline-block; }
+    .card-sub {
+      font-size: 13px;
+      color: rgba(28, 25, 23, 0.6);
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(28, 25, 23, 0.7);
+      margin-bottom: 8px;
+      letter-spacing: 0.01em;
+    }
+    .form-input {
+      width: 100%;
+      padding: 13px 16px;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(58, 39, 34, 0.12);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      color: #1c1917;
+      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+    }
+    .form-input::placeholder {
+      color: rgba(28, 25, 23, 0.32);
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: rgba(58, 39, 34, 0.5);
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(58, 39, 34, 0.08);
+    }
+    .form-hint {
+      font-size: 11px;
+      color: rgba(28, 25, 23, 0.5);
+      margin-top: 6px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px 16px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #3a2722, #5d3d33);
+      color: #fff7ed;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+      margin-top: 8px;
+    }
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px -10px rgba(58, 39, 34, 0.4);
+      filter: brightness(1.06);
+    }
+    .submit-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    .submit-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .notice {
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin-bottom: 16px;
+      display: none;
+      line-height: 1.5;
+    }
+    .notice.error {
+      background: rgba(180, 60, 60, 0.1);
+      color: #7f1d1d;
+      border: 1px solid rgba(180, 60, 60, 0.2);
+    }
+    .notice.success {
+      background: rgba(34, 100, 70, 0.1);
+      color: #14532d;
+      border: 1px solid rgba(34, 100, 70, 0.2);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0 20px;
+      color: rgba(28, 25, 23, 0.4);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(58, 39, 34, 0.1);
+    }
+
+    .help-section {
+      background: rgba(58, 39, 34, 0.04);
+      border: 1px solid rgba(58, 39, 34, 0.08);
+      border-radius: 14px;
+      padding: 16px 18px;
+      text-align: center;
+    }
+    .help-section p {
+      font-size: 13px;
+      color: rgba(28, 25, 23, 0.7);
+      margin-bottom: 6px;
+    }
+    .help-section a {
+      color: #3a2722;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(58, 39, 34, 0.4);
+      padding-bottom: 1px;
+    }
+    .help-section a:hover {
+      border-bottom-style: solid;
+    }
+
+    .tab-row {
+      display: flex;
+      gap: 4px;
+      background: rgba(58, 39, 34, 0.06);
+      padding: 4px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px 12px;
+      background: transparent;
+      border: none;
+      border-radius: 9px;
+      color: rgba(28, 25, 23, 0.55);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+    }
+    .tab-btn.active {
+      background: #ffffff;
+      color: #1c1917;
+      box-shadow: 0 2px 6px rgba(58, 39, 34, 0.08);
+    }
+    .pane { display: none; }
+    .pane.active { display: block; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 20px;
+      color: rgba(28, 25, 23, 0.55);
+      font-size: 12px;
+      text-decoration: none;
+      align-self: center;
+    }
+    .back-link:hover { color: #1c1917; }
+
+    .recharge-overlay {
+      position: fixed; inset: 0;
+      background: rgba(28, 25, 23, 0.55);
+      backdrop-filter: blur(6px);
+      display: grid; place-items: center;
+      z-index: 100; padding: 20px;
+    }
+    .recharge-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 28px 26px 24px;
+      max-width: 380px; width: 100%;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      box-shadow: 0 32px 80px -20px rgba(0,0,0,0.4);
+      position: relative;
+    }
+    .recharge-close {
+      position: absolute; top: 12px; right: 14px;
+      width: 30px; height: 30px;
+      border: none; background: rgba(58, 39, 34, 0.06);
+      border-radius: 50%; cursor: pointer;
+      font-size: 20px; line-height: 1; color: rgba(28, 25, 23, 0.6);
+    }
+    .recharge-close:hover { background: rgba(58, 39, 34, 0.12); color: #1c1917; }
+    .support-contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .support-contact {
+      text-align: center;
+      border: 1px solid rgba(58, 39, 34, 0.1);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,247,237,0.66));
+      padding: 12px 12px 14px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.76);
+    }
+    .support-contact-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+      margin-bottom: 9px;
+      padding: 0.24rem 0.62rem;
+      border-radius: 999px;
+      background: rgba(58,39,34,0.07);
+      color: rgba(58,39,34,0.72);
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .support-contact img {
+      width: min(168px, 100%);
+      height: auto;
+      aspect-ratio: 1;
+      object-fit: contain;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid rgba(58,39,34,0.12);
+      box-shadow: 0 14px 28px -24px rgba(58,39,34,0.55);
+      margin: 0 auto 10px;
+    }
+    .plan-tile {
+      background: linear-gradient(145deg, #fff7ed, #f5e6d8);
+      border: 1px solid rgba(58, 39, 34, 0.08);
+      border-radius: 12px;
+      padding: 16px 12px 14px;
+      text-align: center;
+      display: flex; flex-direction: column; justify-content: center; gap: 4px;
+      min-height: 140px;
+      position: relative;
+    }
+    .plan-tile.is-featured {
+      background: linear-gradient(145deg, #fff4e8, #ead0bf);
+      border-color: rgba(139, 63, 50, 0.34);
+      box-shadow: 0 14px 30px -22px rgba(139, 63, 50, 0.8);
+    }
+    .plan-badge {
+      position: absolute; top: 8px; right: 8px;
+      padding: 2px 5px; border-radius: 999px;
+      background: #8b3f32; color: #fffaf3;
+      font-size: 9px; font-weight: 700;
+    }
+    .plan-tile strong {
+      font-size: 17px; font-weight: 700; color: #3a2722;
+    }
+    .plan-tile span {
+      font-size: 11px; color: rgba(28, 25, 23, 0.6);
+    }
+    .plan-tile .plan-name {
+      font-size: 13px; color: #3a2722; font-weight: 700;
+    }
+    .plan-tile em {
+      font-style: normal; font-size: 10px; color: rgba(124, 63, 53, 0.86); font-weight: 700; line-height: 1.35;
+    }
+    .plan-tile .plan-image-unit {
+      color: #8b3f32; font-size: 11px; font-weight: 900;
+    }
+    .plan-tile .plan-desc {
+      font-size: 10px; color: rgba(28, 25, 23, 0.52); line-height: 1.45;
+    }
+
+    .agree-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 12px;
+      color: rgba(28, 25, 23, 0.65);
+      margin-bottom: 16px;
+      line-height: 1.6;
+      cursor: pointer;
+      user-select: none;
+    }
+    .agree-row input[type="checkbox"] {
+      flex-shrink: 0;
+      width: 14px; height: 14px;
+      margin-top: 2px;
+      accent-color: #3a2722;
+      cursor: pointer;
+    }
+    .agree-row a {
+      color: #3a2722;
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(58, 39, 34, 0.4);
+    }
+    .agree-row a:hover { border-bottom-style: solid; }
+
+    footer {
+      padding-top: 28px;
+      font-size: 11px;
+      color: rgba(28, 25, 23, 0.4);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.08em;
+    }
+
+    @media (max-width: 480px) {
+      body { min-height: 100dvh; padding: 20px 14px calc(18px + env(safe-area-inset-bottom)); }
+      main { justify-content: flex-start; }
+      .card { padding: 26px 18px 22px; border-radius: 18px; }
+      .card-title { font-size: 22px; }
+      .card-sub { font-size: 12px; }
+      .brand { width: 100%; max-width: 440px; margin-bottom: 22px; }
+      .form-input,
+      .submit-btn,
+      .tab-btn { min-height: 44px; }
+      .recharge-overlay { padding: 10px; align-items: end; }
+      .recharge-card { max-height: calc(100dvh - 20px); border-radius: 18px 18px 0 0; padding: 24px 16px 18px; }
+      .recharge-card > div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+      .support-contact-grid { grid-template-columns: 1fr; }
+      .support-contact img { width: min(190px, 76vw); }
+      .plan-tile { min-height: auto; padding: 14px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="brand" href="index.html" aria-label="返回首页" data-home-link>
+    <span class="brand-logo" data-brand-mark>W</span>
+    <span class="brand-name">
+      <strong class="font-cn" data-brand-name>WedScene</strong>
+      <span data-brand-tagline>WEDSCENE · AI</span>
+    </span>
+  </a>
+
+  <main>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-eyebrow" id="cardEyebrow">CLIENT LOGIN</span>
+        <h1 class="card-title font-cn" id="cardTitle">客户<em class="serif-em">&nbsp;登录</em></h1>
+        <p class="card-sub font-cn" id="cardSub">输入账号和密码进入控制台，首次使用请先注册</p>
+      </div>
+
+      <div class="tab-row">
+        <button type="button" class="tab-btn font-cn active" data-pane="login">登 录</button>
+        <button type="button" class="tab-btn font-cn" data-pane="register">注 册</button>
+      </div>
+
+      <div id="notice" class="notice"></div>
+
+      <div id="loginPane" class="pane active">
+        <form id="loginForm" autocomplete="off" novalidate>
+          <div class="form-group">
+            <label class="form-label font-cn" for="login">手机号 / 账号名</label>
+            <input class="form-input" type="text" id="login" name="login" placeholder="例如：13800138000" autocomplete="username" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label font-cn" for="code">密码</label>
+            <input class="form-input" type="password" id="code" name="code" placeholder="注册时设置的密码" autocomplete="current-password" maxlength="32" required />
+            <div class="form-hint font-cn">忘记密码？联系运营在管理后台重置</div>
+          </div>
+
+          <button type="submit" id="submitBtn" class="submit-btn font-cn">登 录 进 入</button>
+        </form>
+      </div>
+
+      <div id="registerPane" class="pane">
+        <form id="registerForm" autocomplete="off" novalidate>
+          <div class="form-group">
+            <label class="form-label font-cn" for="regLogin">手机号 / 账号名</label>
+            <input class="form-input" type="text" id="regLogin" name="login" placeholder="11 位手机号或 4-32 位字母数字" autocomplete="username" required />
+            <div class="form-hint font-cn">手机号用于和你身份对应，不发短信验证</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label font-cn" for="regName">微信名 / 微信号（可选）</label>
+            <input class="form-input" type="text" id="regName" name="name" placeholder="例如：微信昵称或微信号" maxlength="20" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label font-cn" for="regCode">设置密码</label>
+            <input class="form-input" type="password" id="regCode" name="code" placeholder="6-32 位，建议字母数字组合" autocomplete="new-password" minlength="6" maxlength="32" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label font-cn" for="regCode2">确认密码</label>
+            <input class="form-input" type="password" id="regCode2" placeholder="再输一次确认" autocomplete="new-password" minlength="6" maxlength="32" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label font-cn" for="regRole">你的身份</label>
+            <select class="form-input font-cn" id="regRole" name="role" required>
+              <option value="">请选择你的身份</option>
+              <option value="planner">婚礼策划师</option>
+              <option value="host">婚礼主持人</option>
+              <option value="photographer">摄影 / 摄像师</option>
+              <option value="mua">化妆师</option>
+              <option value="lighting">灯光师</option>
+              <option value="bride_groom">备婚新人</option>
+              <option value="other">其他</option>
+            </select>
+            <div class="form-hint font-cn">不同身份会看到不同的生图模板推荐</div>
+          </div>
+
+          <label class="agree-row font-cn">
+            <input type="checkbox" id="regAgree" />
+            <span>我已阅读并同意 <a href="terms.html" target="_blank">《用户协议》</a> 和 <a href="privacy.html" target="_blank">《隐私政策》</a></span>
+          </label>
+
+          <button type="submit" id="regSubmitBtn" class="submit-btn font-cn">注 册 新 账 号</button>
+        </form>
+      </div>
+
+      <div class="divider" id="helpDivider">点数用完了？</div>
+
+      <div class="help-section">
+<p class="font-cn">注册后点数不够用，加运营微信充值，后台手动加点</p>
+        <a href="#contact" id="contactBtn" class="font-cn">点数用完后联系运营充值 →</a>
+      </div>
+    </div>
+
+    <a class="back-link font-cn" href="index.html" data-home-link>← 返回主站浏览</a>
+  </main>
+
+  <footer>
+    © 2026 <span data-brand-footer>WEDSCENE</span> · ONLINE PREVIEW ·
+    <a href="terms.html" style="color: inherit; text-decoration: none; border-bottom: 1px dashed currentColor;">用户协议</a> ·
+    <a href="privacy.html" style="color: inherit; text-decoration: none; border-bottom: 1px dashed currentColor;">隐私政策</a>
+  </footer>
+
+  <script src="site-config.js?v=20260531-server-api-1"></script>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const notice = $('notice');
+    const submitBtn = $('submitBtn');
+    const regSubmitBtn = $('regSubmitBtn');
+
+    function showNotice(message, type = 'error') {
+      notice.textContent = message;
+      notice.className = 'notice ' + type;
+      notice.style.display = 'block';
+    }
+    function hideNotice() {
+      notice.style.display = 'none';
+    }
+
+    function displayAccountName(user, fallback) {
+      const name = String(user?.name || '').trim();
+      if (!name || /^[?\s]+$/.test(name) || name.includes('�')) return user?.login || fallback || '客户账号';
+      return name;
+    }
+
+    function currentPartnerSlug() {
+      const params = new URLSearchParams(location.search);
+      return (params.get('partner') || params.get('t') || siteInfo.partner || siteInfo.tenant?.slug || '').trim();
+    }
+
+    function appendPartnerParam(url) {
+      const partner = currentPartnerSlug();
+      if (!partner) return url;
+      const target = new URL(url, window.location.href);
+      if (!target.searchParams.get('partner') && !target.searchParams.get('t')) {
+        target.searchParams.set('partner', partner);
+      }
+      return `${target.pathname}${target.search}${target.hash}`;
+    }
+
+    function apiUrl(url) {
+      return appendPartnerParam(url);
+    }
+
+    function applyLoginBrand(tenant = null) {
+      if (!tenant) return;
+      siteInfo.tenant = tenant;
+      siteInfo.partner = tenant.defaultTenant ? '' : (tenant.slug || siteInfo.partner || '');
+      const name = String(tenant.name || 'WedScene').trim();
+      const tagline = String(tenant.tagline || 'WEDSCENE · AI').trim();
+      const logoText = String(tenant.logoText || name.slice(0, 1) || 'W').trim().slice(0, 2);
+      document.title = `${name} 登录`;
+      document.querySelectorAll('[data-brand-name]').forEach((el) => { el.textContent = name; });
+      document.querySelectorAll('[data-brand-tagline]').forEach((el) => { el.textContent = tagline; });
+      document.querySelectorAll('[data-brand-footer]').forEach((el) => { el.textContent = name.toUpperCase(); });
+      document.querySelectorAll('[data-brand-mark]').forEach((el) => {
+        if (tenant.logoUrl) {
+          el.innerHTML = `<img src="${escapeHtml(tenant.logoUrl)}" alt="${escapeHtml(name)}" />`;
+        } else {
+          el.textContent = logoText;
+        }
+      });
+      document.querySelectorAll('[data-home-link]').forEach((el) => {
+        el.setAttribute('href', appendPartnerParam(el.getAttribute('href') || 'index.html'));
+      });
+    }
+
+    function switchPane(name) {
+      hideNotice();
+      document.querySelectorAll('.tab-btn').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.pane === name);
+      });
+      $('loginPane').classList.toggle('active', name === 'login');
+      $('registerPane').classList.toggle('active', name === 'register');
+      const isReg = name === 'register';
+      $('cardEyebrow').textContent = isReg ? 'CREATE ACCOUNT' : 'CLIENT LOGIN';
+      $('cardTitle').innerHTML = isReg
+        ? '注 册<em class="serif-em">&nbsp;新账号</em>'
+        : '客户<em class="serif-em">&nbsp;登录</em>';
+      $('cardSub').textContent = isReg
+        ? '手机号 + 自设密码，3 分钟开通账号，无需短信验证'
+        : '输入账号和密码进入控制台，首次使用请先注册';
+    }
+
+    document.querySelectorAll('.tab-btn').forEach((btn) => {
+      btn.addEventListener('click', () => switchPane(btn.dataset.pane));
+    });
+
+    if (new URLSearchParams(location.search).get('tab') === 'register') {
+      switchPane('register');
+    }
+
+    $('loginForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      hideNotice();
+      const login = $('login').value.trim();
+      const code = $('code').value.trim();
+      if (!login || !code) {
+        showNotice('请输入账号和密码', 'error');
+        return;
+      }
+      submitBtn.disabled = true;
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = '登录中…';
+      try {
+        const response = await fetch(apiUrl('/api/access'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ login, code, partner: currentPartnerSlug() }),
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.error || '登录失败');
+        }
+        showNotice(`登录成功，欢迎回来 ${displayAccountName(data.user, login)}`, 'success');
+        const target = appendPartnerParam(new URLSearchParams(location.search).get('next') || 'index.html');
+        setTimeout(() => { location.href = target; }, 500);
+      } catch (error) {
+        showNotice(error.message || '登录失败，请稍后再试', 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    });
+
+    $('registerForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      hideNotice();
+      const login = $('regLogin').value.trim();
+      const name = $('regName').value.trim();
+      const code = $('regCode').value;
+      const code2 = $('regCode2').value;
+      const role = $('regRole').value;
+      if (!login || !code) {
+        showNotice('请输入账号和密码', 'error');
+        return;
+      }
+      if (code.length < 6) {
+        showNotice('密码至少 6 位', 'error');
+        return;
+      }
+      if (code !== code2) {
+        showNotice('两次密码输入不一致', 'error');
+        return;
+      }
+      if (!$('regAgree').checked) {
+        showNotice('请阅读并勾选同意《用户协议》和《隐私政策》', 'error');
+        return;
+      }
+      regSubmitBtn.disabled = true;
+      const originalText = regSubmitBtn.textContent;
+      regSubmitBtn.textContent = '注册中…';
+      try {
+        const response = await fetch(apiUrl('/api/account/register'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ login, name, code, role, partner: currentPartnerSlug() }),
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.error || '注册失败');
+        }
+        showNotice(`${data.message || '注册成功'}，自动登录中…`, 'success');
+        const target = appendPartnerParam(new URLSearchParams(location.search).get('next') || 'index.html');
+        setTimeout(() => { location.href = target; }, 800);
+      } catch (error) {
+        showNotice(error.message || '注册失败，请稍后再试', 'error');
+        regSubmitBtn.disabled = false;
+        regSubmitBtn.textContent = originalText;
+      }
+    });
+
+    let siteInfo = { supportWechat: '', supportWechatQr: '', supportContacts: [], rechargePlans: '', rechargePlanItems: [], tenant: null, partner: '' };
+    const rechargePlanProfiles = [
+      { price: 9.9, name: '体验包', badge: '体验', description: '适合首次体验AI视频', durationText: '3天体验' },
+      { price: 99, name: '月度包', badge: '月卡', featured: true, description: '适合一个月持续创作', durationText: '1个月有效' },
+      { price: 199, name: '半年包', badge: '半年', featured: true, description: '适合半年稳定使用', durationText: '半年有效' },
+      { price: 399, name: '包年档', badge: '最划算', featured: true, description: '一年超低成本使用AI', durationText: '一年有效' },
+    ];
+
+    function getRechargePlanProfile(priceValue) {
+      return rechargePlanProfiles.find((profile) => Math.abs(profile.price - priceValue) < 0.01)
+        || {};
+    }
+
+    function formatRechargeUnitCost(unitCost) {
+      if (!Number.isFinite(unitCost) || unitCost <= 0) return '';
+      if (unitCost <= 5) return `低至${unitCost.toFixed(1)}元/条`;
+      return `约${unitCost.toFixed(unitCost >= 4.95 ? 0 : 1)}元/条`;
+    }
+
+    function formatRechargeImageUnitCost(unitCost) {
+      if (!Number.isFinite(unitCost) || unitCost <= 0) return '';
+      const value = unitCost >= 1 ? unitCost.toFixed(1) : unitCost.toFixed(2);
+      return `图片低至${value}元/张`;
+    }
+
+    function escapeHtml(value = '') {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function normalizeRechargePlan(plan, index = 0) {
+      if (plan && typeof plan === 'object') {
+        const priceValue = Number(plan.price || String(plan.priceText || '').match(/[\d.]+/)?.[0] || 0);
+        const pointCount = Number(plan.points || String(plan.pointsText || '').match(/\d+/)?.[0] || 0);
+        const profile = getRechargePlanProfile(priceValue);
+        const singleImageCount = Number(plan.singleImageGenerations || plan.imageGenerations || 0) || Math.floor(pointCount / 5);
+        const sixImageCount = Number(plan.sixImageGenerations || 0) || Math.floor(pointCount / 30);
+        const videoCount = Number(plan.motionGenerations || 0) || Math.floor(pointCount / 60);
+        const imageUnitCost = Number(plan.imageUnitCost || 0) || (priceValue && sixImageCount ? priceValue / (sixImageCount * 6) : 0);
+        const unitCost = Number(plan.motionUnitCost || 0) || (priceValue && videoCount ? priceValue / videoCount : 0);
+        return {
+          id: plan.id || `${plan.priceText || priceValue}-${plan.pointsText || pointCount}-${index}`,
+          name: plan.name || profile.name || '',
+          price: plan.priceText || (priceValue ? `${priceValue}元` : ''),
+          points: plan.pointsText || (pointCount ? `${pointCount}灵感值` : ''),
+          pointCount,
+          singleImageCount,
+          sixImageCount,
+          imageUnitCost,
+          videoCount,
+          unitCost,
+          badge: plan.badge || profile.badge || '',
+          description: plan.description || profile.description || '',
+          durationText: plan.durationText || profile.durationText || '',
+          featured: !!(plan.featured || profile.featured),
+        };
+      }
+      const [price, points] = String(plan || '').split('=');
+      const priceValue = Number(String(price || '').match(/[\d.]+/)?.[0] || 0);
+      const pointCount = Number(String(points || '').match(/\d+/)?.[0] || 0);
+      const singleImageCount = Math.floor(pointCount / 5);
+      const sixImageCount = Math.floor(pointCount / 30);
+      const videoCount = Math.floor(pointCount / 60);
+      const imageUnitCost = priceValue && sixImageCount ? priceValue / (sixImageCount * 6) : 0;
+      const unitCost = priceValue && videoCount ? priceValue / videoCount : 0;
+      const profile = getRechargePlanProfile(priceValue);
+      return {
+        id: `${String(price || '').trim()}-${String(points || '').trim()}-${index}`,
+        name: profile.name || '',
+        price,
+        points,
+        pointCount,
+        singleImageCount,
+        sixImageCount,
+        imageUnitCost,
+        videoCount,
+        unitCost,
+        badge: profile.badge || '',
+        description: profile.description || '',
+        durationText: profile.durationText || '',
+        featured: !!profile.featured,
+      };
+    }
+
+    function rechargePlansForDisplay() {
+      const structuredPlans = Array.isArray(siteInfo.rechargePlanItems) ? siteInfo.rechargePlanItems : [];
+      const source = structuredPlans.length
+        ? structuredPlans
+        : (siteInfo.rechargePlans || '').split(';').filter(Boolean);
+      return source
+        .map(normalizeRechargePlan)
+        .filter((plan) => plan.price && plan.pointCount > 0);
+    }
+
+    function supportContactsForDisplay() {
+      const structuredContacts = Array.isArray(siteInfo.supportContacts) ? siteInfo.supportContacts : [];
+      const contacts = structuredContacts
+        .map((contact) => ({
+          wechat: String(contact?.wechat || contact?.id || '').trim(),
+          qr: String(contact?.qr || contact?.qrUrl || '').trim(),
+        }))
+        .filter((contact) => contact.wechat || contact.qr);
+      if (contacts.length) return contacts;
+      if (siteInfo.supportWechat || siteInfo.supportWechatQr) {
+        return [{ wechat: siteInfo.supportWechat || '', qr: siteInfo.supportWechatQr || '' }];
+      }
+      return [];
+    }
+
+    $('contactBtn').addEventListener('click', (event) => {
+      event.preventDefault();
+      showRechargeDialog();
+    });
+
+    function showRechargeDialog() {
+      const contacts = supportContactsForDisplay();
+      const plans = rechargePlansForDisplay();
+      let html = '<div class="recharge-overlay" id="rechargeOverlay">';
+      html += '<div class="recharge-card">';
+      html += '<button type="button" class="recharge-close" id="rechargeClose">×</button>';
+      html += '<h3 class="font-cn" style="font-size:18px;font-weight:700;margin-bottom:6px;">购买灵感值</h3>';
+      html += '<p class="font-cn" style="font-size:12px;color:rgba(28,25,23,0.55);margin-bottom:18px;">添加客服微信并备注账号，确认后补充灵感值。</p>';
+      if (plans.length) {
+        html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">';
+        for (const plan of plans) {
+          const badge = plan.badge ? `<span class="plan-badge">${escapeHtml(plan.badge)}</span>` : '';
+          const pointLabel = String(plan.points || '').replace(/^(\d+)(\S+)/, '$1 $2');
+          const unitHint = formatRechargeUnitCost(plan.unitCost);
+          const name = plan.name ? `<span class="plan-name">${escapeHtml(plan.name)}</span>` : '';
+          const desc = plan.description ? `<span class="plan-desc">${escapeHtml(plan.description)}</span>` : '';
+          const singleImageHint = plan.singleImageCount ? `<em>约 ${plan.singleImageCount} 次单图</em>` : '';
+          const imageTextHint = plan.sixImageCount ? `<em>约 ${plan.sixImageCount} 次 6图包</em>` : '';
+          const imageUnitHint = plan.imageUnitCost ? `<em class="plan-image-unit">${escapeHtml(formatRechargeImageUnitCost(plan.imageUnitCost))}</em>` : '';
+          const videoHint = plan.videoCount ? `<em>约 ${plan.videoCount} 条 4K 视频</em><em>${unitHint}</em>` : '';
+          const durationHint = plan.durationText ? `<em>${escapeHtml(plan.durationText)}</em>` : '';
+          html += `<div class="plan-tile font-cn${plan.featured ? ' is-featured' : ''}">${badge}<strong>${escapeHtml(plan.price || '')}</strong>${name}<span>${escapeHtml(pointLabel)}</span>${durationHint}${singleImageHint}${imageTextHint}${imageUnitHint}${videoHint}${desc}</div>`;
+        }
+        html += '</div>';
+      }
+      if (contacts.length) {
+        html += '<div class="support-contact-grid">';
+        contacts.forEach((contact, index) => {
+          html += '<div class="support-contact font-cn">';
+          html += `<div class="support-contact-label">微信客服 ${index + 1}</div>`;
+          if (contact.qr) {
+            html += `<img src="${escapeHtml(contact.qr)}" alt="客服微信二维码 ${index + 1}">`;
+          }
+          if (contact.wechat) {
+            html += `<div style="font-size:13px;color:#1c1917;">运营微信：<strong class="font-mono" style="font-size:15px;user-select:all;">${escapeHtml(contact.wechat)}</strong></div>`;
+          }
+          html += '</div>';
+        });
+        html += '</div>';
+        html += '<div class="font-cn" style="text-align:center;font-size:11px;color:rgba(28,25,23,0.5);margin-top:6px;">添加任意客服微信，备注账号，方便快速到账</div>';
+      } else {
+        html += '<div class="font-cn" style="text-align:center;font-size:12px;color:rgba(28,25,23,0.55);line-height:1.7;">管理员尚未在 <code style="background:rgba(58,39,34,0.08);padding:2px 6px;border-radius:4px;font-family:monospace;">.env</code> 里配置<br><code style="background:rgba(58,39,34,0.08);padding:2px 6px;border-radius:4px;font-family:monospace;">SUPPORT_WECHAT=你的微信号</code></div>';
+      }
+      html += '</div></div>';
+      const contactWrap = document.createElement('div');
+      contactWrap.innerHTML = html;
+      document.body.appendChild(contactWrap);
+      const contactOverlay = $('rechargeOverlay');
+      const contactClose = () => contactOverlay.remove();
+      $('rechargeClose').addEventListener('click', contactClose);
+      contactOverlay.addEventListener('click', (e) => { if (e.target === contactOverlay) contactClose(); });
+      return;
+      if (qr) {
+        html += `<div style="text-align:center;margin-bottom:14px;"><img src="${qr}" alt="微信二维码" style="width:180px;height:180px;border-radius:12px;border:1px solid rgba(58,39,34,0.12);"></div>`;
+      }
+      if (wechat) {
+        html += `<div class="font-cn" style="text-align:center;font-size:13px;color:#1c1917;">运营微信：<strong class="font-mono" style="font-size:15px;">${escapeHtml(wechat)}</strong></div>`;
+        html += '<div class="font-cn" style="text-align:center;font-size:11px;color:rgba(28,25,23,0.5);margin-top:6px;">长按复制或手动添加</div>';
+      } else {
+        html += '<div class="font-cn" style="text-align:center;font-size:12px;color:rgba(28,25,23,0.55);line-height:1.7;">管理员尚未在 <code style="background:rgba(58,39,34,0.08);padding:2px 6px;border-radius:4px;font-family:monospace;">.env</code> 里配置<br><code style="background:rgba(58,39,34,0.08);padding:2px 6px;border-radius:4px;font-family:monospace;">SUPPORT_WECHAT=你的微信号</code><br>临时联系方式请看公众号</div>';
+      }
+      html += '</div></div>';
+      const wrap = document.createElement('div');
+      wrap.innerHTML = html;
+      document.body.appendChild(wrap);
+      const overlay = $('rechargeOverlay');
+      const close = () => overlay.remove();
+      $('rechargeClose').addEventListener('click', close);
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+    }
+
+    fetch(apiUrl('/api/access'), { cache: 'no-store' })
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        if (!data) return;
+        siteInfo.tenant = data.tenant || null;
+        siteInfo.partner = data.partner || data.tenant?.slug || currentPartnerSlug();
+        applyLoginBrand(data.tenant);
+        siteInfo.supportWechat = data.supportWechat || '';
+        siteInfo.supportWechatQr = data.supportWechatQr || '';
+        siteInfo.supportContacts = Array.isArray(data.supportContacts) ? data.supportContacts : [];
+        siteInfo.rechargePlans = data.rechargePlans || '';
+        siteInfo.rechargePlanItems = Array.isArray(data.rechargePlanItems) ? data.rechargePlanItems : [];
+        if (data.user) {
+          showNotice(`你已登录为 ${displayAccountName(data.user, data.user.login)}，即将返回主站…`, 'success');
+          setTimeout(() => { location.href = appendPartnerParam('index.html'); }, 800);
+        }
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>

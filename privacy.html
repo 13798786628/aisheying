@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>隐私政策 · WedScene AI</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><text y=%2214%22 font-size=%2214%22>W</text></svg>" />
+  <style>
+    :root {
+      --bg: #faf6f0;
+      --ink: #1c1917;
+      --muted: rgba(28, 25, 23, 0.65);
+      --line: rgba(58, 39, 34, 0.12);
+      --accent: #3a2722;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.85;
+      letter-spacing: 0.01em;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 56px 28px 80px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--ink);
+      margin-bottom: 32px;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      opacity: 0.7;
+    }
+    .brand:hover { opacity: 1; }
+    .brand .logo {
+      display: inline-grid;
+      place-items: center;
+      width: 28px; height: 28px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 8px;
+      font-family: Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0 0 6px;
+      letter-spacing: -0.01em;
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 36px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    h2 {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 32px 0 10px;
+      color: var(--accent);
+    }
+    p {
+      color: rgba(28, 25, 23, 0.78);
+      margin: 0 0 12px;
+    }
+    ul {
+      padding-left: 22px;
+      margin: 0 0 12px;
+    }
+    ul li {
+      color: rgba(28, 25, 23, 0.78);
+      margin-bottom: 6px;
+    }
+    .lead {
+      background: #fffaf3;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 28px;
+      color: rgba(28, 25, 23, 0.7);
+      font-size: 13px;
+    }
+    table.data {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0 16px;
+      font-size: 13px;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    table.data th, table.data td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    table.data tr:last-child td { border-bottom: none; }
+    table.data th {
+      background: rgba(58, 39, 34, 0.04);
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+    a.text-link {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px dashed var(--line);
+    }
+    a.text-link:hover { border-bottom-style: solid; }
+    .footer-back {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a class="brand" href="/">
+      <span class="logo">W</span>
+      <span>WedScene · AI</span>
+    </a>
+
+    <h1>隐私政策</h1>
+    <div class="meta">PRIVACY POLICY · 公测版 v1.0 · 2026-05-25 生效</div>
+
+    <div class="lead">
+      WedScene AI（以下简称"本服务"）尊重并保护用户隐私。本政策说明我们收集、使用、存储和保护你个人信息的规则。请你在使用本服务前认真阅读并理解本政策。
+    </div>
+
+    <h2>1. 我们收集哪些信息</h2>
+    <table class="data">
+      <thead>
+        <tr><th>信息类型</th><th>收集场景</th><th>用途</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>手机号 / 自定义账号名</td><td>注册和登录</td><td>账号识别、客服联系、防止重复注册</td></tr>
+        <tr><td>密码（哈希存储）</td><td>注册和登录</td><td>身份校验，明文不存储</td></tr>
+        <tr><td>身份分类（策划师/主持人等）</td><td>注册时选择</td><td>个性化推荐生图模板</td></tr>
+        <tr><td>注册时 IP</td><td>注册时自动记录</td><td>反垃圾注册、异常风控</td></tr>
+        <tr><td>上传的照片</td><td>使用生图功能时</td><td>仅用于本次生成，不用于训练 AI 模型</td></tr>
+        <tr><td>生成的图片和文案</td><td>使用生图功能时</td><td>展示给你本人查看和下载</td></tr>
+        <tr><td>点数变动流水</td><td>充值、消费时</td><td>账单核对、客服处理</td></tr>
+      </tbody>
+    </table>
+
+    <h2>2. 我们不收集哪些信息</h2>
+    <ul>
+      <li>不收集你的真实姓名、身份证号、银行卡号等敏感个人身份信息。</li>
+      <li>不收集你的精确地理位置、通讯录、设备识别码。</li>
+      <li>不通过第三方 SDK 进行精准广告投放或行为追踪。</li>
+    </ul>
+
+    <h2>3. 信息如何使用</h2>
+    <ul>
+      <li><strong>账号管理</strong>：登录验证、点数管理、客服处理充值申请。</li>
+      <li><strong>核心功能</strong>：你上传的照片会发送到第三方 AI 服务商（如 OpenAI 兼容接口或国内同类服务）用于生成图片，生成结果回传后存储于我们的服务器，供你下载使用。</li>
+      <li><strong>服务改进</strong>：以聚合统计的形式（不指向具体个人）分析使用频率、身份分布、流行模板，用于优化产品。</li>
+      <li><strong>未经你明示同意，不会将信息用于上述以外的用途。</strong></li>
+    </ul>
+
+    <h2>4. 信息存储与保护</h2>
+    <ul>
+      <li>密码经哈希加盐处理后存储，本服务运营人员也无法看到明文。</li>
+      <li>账号信息和生成结果存储于国内云服务器，仅授权人员可访问。</li>
+      <li>用户上传原图在生成完成后保留 30 天供你回看，超期可能自动清理。</li>
+      <li>我们采取业内常规的安全措施防止数据泄露，但任何在线服务都无法 100% 保证安全。</li>
+    </ul>
+
+    <h2>5. 信息共享与第三方</h2>
+    <ul>
+      <li>本服务为完成核心功能，会将你上传的照片传输给第三方 AI 服务商（如 OpenAI 或其国内合规替代）。这些服务商有自己的隐私政策，我们建议你了解并遵守。</li>
+      <li>除上述必要情形和法律法规要求外，本服务不会向任何第三方出售或共享你的个人信息。</li>
+    </ul>
+
+    <h2>6. 你的权利</h2>
+    <ul>
+      <li><strong>查询和导出</strong>：通过运营微信联系我们，可获取你账号下的所有数据导出。</li>
+      <li><strong>更正</strong>：登录账号后可自行修改身份分类等可变信息；账号名（手机号）如需修改请联系运营。</li>
+      <li><strong>注销账号</strong>：通过运营微信申请注销，注销后所有关联数据将在 30 天内删除（法律法规要求保留的除外）。</li>
+      <li><strong>撤回同意</strong>：你随时可以选择停止使用本服务，已生成的内容不再可见。</li>
+    </ul>
+
+    <h2>7. 未成年人保护</h2>
+    <p>本服务不面向 14 周岁以下未成年人提供。如你不满 14 周岁，请在监护人陪同下使用本服务，并由监护人代为同意本政策。如发现存在未经监护人同意的未成年人账号，请联系运营，我们将协助删除。</p>
+
+    <h2>8. 政策更新</h2>
+    <p>本政策可能随服务变化而更新。重要变更将以站内公告、登录提醒或运营微信通知方式告知。继续使用本服务即视为接受更新后的政策。</p>
+
+    <h2>9. 联系我们</h2>
+    <p>如对本政策有任何疑问、投诉或建议，可通过页面底部的运营微信联系我们，我们承诺在 7 个工作日内回复。</p>
+
+    <div class="footer-back">
+      <a class="text-link" href="terms.html">← 用户协议</a>
+      <a class="text-link" href="/">返回主站 →</a>
+    </div>
+  </div>
+</body>
+</html>
