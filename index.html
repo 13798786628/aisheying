@@ -1,0 +1,4936 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WedScene AI · 一键生成爆款图文与高清婚礼视频</title>
+  <meta name="description" content="上传婚礼现场照或设计图，一键生成婚礼爆款图文、电影感分镜、真实现场候选图、发布文案和高清空景运镜视频。" />
+  <link rel="stylesheet" href="assets/styles.css?v=20260531-download-wording-1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #15110f;
+      --paper: #f6ded5;
+      --rose: #f0c2b5;
+      --gold: #d4b46e;
+      --cyan: #7dd3fc;
+    }
+    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+    html, body { margin: 0; overflow-x: hidden; background: #0b0b10; color: #fafafa; }
+    body { font-family: 'Space Grotesk', 'Noto Sans SC', system-ui, sans-serif; }
+    .font-cn { font-family: 'Noto Sans SC', system-ui, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .glass {
+      background: rgba(255,244,237,0.68);
+      backdrop-filter: blur(20px) saturate(165%);
+      -webkit-backdrop-filter: blur(20px) saturate(165%);
+      border-bottom: 1px solid rgba(255,255,255,0.38);
+      color: var(--ink);
+    }
+    .brand-mark {
+      position: relative;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: linear-gradient(145deg, #211916, #3a2722 54%, #15110f);
+      border: 1px solid rgba(255,255,255,0.58);
+      box-shadow: 0 18px 36px rgba(54,35,30,0.18), inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+    .brand-mark::before {
+      content: '';
+      position: absolute;
+      inset: -28%;
+      background: conic-gradient(from 210deg, transparent, rgba(244,212,197,0.55), rgba(125,211,252,0.36), transparent);
+      animation: spin 8s linear infinite;
+      opacity: 0.65;
+    }
+    .brand-mark::after {
+      content: '';
+      position: absolute;
+      inset: 1px;
+      border-radius: 13px;
+      background: linear-gradient(145deg, rgba(33,25,22,0.92), rgba(16,13,12,0.98));
+    }
+    .brand-mark svg { position: relative; z-index: 1; width: 26px; height: 26px; }
+    .brand-mark img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+    .brand-mark span { position: relative; z-index: 1; color: #fff7ed; font-weight: 800; font-size: 16px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .studio-hero {
+      min-height: 82vh;
+      padding: 6.7rem 1.5rem 1.25rem;
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: var(--ink);
+      background: #efd8d1;
+    }
+    .studio-scene {
+      --mx: 0;
+      --my: 0;
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 64% 30%, rgba(255,255,255,0.86), transparent 16%),
+        radial-gradient(circle at 12% 76%, rgba(168,210,255,0.48), transparent 24%),
+        linear-gradient(115deg, #f4d8cf, #fae7df 45%, #e6d3cf);
+    }
+    .studio-scene::before {
+      content: '';
+      position: absolute;
+      inset: -10%;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.16) 0 1px, transparent 1px 5px),
+        radial-gradient(ellipse at center, transparent 44%, rgba(0,0,0,0.18) 100%);
+      opacity: 0.45;
+      mix-blend-mode: soft-light;
+    }
+    .scene-arch {
+      position: absolute;
+      left: 5%;
+      bottom: 27%;
+      width: clamp(120px, 15vw, 230px);
+      height: clamp(260px, 34vw, 510px);
+      border-radius: 999px 999px 18px 18px;
+      border: clamp(18px, 2.6vw, 34px) solid rgba(255,255,255,0.48);
+      border-bottom: 0;
+      box-shadow: 14px 0 rgba(125,211,252,0.16), -9px 0 rgba(232,180,168,0.16);
+      transform: translate3d(calc(var(--mx) * -10px), calc(var(--my) * -8px), 0);
+    }
+    .scene-window {
+      position: absolute;
+      top: 14%;
+      left: 61%;
+      width: clamp(46px, 6vw, 92px);
+      height: clamp(150px, 22vw, 318px);
+      border-radius: 999px;
+      background: linear-gradient(180deg, #ccecff, #ffe8db 58%, #d1b7ea);
+      box-shadow: 0 0 40px rgba(255,255,255,0.5), 12px 0 rgba(125,211,252,0.12);
+      opacity: 0.86;
+    }
+    .scene-window.small { top: 23%; left: 54%; width: 58px; height: 182px; opacity: 0.72; }
+    .scene-sphere {
+      position: absolute;
+      right: 28%;
+      top: 39%;
+      width: clamp(80px, 12vw, 166px);
+      aspect-ratio: 1;
+      border-radius: 999px;
+      background: radial-gradient(circle at 36% 30%, #fff 0 18%, #f7d7cf 38%, #b5e8ff 65%, #f5c5db 100%);
+      box-shadow: 24px 28px 55px rgba(54,35,40,0.18);
+      transform: translate3d(calc(var(--mx) * 18px), calc(var(--my) * -16px), 0);
+    }
+    .scene-water {
+      position: absolute;
+      left: -10%;
+      right: -10%;
+      bottom: -18%;
+      height: 46%;
+      background:
+        linear-gradient(90deg, rgba(125,211,252,0.18), transparent 28%, rgba(232,180,168,0.23)),
+        repeating-linear-gradient(178deg, rgba(255,255,255,0.2) 0 2px, transparent 2px 16px);
+      opacity: 0.84;
+    }
+    .scene-stairs {
+      position: absolute;
+      left: 37%;
+      bottom: 25%;
+      width: clamp(220px, 32vw, 470px);
+      height: clamp(120px, 18vw, 250px);
+      transform: perspective(620px) rotateX(60deg);
+    }
+    .scene-stairs span {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 17%;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(231,213,207,0.76));
+      box-shadow: 0 14px 28px rgba(61,43,37,0.12);
+    }
+    .scene-stairs span:nth-child(1) { bottom: 0; width: 100%; }
+    .scene-stairs span:nth-child(2) { bottom: 16%; width: 90%; left: 5%; }
+    .scene-stairs span:nth-child(3) { bottom: 32%; width: 78%; left: 11%; }
+    .scene-stairs span:nth-child(4) { bottom: 48%; width: 64%; left: 18%; }
+    .scene-stairs span:nth-child(5) { bottom: 64%; width: 48%; left: 26%; }
+    .hero-copy { width: min(1120px, 100%); margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+    .hero-copy h1 {
+      margin: 1rem auto 0.9rem;
+      font-size: clamp(3.8rem, 9vw, 8.1rem);
+      line-height: 0.92;
+      letter-spacing: 0;
+      color: rgba(18,16,15,0.9);
+    }
+    .hero-copy h1 em {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-style: italic;
+      font-weight: 400;
+      color: rgba(28,25,23,0.72);
+    }
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.46rem 0.82rem;
+      border-radius: 999px;
+      color: rgba(28,25,23,0.76);
+      background: rgba(255,255,255,0.5);
+      border: 1px solid rgba(255,255,255,0.62);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .hero-meta {
+      margin: 1.7rem auto 0;
+      max-width: 860px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.58);
+      background: rgba(255,244,237,0.52);
+      box-shadow: 0 24px 70px rgba(59,39,36,0.1);
+    }
+    .hero-meta div { padding: 0.72rem 1rem; border-right: 1px solid rgba(0,0,0,0.05); }
+    .hero-meta div:last-child { border-right: 0; }
+    .hero-meta strong { display: block; font-size: clamp(1rem, 1.6vw, 1.35rem); line-height: 1.1; color: #17120f; }
+    .hero-meta span { display: block; margin-top: 0.45rem; font-size: 12px; color: rgba(28,25,23,0.58); }
+    .home-video-signal {
+      margin: 1rem auto 0;
+      width: min(860px, 100%);
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 0.85rem;
+      align-items: center;
+      padding: 0.72rem;
+      border-radius: 14px;
+      text-align: left;
+      color: #fff7ed;
+      background: rgba(18,16,15,0.76);
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 24px 70px rgba(59,39,36,0.18);
+      backdrop-filter: blur(16px) saturate(145%);
+      -webkit-backdrop-filter: blur(16px) saturate(145%);
+    }
+    .home-video-thumb {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      border-radius: 10px;
+      background: #09090b;
+    }
+    .home-video-thumb video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.9;
+    }
+    .home-video-thumb::after {
+      content: '▶';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      padding-left: 2px;
+      color: #17120f;
+      background: rgba(255,247,237,0.88);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+      font-size: 13px;
+    }
+    .home-video-copy {
+      min-width: 0;
+    }
+    .home-video-copy strong {
+      display: block;
+      font-size: 0.98rem;
+      line-height: 1.25;
+      color: #fff7ed;
+    }
+    .home-video-copy p {
+      margin-top: 0.34rem;
+      color: rgba(255,247,237,0.72);
+      font-size: 0.82rem;
+      line-height: 1.55;
+    }
+    .home-video-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.42rem;
+      margin-top: 0.62rem;
+    }
+    .home-video-flow span {
+      border-radius: 999px;
+      padding: 0.24rem 0.55rem;
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,247,237,0.86);
+      font-size: 0.68rem;
+      font-weight: 800;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #f4d4c5, #e8b4a8 45%, #d4a574);
+      color: #0a0a0f;
+      font-weight: 700;
+      box-shadow: 0 14px 40px -16px rgba(232,180,168,0.72);
+      transition: transform .22s ease, box-shadow .22s ease;
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 20px 48px -16px rgba(232,180,168,0.82); }
+    .btn-dark {
+      background: rgba(18,16,15,0.94);
+      color: #fff7ed;
+      font-weight: 700;
+      box-shadow: 0 18px 42px rgba(57,39,34,0.14);
+    }
+    .btn-ghost {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: #fafafa;
+      transition: all .25s ease;
+    }
+    .btn-ghost:hover { border-color: rgba(232,180,168,0.48); color: #f4d4c5; }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.052), rgba(255,255,255,0.018));
+      border: 1px solid rgba(255,255,255,0.09);
+      box-shadow: 0 18px 60px -34px rgba(0,0,0,0.6);
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.35rem 0.95rem;
+      border-radius: 999px;
+      background: rgba(232,180,168,0.08);
+      border: 1px solid rgba(232,180,168,0.22);
+      color: #f4d4c5;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+    .access-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: grid;
+      place-items: center;
+      padding: 1.25rem;
+      background: rgba(248,231,223,0.94);
+      backdrop-filter: blur(18px);
+    }
+    .access-gate[hidden] {
+      display: none;
+    }
+    .access-card {
+      width: min(100%, 420px);
+      border-radius: 8px;
+      border: 1px solid rgba(61,43,37,0.12);
+      background: #fffaf6;
+      box-shadow: 0 30px 90px -54px rgba(54,35,30,0.56);
+      padding: 1.2rem;
+      color: #17120f;
+    }
+    .access-card input {
+      width: 100%;
+      height: 46px;
+      margin: 0.9rem 0 0.75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(61,43,37,0.14);
+      background: rgba(255,255,255,0.72);
+      padding: 0 1rem;
+      outline: 0;
+    }
+    .access-card input:focus {
+      border-color: rgba(118,78,65,0.36);
+      box-shadow: 0 0 0 4px rgba(232,180,168,0.18);
+    }
+    .access-error {
+      min-height: 1.2rem;
+      color: #8a3f33;
+      font-size: 0.82rem;
+    }
+    .product-suite {
+      position: relative;
+      overflow: hidden;
+      color: #17120f;
+      background: linear-gradient(180deg, #fbf7f3 0%, #eef7f4 48%, #f6e2d9 100%);
+    }
+    .product-suite::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(21,17,15,0.045) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(21,17,15,0.04) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent);
+      pointer-events: none;
+    }
+    .product-suite .tag {
+      background: rgba(21,17,15,0.07);
+      border-color: rgba(21,17,15,0.12);
+      color: #3a2722;
+    }
+    .suite-layout {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+    }
+    .suite-feature,
+    .suite-card {
+      border-radius: 8px;
+      border: 1px solid rgba(61,43,37,0.12);
+      box-shadow: 0 28px 80px -54px rgba(54,35,30,0.5);
+    }
+    .suite-feature {
+      min-height: auto;
+      display: grid;
+      grid-template-columns: minmax(280px, 0.78fr) minmax(0, 1.22fr);
+      gap: 1rem;
+      align-items: stretch;
+      padding: 1rem;
+      background: rgba(255,250,246,0.72);
+      backdrop-filter: blur(18px);
+    }
+    .suite-feature-body {
+      padding: clamp(0.4rem, 1vw, 0.75rem) clamp(0.35rem, 0.9vw, 0.65rem) 0;
+    }
+    .suite-feature h2 {
+      max-width: 560px;
+      margin: 0.7rem 0 0.75rem;
+      font-size: clamp(1.85rem, 2.35vw, 3.1rem);
+      line-height: 1.04;
+      letter-spacing: 0;
+      text-wrap: balance;
+    }
+    .suite-preview {
+      position: relative;
+      min-height: 238px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #141016;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+    }
+    .suite-preview img {
+      width: 100%;
+      height: 100%;
+      min-height: 238px;
+      object-fit: cover;
+      filter: saturate(0.96) contrast(1.02);
+    }
+    .suite-preview::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 42%, rgba(9,8,12,0.78));
+      pointer-events: none;
+    }
+    .suite-preview-label {
+      position: absolute;
+      left: 1rem;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 1;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      color: #fffaf5;
+    }
+    .suite-flow {
+      display: grid;
+      gap: 0.6rem;
+      margin-top: 0.9rem;
+    }
+    .suite-flow-item {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 0.8rem;
+      align-items: start;
+      padding: 0.75rem;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(61,43,37,0.08);
+    }
+    .suite-flow-item span {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: linear-gradient(145deg, rgba(58,39,34,0.94), rgba(118,78,65,0.9));
+      color: #fff7ed;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+    .suite-flow-item strong {
+      display: block;
+      font-size: 0.98rem;
+      line-height: 1.35;
+      color: #17120f;
+    }
+    .suite-flow-item p {
+      margin-top: 0.18rem;
+      color: rgba(68,64,60,0.78);
+      font-size: 0.78rem;
+      line-height: 1.65;
+    }
+    .suite-feature-action {
+      grid-column: 1 / -1;
+      margin-top: 0.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 0.4rem 0.25rem;
+      border-top: 1px solid rgba(61,43,37,0.08);
+    }
+    .title-copy-strip {
+      margin-top: 0.95rem;
+      padding-top: 0.95rem;
+      border-top: 1px solid rgba(61,43,37,0.1);
+      display: grid;
+      gap: 0.65rem;
+    }
+    .title-copy-strip-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+    .title-copy-strip-head strong {
+      color: #17120f;
+      font-size: 0.98rem;
+      line-height: 1.35;
+    }
+    .title-copy-strip-head span {
+      color: rgba(68,64,60,0.62);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+    }
+    .title-copy-examples {
+      display: grid;
+      gap: 0.4rem;
+    }
+    .title-copy-examples span {
+      display: block;
+      border-left: 3px solid rgba(232,180,168,0.8);
+      padding: 0.42rem 0.58rem;
+      color: rgba(58,39,34,0.86);
+      background: rgba(255,255,255,0.42);
+      border-radius: 0 7px 7px 0;
+      font-size: 0.78rem;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+    .title-copy-strip .request-feature {
+      margin-top: 0.05rem;
+    }
+    .suite-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .suite-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 154px;
+      display: flex;
+      gap: 1rem;
+      padding: 1.15rem;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 88% 12%, color-mix(in srgb, var(--tone, #e8b4a8) 32%, transparent), transparent 35%),
+        linear-gradient(145deg, rgba(255,255,255,0.82), rgba(255,248,244,0.58));
+      backdrop-filter: blur(16px);
+      transition: transform .22s ease, background .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+    .suite-card::before {
+      content: '';
+      position: absolute;
+      right: -44px;
+      bottom: -52px;
+      width: 150px;
+      height: 150px;
+      border-radius: 999px;
+      background: radial-gradient(circle, color-mix(in srgb, var(--tone, #e8b4a8) 46%, transparent), transparent 68%);
+      opacity: 0.72;
+      z-index: -1;
+    }
+    .suite-card::after {
+      content: attr(data-code);
+      position: absolute;
+      right: 1rem;
+      top: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: rgba(58,39,34,0.18);
+    }
+    .suite-card:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.82);
+      border-color: color-mix(in srgb, var(--tone, #e8b4a8) 42%, rgba(61,43,37,0.12));
+      box-shadow: 0 28px 80px -42px rgba(54,35,30,0.62);
+    }
+    .suite-card.locked {
+      opacity: 0.78;
+    }
+    .suite-card.locked::before {
+      opacity: 0.38;
+    }
+    .suite-card.locked:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    .request-feature {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      width: fit-content;
+      margin-top: 0.8rem;
+      padding: 0.46rem 0.76rem;
+      border-radius: 999px;
+      border: 1px solid rgba(58,39,34,0.12);
+      background: rgba(255,255,255,0.62);
+      color: rgba(58,39,34,0.82);
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+    .request-feature:hover {
+      border-color: rgba(58,39,34,0.24);
+      background: rgba(255,255,255,0.84);
+    }
+    .suite-card.motion { --tone: #7dd3fc; }
+    .suite-card.build { --tone: #f8b4a2; }
+    .suite-card.copy { --tone: #f0c2b5; }
+    .suite-card.title-copy { --tone: #f0c2b5; }
+    .suite-card.design { --tone: #d4b46e; }
+    .suite-card.invite { --tone: #f5c5db; }
+    .suite-card.album { --tone: #c7d2fe; }
+    .suite-card.retouch { --tone: #a7f3d0; }
+    .suite-card.mc { --tone: #fcd34d; }
+    .suite-card.accent {
+      grid-column: span 2;
+      min-height: 188px;
+      padding: 1.35rem;
+      background:
+        linear-gradient(135deg, rgba(21,17,15,0.92), rgba(58,39,34,0.86)),
+        url('assets/demo/product-core-bg.webp') center/cover;
+      background-blend-mode: normal, soft-light;
+      color: #fffaf5;
+      border-color: rgba(255,255,255,0.14);
+    }
+    .suite-card.accent::before {
+      width: 260px;
+      height: 260px;
+      right: -80px;
+      bottom: -110px;
+      background: radial-gradient(circle, rgba(232,180,168,0.32), transparent 66%);
+    }
+    .suite-card.accent::after {
+      color: rgba(255,247,237,0.18);
+    }
+    .suite-card.wide {
+      grid-column: span 2;
+      min-height: 136px;
+    }
+    .suite-card.rednote-demo {
+      grid-column: span 2;
+      min-height: 244px;
+      align-items: stretch;
+    }
+    .suite-card.title-copy {
+      align-items: stretch;
+      min-height: 154px;
+    }
+    .title-copy-card-preview {
+      min-width: 150px;
+      display: grid;
+      gap: 0.45rem;
+      align-content: center;
+      margin-left: auto;
+      position: relative;
+      z-index: 1;
+    }
+    .title-copy-card-preview span {
+      display: block;
+      border-radius: 7px;
+      padding: 0.42rem 0.52rem;
+      background: rgba(255,250,246,0.68);
+      border: 1px solid rgba(58,39,34,0.08);
+      color: rgba(58,39,34,0.68);
+      font-size: 0.68rem;
+      line-height: 1.35;
+      font-weight: 800;
+    }
+    .title-copy-card-preview span:first-child {
+      color: #7c3f35;
+    }
+    .rednote-content {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 170px;
+      gap: 1rem;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+    .rednote-preview {
+      align-self: stretch;
+      border-radius: 8px;
+      padding: 0.55rem;
+      background: rgba(255,255,255,0.62);
+      border: 1px solid rgba(58,39,34,0.1);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+    }
+    .rednote-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+    }
+    .rednote-grid span {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      background:
+        linear-gradient(145deg, rgba(21,17,15,0.3), rgba(21,17,15,0.08)),
+        url('assets/demo/product-showcase.webp') center/cover;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.24);
+    }
+    .rednote-grid span:nth-child(2) { background-position: 38% 46%; }
+    .rednote-grid span:nth-child(3) { background-position: 70% 44%; }
+    .rednote-grid span:nth-child(4) { background-position: 20% 68%; }
+    .rednote-grid span:nth-child(5) { background-position: 52% 70%; }
+    .rednote-grid span:nth-child(6) { background-position: 84% 66%; }
+    .rednote-meta {
+      display: grid;
+      gap: 0.4rem;
+      margin-top: 0.55rem;
+    }
+    .rednote-meta div {
+      border-radius: 7px;
+      padding: 0.38rem 0.5rem;
+      background: rgba(255,250,246,0.68);
+      border: 1px solid rgba(58,39,34,0.08);
+      font-size: 0.68rem;
+      color: rgba(58,39,34,0.72);
+      line-height: 1.35;
+    }
+    .rednote-meta strong {
+      display: block;
+      color: #17120f;
+      font-size: 0.72rem;
+      margin-bottom: 0.12rem;
+    }
+    .suite-card p { color: rgba(68,64,60,0.82); }
+    .suite-card.accent p { color: rgba(255,250,245,0.72); }
+    .suite-card h3,
+    .suite-card p,
+    .suite-card a,
+    .suite-chip { position: relative; z-index: 1; }
+    .suite-copy { position: relative; z-index: 1; padding-right: 1.4rem; }
+    .suite-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.22rem 0.52rem;
+      border-radius: 999px;
+      margin-bottom: 0.55rem;
+      background: color-mix(in srgb, var(--tone, #e8b4a8) 18%, rgba(255,255,255,0.78));
+      border: 1px solid color-mix(in srgb, var(--tone, #e8b4a8) 34%, rgba(61,43,37,0.08));
+      color: rgba(58,39,34,0.72);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .suite-card.accent .suite-chip {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.16);
+      color: rgba(255,231,220,0.86);
+    }
+    .suite-icon {
+      flex: 0 0 auto;
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      color: #3a2722;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.9), color-mix(in srgb, var(--tone, #e8b4a8) 18%, rgba(255,244,237,0.72)));
+      border: 1px solid color-mix(in srgb, var(--tone, #e8b4a8) 34%, rgba(58,39,34,0.12));
+      box-shadow: 0 14px 34px -22px color-mix(in srgb, var(--tone, #e8b4a8) 86%, #000);
+      position: relative;
+      z-index: 1;
+    }
+    .suite-icon svg { width: 24px; height: 24px; }
+    .suite-card.accent .suite-icon {
+      width: 58px;
+      height: 58px;
+      color: #ffe7dc;
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.16);
+    }
+    .tools-page-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .tools-page-head h2 {
+      margin: 0;
+      font-size: clamp(2.5rem, 5vw, 4.7rem);
+      line-height: 0.98;
+      letter-spacing: 0;
+      text-wrap: balance;
+    }
+    .tools-page-head p {
+      max-width: 620px;
+      margin-top: 0.8rem;
+      color: rgba(58,39,34,0.7);
+      line-height: 1.8;
+    }
+    .product-tools-shell {
+      display: grid;
+      grid-template-columns: 190px minmax(0, 1fr);
+      gap: 1rem;
+      align-items: start;
+    }
+    .product-tools-sidebar,
+    .product-tools-main,
+    .tools-overview-card,
+    .quick-tool-card,
+    .tool-card {
+      border-radius: 8px;
+      border: 1px solid rgba(61,43,37,0.1);
+      background: rgba(255,255,255,0.72);
+      box-shadow: 0 24px 68px -52px rgba(54,35,30,0.48);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .product-tools-sidebar {
+      position: sticky;
+      top: 5.6rem;
+      display: grid;
+      gap: 0.45rem;
+      padding: 0.75rem;
+    }
+    .tools-sidebar-title {
+      padding: 0.45rem 0.55rem 0.65rem;
+      color: rgba(58,39,34,0.48);
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .product-filter {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
+      min-height: 40px;
+      padding: 0.52rem 0.62rem;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: rgba(58,39,34,0.72);
+      font-size: 0.82rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: background .18s ease, border-color .18s ease, color .18s ease;
+    }
+    .product-filter b {
+      min-width: 1.65rem;
+      padding: 0.12rem 0.36rem;
+      border-radius: 999px;
+      background: rgba(58,39,34,0.08);
+      color: rgba(58,39,34,0.52);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      text-align: center;
+    }
+    .product-filter:hover,
+    .product-filter.active {
+      color: #17120f;
+      border-color: rgba(58,39,34,0.12);
+      background: rgba(255,250,246,0.86);
+    }
+    .product-filter.active b {
+      color: #fff7ed;
+      background: #3a2722;
+    }
+    .product-tools-main {
+      padding: 1rem;
+    }
+    .tools-overview {
+      display: grid;
+      grid-template-columns: 0.82fr 1.12fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .tools-overview-card {
+      padding: 0.95rem;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.86), rgba(246,250,247,0.7)),
+        linear-gradient(90deg, rgba(232,180,168,0.12), rgba(125,211,252,0.12));
+    }
+    .tools-overview-card span,
+    .tool-card-meta span,
+    .quick-tool-card span {
+      display: block;
+      color: rgba(58,39,34,0.46);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.64rem;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .tools-overview-card strong {
+      display: block;
+      margin-top: 0.28rem;
+      color: #17120f;
+      font-size: clamp(1.35rem, 1.8vw, 1.9rem);
+      line-height: 1.12;
+    }
+    .tools-overview-card p {
+      margin-top: 0.35rem;
+      color: rgba(68,64,60,0.66);
+      font-size: 0.76rem;
+      line-height: 1.55;
+    }
+    .tools-quick-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 0.85rem;
+    }
+    .quick-tool-card {
+      position: relative;
+      min-height: 118px;
+      overflow: hidden;
+      padding: 1rem;
+      text-decoration: none;
+      background:
+        linear-gradient(135deg, rgba(255,250,246,0.9), rgba(238,247,244,0.72)),
+        url('assets/demo/product-showcase.webp') center/cover;
+      background-blend-mode: screen, normal;
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .quick-tool-card.video {
+      background:
+        linear-gradient(135deg, rgba(255,250,246,0.9), rgba(234,246,255,0.68)),
+        url('assets/demo/product-core-bg.webp') center/cover;
+      background-blend-mode: screen, normal;
+    }
+    .quick-tool-card.proposal {
+      background:
+        linear-gradient(135deg, rgba(255,250,246,0.9), rgba(255,244,230,0.72)),
+        url('assets/demo/upload-bg.webp') center/cover;
+      background-blend-mode: screen, normal;
+    }
+    .quick-tool-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(58,39,34,0.18);
+      box-shadow: 0 28px 72px -46px rgba(54,35,30,0.6);
+    }
+    .quick-tool-card strong {
+      display: block;
+      margin-top: 0.42rem;
+      color: #17120f;
+      font-size: 1.22rem;
+      line-height: 1.25;
+    }
+    .quick-tool-card em {
+      display: block;
+      margin-top: 0.45rem;
+      color: rgba(58,39,34,0.72);
+      font-size: 0.78rem;
+      font-style: normal;
+      font-weight: 800;
+    }
+    .tool-category-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0.15rem 0 0.85rem;
+      padding: 0.55rem;
+      border-radius: 8px;
+      border: 1px solid rgba(61,43,37,0.08);
+      background: rgba(255,250,246,0.58);
+    }
+    .tool-category-strip .product-filter {
+      min-height: 34px;
+      padding-inline: 0.8rem;
+      justify-content: center;
+    }
+    .tool-library-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    .tool-card {
+      position: relative;
+      min-height: 430px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(145deg, rgba(255,255,255,0.86), rgba(255,250,246,0.64));
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .tool-card[hidden] { display: none; }
+    .tool-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(58,39,34,0.16);
+      box-shadow: 0 30px 78px -50px rgba(54,35,30,0.62);
+    }
+    .tool-card.upcoming {
+      background: linear-gradient(145deg, rgba(255,255,255,0.64), rgba(246,250,247,0.54));
+    }
+    .tool-visual {
+      position: relative;
+      height: 210px;
+      margin: 0.72rem 0.72rem 0;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid rgba(58,39,34,0.08);
+      background: rgba(23,18,15,0.08);
+      isolation: isolate;
+    }
+    .tool-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      pointer-events: none;
+      border-radius: inherit;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.24), inset 0 -54px 60px -54px rgba(23,18,15,0.5);
+    }
+    .visual-tag,
+    .visual-chip,
+    .visual-label {
+      border-radius: 999px;
+      background: rgba(255,250,246,0.9);
+      color: #3a2722;
+      border: 1px solid rgba(58,39,34,0.08);
+      font-size: 0.66rem;
+      font-weight: 900;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .visual-tag {
+      position: absolute;
+      left: 0.72rem;
+      top: 0.72rem;
+      z-index: 8;
+      padding: 0.38rem 0.56rem;
+    }
+    .visual-label {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.33rem 0.5rem;
+    }
+    .visual-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.34rem 0.52rem;
+    }
+    .visual-content {
+      display: grid;
+      grid-template-columns: 0.76fr 1fr;
+      grid-template-rows: minmax(0, 1fr) auto;
+      gap: 0.55rem;
+      padding: 0.72rem;
+      background:
+        linear-gradient(145deg, rgba(255,250,246,0.92), rgba(238,247,244,0.68)),
+        url('assets/client-pdf/app-similar-result-tight.png') center/cover;
+      background-blend-mode: screen, normal;
+    }
+    .visual-content .visual-source,
+    .visual-content .visual-output-grid {
+      min-height: 0;
+      border-radius: 6px;
+    }
+    .visual-source {
+      display: flex;
+      align-items: end;
+      padding: 0.5rem;
+      background:
+        linear-gradient(180deg, transparent 38%, rgba(23,18,15,0.56)),
+        url('assets/demo/product-showcase.webp') center/cover;
+      color: #fff7ed;
+    }
+    .visual-source b {
+      position: relative;
+      z-index: 7;
+      font-size: 0.72rem;
+      font-weight: 900;
+    }
+    .visual-output-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.32rem;
+    }
+    .visual-output-grid i {
+      min-height: 0;
+      border-radius: 6px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(23,18,15,0.2)),
+        url('assets/demo/product-showcase.webp') center/cover;
+      border: 1px solid rgba(255,255,255,0.42);
+      box-shadow: 0 10px 26px -20px rgba(23,18,15,0.6);
+    }
+    .visual-output-grid i:nth-child(2),
+    .visual-output-grid i:nth-child(5) { background-position: 62% 42%; }
+    .visual-output-grid i:nth-child(3),
+    .visual-output-grid i:nth-child(6) { background-position: 38% 56%; }
+    .visual-copyline {
+      grid-column: 1 / -1;
+      position: relative;
+      z-index: 7;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      padding: 0.52rem 0.58rem;
+      border-radius: 7px;
+      border: 1px solid rgba(58,39,34,0.08);
+      background: rgba(255,250,246,0.9);
+      color: #3a2722;
+    }
+    .visual-copyline strong {
+      min-width: 0;
+      overflow: hidden;
+      font-size: 0.76rem;
+      font-weight: 900;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .visual-copyline span {
+      flex: 0 0 auto;
+      color: rgba(58,39,34,0.56);
+      font-size: 0.66rem;
+      font-weight: 900;
+    }
+    .visual-video {
+      position: relative;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+      gap: 0.55rem;
+      padding: 0.72rem;
+      background:
+        linear-gradient(135deg, rgba(21,17,15,0.28), rgba(21,17,15,0.62)),
+        url('assets/client-pdf/app-video-page.png') center/cover;
+    }
+    .video-frame {
+      position: relative;
+      min-height: 0;
+      overflow: hidden;
+      border-radius: 7px;
+      background:
+        linear-gradient(180deg, rgba(23,18,15,0.08), rgba(23,18,15,0.42)),
+        url('assets/demo/product-core-bg.webp') center/cover;
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 18px 36px -28px rgba(0,0,0,0.72);
+    }
+    .video-frame .visual-chip {
+      position: absolute;
+      top: 0.52rem;
+      left: 0.52rem;
+      z-index: 7;
+      background: rgba(23,18,15,0.68);
+      color: #fff7ed;
+      border-color: rgba(255,255,255,0.18);
+    }
+    .video-play {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 42px;
+      height: 42px;
+      transform: translate(-50%, -50%);
+      border-radius: 999px;
+      background: rgba(255,250,246,0.86);
+      z-index: 7;
+    }
+    .video-play::after {
+      content: '';
+      position: absolute;
+      left: 17px;
+      top: 12px;
+      border-left: 13px solid #3a2722;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+    }
+    .video-timeline {
+      position: absolute;
+      left: 0.72rem;
+      right: 0.72rem;
+      bottom: 0.58rem;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.3);
+      overflow: hidden;
+      z-index: 7;
+    }
+    .video-timeline i {
+      display: block;
+      width: 58%;
+      height: 100%;
+      border-radius: inherit;
+      background: #fff7ed;
+    }
+    .video-strip {
+      position: relative;
+      z-index: 7;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.36rem;
+    }
+    .video-strip span {
+      min-height: 34px;
+      border-radius: 6px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(23,18,15,0.34)),
+        url('assets/client-pdf/video-frame-1.jpg') center/cover;
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+    .video-strip span:nth-child(2) { background-image: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(23,18,15,0.34)), url('assets/client-pdf/video-frame-2.jpg'); }
+    .video-strip span:nth-child(3) { background-image: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(23,18,15,0.34)), url('assets/client-pdf/video-frame-3.jpg'); }
+    .video-strip span:nth-child(4) { background-position: 68% 50%; }
+    .visual-render {
+      display: grid;
+      grid-template-columns: 0.78fr 1fr;
+      gap: 0.55rem;
+      padding: 0.72rem;
+      background:
+        linear-gradient(145deg, rgba(255,250,246,0.9), rgba(255,241,230,0.62)),
+        url('assets/client-pdf/app-design-result-tight.png') center/cover;
+      background-blend-mode: screen, normal;
+    }
+    .render-blueprint,
+    .render-grid {
+      min-height: 0;
+      border-radius: 6px;
+    }
+    .render-blueprint {
+      position: relative;
+      display: flex;
+      align-items: end;
+      padding: 0.56rem;
+      background:
+        linear-gradient(90deg, rgba(58,39,34,0.08) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(58,39,34,0.08) 1px, transparent 1px),
+        linear-gradient(145deg, #fff7ed, #f3e8ff);
+      background-size: 18px 18px, 18px 18px, auto;
+      border: 1px solid rgba(58,39,34,0.08);
+    }
+    .render-blueprint::before {
+      content: '';
+      position: absolute;
+      left: 18%;
+      right: 16%;
+      top: 26%;
+      height: 42%;
+      border-radius: 999px 999px 30px 30px;
+      border: 2px solid rgba(58,39,34,0.36);
+      border-bottom-width: 6px;
+    }
+    .render-blueprint b {
+      position: relative;
+      z-index: 7;
+      color: rgba(58,39,34,0.72);
+      font-size: 0.72rem;
+      font-weight: 900;
+    }
+    .render-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.35rem;
+    }
+    .render-grid span {
+      border-radius: 6px;
+      background:
+        linear-gradient(180deg, rgba(23,18,15,0.04), rgba(23,18,15,0.24)),
+        url('assets/demo/upload-bg.webp') center/cover;
+      border: 1px solid rgba(255,255,255,0.34);
+    }
+    .render-grid span:nth-child(2) { background-position: 54% 44%; }
+    .render-grid span:nth-child(3) { background-position: 44% 62%; }
+    .render-grid span:nth-child(4) { background-position: 70% 58%; }
+    .visual-before-after {
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+      gap: 0.55rem;
+      padding: 0.72rem;
+      background:
+        linear-gradient(145deg, rgba(255,250,246,0.86), rgba(246,250,247,0.58)),
+        url('assets/client-pdf/app-before-result-tight.png') center/cover;
+      background-blend-mode: screen, normal;
+    }
+    .compare-frame {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      min-height: 0;
+      overflow: hidden;
+      border-radius: 7px;
+      border: 1px solid rgba(58,39,34,0.08);
+      background: #fff7ed;
+    }
+    .compare-frame span {
+      display: flex;
+      align-items: end;
+      padding: 0.5rem;
+      color: #fff7ed;
+      font-size: 0.72rem;
+      font-weight: 900;
+      background:
+        linear-gradient(180deg, transparent 36%, rgba(23,18,15,0.62)),
+        url('assets/demo/empty.jpg') center/cover;
+    }
+    .compare-frame span + span {
+      background-image:
+        linear-gradient(180deg, transparent 36%, rgba(23,18,15,0.62)),
+        url('assets/demo/upload-bg.webp');
+    }
+    .compare-divider {
+      position: absolute;
+      inset-block: 0;
+      left: 50%;
+      z-index: 5;
+      width: 2px;
+      background: rgba(255,250,246,0.9);
+      box-shadow: 0 0 0 1px rgba(58,39,34,0.06);
+    }
+    .compare-caption {
+      position: relative;
+      z-index: 7;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .visual-design-live {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+      padding: 0.72rem;
+      background:
+        linear-gradient(145deg, rgba(255,250,246,0.88), rgba(244,243,255,0.6)),
+        url('assets/client-pdf/app-design-result-tight.png') center/cover;
+      background-blend-mode: screen, normal;
+    }
+    .design-live-panel {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: end;
+      min-height: 0;
+      padding: 0.55rem;
+      overflow: hidden;
+      border-radius: 7px;
+      border: 1px solid rgba(58,39,34,0.08);
+      color: #fff7ed;
+      font-size: 0.72rem;
+      font-weight: 900;
+      background:
+        linear-gradient(180deg, transparent 42%, rgba(23,18,15,0.72)),
+        url('assets/client-pdf/app-design-result-tight.png') 25% 35%/cover;
+    }
+    .design-live-panel.live {
+      background-image:
+        linear-gradient(180deg, transparent 42%, rgba(23,18,15,0.72)),
+        url('assets/demo/upload-bg.webp');
+      background-position: center;
+    }
+    .visual-copy-result {
+      display: grid;
+      gap: 0.5rem;
+      padding: 0.72rem;
+      background:
+        linear-gradient(145deg, rgba(255,250,246,0.92), rgba(255,244,230,0.68)),
+        url('assets/client-pdf/app-similar-result-tight.png') center/cover;
+      background-blend-mode: screen, normal;
+    }
+    .copy-document {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      border-radius: 7px;
+      border: 1px solid rgba(58,39,34,0.08);
+      background: rgba(255,250,246,0.92);
+      color: #3a2722;
+    }
+    .copy-headline {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.28;
+      font-weight: 900;
+    }
+    .copy-lines {
+      display: grid;
+      gap: 0.35rem;
+    }
+    .copy-lines span {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(58,39,34,0.12);
+    }
+    .copy-lines span:nth-child(2) { width: 84%; }
+    .copy-lines span:nth-child(3) { width: 62%; }
+    .copy-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .visual-build-video,
+    .visual-invite-motion,
+    .visual-memory-video,
+    .visual-retouch,
+    .visual-script,
+    .visual-board {
+      padding: 0.72rem;
+      background: linear-gradient(145deg, rgba(255,250,246,0.92), rgba(238,247,244,0.66));
+    }
+    .build-stage {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.36rem;
+      height: 100%;
+    }
+    .build-stage span {
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      padding: 0.5rem 0.32rem;
+      border-radius: 7px;
+      color: #fff7ed;
+      font-size: 0.68rem;
+      font-weight: 900;
+      background:
+        linear-gradient(180deg, transparent 36%, rgba(23,18,15,0.62)),
+        url('assets/demo/empty.jpg') center/cover;
+    }
+    .build-stage span:nth-child(2) { background-image: linear-gradient(180deg, transparent 36%, rgba(23,18,15,0.62)), url('assets/client-pdf/storyboard-shot-2.jpg'); }
+    .build-stage span:nth-child(3) { background-image: linear-gradient(180deg, transparent 36%, rgba(23,18,15,0.62)), url('assets/demo/upload-bg.webp'); }
+    .invite-card {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      place-items: center;
+      height: 100%;
+      border-radius: 7px;
+      overflow: hidden;
+      color: #fff7ed;
+      background:
+        linear-gradient(110deg, rgba(255,255,255,0.24), transparent 34%, rgba(255,255,255,0.26) 48%, transparent 62%),
+        linear-gradient(145deg, #3a2722, #7c2d12 58%, #2f2824);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .invite-card::before,
+    .invite-card::after {
+      content: '';
+      position: absolute;
+      width: 54px;
+      height: 54px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,247,237,0.28);
+    }
+    .invite-card::before { left: 12%; top: 18%; }
+    .invite-card::after { right: 10%; bottom: 16%; }
+    .invite-card strong {
+      position: relative;
+      z-index: 5;
+      font-size: 1.1rem;
+      letter-spacing: 0;
+    }
+    .memory-stack {
+      position: relative;
+      height: 100%;
+    }
+    .memory-stack span {
+      position: absolute;
+      inset: 10% 8%;
+      border-radius: 7px;
+      border: 5px solid rgba(255,250,246,0.92);
+      background: url('assets/client-pdf/storyboard-shot-4.jpg') center/cover;
+      box-shadow: 0 18px 42px -30px rgba(23,18,15,0.8);
+      transform: rotate(-7deg) translateX(-14%);
+    }
+    .memory-stack span:nth-child(2) {
+      background-image: url('assets/client-pdf/storyboard-shot-5.jpg');
+      transform: rotate(5deg) translateX(13%);
+    }
+    .memory-stack span:nth-child(3) {
+      background-image: url('assets/client-pdf/storyboard-shot-6.jpg');
+      transform: rotate(0deg);
+      inset: 14% 18%;
+    }
+    .retouch-split {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      height: 100%;
+      overflow: hidden;
+      border-radius: 7px;
+      border: 1px solid rgba(58,39,34,0.08);
+    }
+    .retouch-split span {
+      display: flex;
+      align-items: end;
+      padding: 0.5rem;
+      color: #fff7ed;
+      font-size: 0.68rem;
+      font-weight: 900;
+      background:
+        linear-gradient(180deg, rgba(23,18,15,0.06), rgba(23,18,15,0.58)),
+        url('assets/demo/step1.jpg') center/cover;
+      filter: saturate(0.72) contrast(0.9);
+    }
+    .retouch-split span + span {
+      background-image:
+        linear-gradient(180deg, rgba(23,18,15,0.02), rgba(23,18,15,0.52)),
+        url('assets/demo/step3.jpg');
+      filter: saturate(1.08) contrast(1.04);
+    }
+    .script-sheet {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      gap: 0.45rem;
+      height: 100%;
+      padding: 0.72rem;
+      border-radius: 7px;
+      background: rgba(255,250,246,0.92);
+      border: 1px solid rgba(58,39,34,0.08);
+    }
+    .script-sheet b {
+      color: #3a2722;
+      font-size: 0.86rem;
+      font-weight: 900;
+    }
+    .script-sheet span {
+      height: 9px;
+      border-radius: 999px;
+      background: rgba(58,39,34,0.12);
+    }
+    .script-sheet span:nth-child(3) { width: 82%; }
+    .script-sheet span:nth-child(4) { width: 68%; }
+    .board-grid {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      grid-template-rows: 1fr auto;
+      gap: 0.45rem;
+      height: 100%;
+    }
+    .board-grid .board-photo {
+      border-radius: 7px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(23,18,15,0.28)),
+        url('assets/demo/upload-bg.webp') center/cover;
+      border: 1px solid rgba(255,255,255,0.36);
+    }
+    .board-grid .board-note {
+      border-radius: 7px;
+      background: rgba(255,250,246,0.86);
+      border: 1px solid rgba(58,39,34,0.08);
+    }
+    .board-swatches {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0.32rem;
+    }
+    .board-swatches i {
+      height: 24px;
+      border-radius: 999px;
+      background: #3a2722;
+    }
+    .board-swatches i:nth-child(2) { background: #b45309; }
+    .board-swatches i:nth-child(3) { background: #f6d3c4; }
+    .board-swatches i:nth-child(4) { background: #d9f0ea; }
+    .board-swatches i:nth-child(5) { background: #f8fafc; border: 1px solid rgba(58,39,34,0.08); }
+    .tool-card-body {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 1.08rem 1.12rem 1.12rem;
+    }
+    .tool-card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.65rem;
+    }
+    .tool-card-meta b {
+      flex: 0 0 auto;
+      padding: 0.22rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(58,39,34,0.08);
+      color: rgba(58,39,34,0.7);
+      font-size: 0.68rem;
+      font-weight: 900;
+    }
+    .tool-card.open .tool-card-meta b {
+      color: #2f513f;
+      background: rgba(167,243,208,0.34);
+    }
+    .tool-card h3 {
+      margin: 0;
+      color: #17120f;
+      font-size: 1.24rem;
+      line-height: 1.25;
+      font-weight: 900;
+    }
+    .tool-card p {
+      margin-top: 0.58rem;
+      color: rgba(68,64,60,0.72);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+    .tool-io {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.42rem;
+      margin-top: auto;
+      padding-top: 0.95rem;
+    }
+    .tool-io span {
+      display: block;
+      border-radius: 7px;
+      padding: 0.5rem 0.58rem;
+      background: rgba(255,250,246,0.72);
+      border: 1px solid rgba(61,43,37,0.07);
+      color: rgba(58,39,34,0.66);
+      font-size: 0.76rem;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+    .tool-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      width: 100%;
+      margin-top: 0.85rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(58,39,34,0.12);
+      background: #2f2824;
+      color: #fff7ed;
+      font-size: 0.8rem;
+      font-weight: 900;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .tool-action.ghost {
+      background: rgba(255,255,255,0.64);
+      color: rgba(58,39,34,0.72);
+    }
+    @media (max-width: 1120px) {
+      .product-tools-shell { grid-template-columns: 1fr; }
+      .product-tools-sidebar {
+        position: static;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .tools-sidebar-title { width: 100%; }
+      .product-tools-sidebar .product-filter { flex: 1 1 150px; }
+      .tool-library-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 760px) {
+      .tools-page-head {
+        display: grid;
+        align-items: start;
+      }
+      .tools-page-head h2 { font-size: 2.35rem; line-height: 1.05; }
+      .tools-page-head .btn-primary { width: 100%; text-align: center; }
+      .product-tools-main { padding: 0.75rem; }
+      .tools-overview,
+      .tools-quick-grid,
+      .tool-library-grid { grid-template-columns: 1fr; }
+      .product-tools-sidebar { padding: 0.65rem; }
+      .product-tools-sidebar .product-filter { flex: 1 1 100%; }
+      .tool-category-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .tool-card { min-height: auto; }
+      .tool-visual { height: 188px; margin: 0.6rem 0.6rem 0; }
+      .visual-content,
+      .visual-render,
+      .visual-design-live { grid-template-columns: 1fr; }
+      .visual-source,
+      .render-blueprint { min-height: 72px; }
+      .visual-output-grid,
+      .render-grid { min-height: 74px; }
+      .visual-copyline { align-items: start; flex-direction: column; gap: 0.3rem; }
+      .tool-io { grid-template-columns: 1fr; }
+    }
+    .demo-section {
+      position: relative;
+      overflow: hidden;
+      color: #17120f;
+      background:
+        radial-gradient(circle at 84% 10%, rgba(125,211,252,0.26), transparent 24%),
+        radial-gradient(circle at 12% 20%, rgba(232,180,168,0.36), transparent 28%),
+        linear-gradient(180deg, #f3d8d0 0%, #f8e7df 44%, #f1d7cf 100%);
+      border-top: 1px solid rgba(61,43,37,0.08);
+    }
+    .demo-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(21,17,15,0.045) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(21,17,15,0.035) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent);
+      pointer-events: none;
+    }
+    .demo-top {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2rem;
+      align-items: end;
+      max-width: 1160px;
+      margin: 0 auto 1.4rem;
+    }
+    .demo-top h2 {
+      max-width: 920px;
+      margin-top: 0.9rem;
+      font-size: clamp(2.15rem, 3.45vw, 4rem);
+      line-height: 1.04;
+      letter-spacing: 0;
+      text-wrap: balance;
+    }
+    .demo-shell {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+      padding: 14px;
+      max-width: 1160px;
+      margin: 0 auto;
+      border-radius: 8px;
+      background: rgba(255,250,246,0.62);
+      border: 1px solid rgba(61,43,37,0.12);
+      box-shadow: 0 34px 100px -62px rgba(54,35,30,0.56);
+      backdrop-filter: blur(18px);
+    }
+    .demo-workspace {
+      border-radius: 8px;
+      border: 1px solid rgba(61,43,37,0.1);
+      background: linear-gradient(180deg, rgba(255,255,255,0.64), rgba(255,250,246,0.36));
+    }
+    .demo-workspace {
+      padding: clamp(1rem, 2.2vw, 1.7rem);
+    }
+    #stepIndicator.step-track {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 1rem;
+    }
+    .step-item {
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.55rem 0.7rem;
+      border-radius: 8px;
+      border: 1px solid rgba(61,43,37,0.1);
+      background: rgba(255,255,255,0.54);
+      color: rgba(68,64,60,0.62);
+      transition: all .28s ease;
+    }
+    .step-item.done {
+      color: rgba(58,39,34,0.78);
+      border-color: rgba(232,180,168,0.24);
+      background: rgba(232,180,168,0.16);
+    }
+    .step-item.active {
+      color: #17120f;
+      border-color: rgba(58,39,34,0.16);
+      background: linear-gradient(135deg, rgba(244,212,197,0.92), rgba(212,180,110,0.5));
+      box-shadow: 0 18px 40px -30px rgba(118,78,65,0.42);
+    }
+    .step-item .step-dot {
+      width: 9px;
+      height: 9px;
+      flex: 0 0 auto;
+      border-radius: 999px;
+    }
+    .upload-zone {
+      position: relative;
+      min-height: 390px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 8px;
+      transition: all .3s ease;
+      border: 1px dashed rgba(118,78,65,0.34);
+      background:
+        linear-gradient(180deg, rgba(255,250,246,0.7), rgba(255,244,237,0.54)),
+        radial-gradient(circle at 50% 34%, rgba(232,180,168,0.22), transparent 30%);
+    }
+    .upload-zone::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255,244,237,0.28), rgba(255,244,237,0.66)),
+        linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent),
+        url('assets/demo/upload-bg.webp') center/cover;
+      opacity: 1;
+      filter: saturate(0.94) contrast(0.98) brightness(1.04);
+    }
+    .upload-content { position: relative; z-index: 1; max-width: 470px; margin: auto; }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: rgba(118,78,65,0.52);
+      background:
+        linear-gradient(180deg, rgba(255,250,246,0.78), rgba(255,244,237,0.6)),
+        radial-gradient(circle at 50% 34%, rgba(232,180,168,0.3), transparent 32%);
+    }
+    .fusion-material-panel {
+      border: 1px dashed rgba(118,78,65,0.32);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.48);
+      padding: 0.9rem;
+    }
+    .fusion-material-panel.dragover {
+      border-color: rgba(118,78,65,0.58);
+      background: rgba(255,244,237,0.72);
+    }
+    .fusion-material-preview {
+      aspect-ratio: 16 / 10;
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(28,22,20,0.08);
+      border: 1px solid rgba(28,22,20,0.08);
+    }
+    .fusion-material-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .step-dot { transition: all .35s ease; background: rgba(61,43,37,0.18); }
+    .step-dot.done { background: rgba(118,78,65,0.46); }
+    .step-dot.active { transform: scale(1.38); background: #3a2722; box-shadow: 0 0 0 8px rgba(118,78,65,0.1), 0 0 18px rgba(232,180,168,0.5); }
+    .progress-fill { transition: width .3s linear; position: relative; overflow: hidden; }
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.58), transparent);
+      animation: shimmer 1.8s ease-in-out infinite;
+    }
+    @keyframes shimmer { from { transform: translateX(-100%); } to { transform: translateX(200%); } }
+    .keyframe-card { opacity: 0; transform: scale(0.92); transition: opacity .55s ease, transform .55s ease; }
+    .keyframe-card.shown { opacity: 1; transform: scale(1); }
+    .mock-video img { transform-origin: center; animation: kenburns 7s ease-in-out infinite alternate; }
+    .mock-video::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 45%, rgba(0,0,0,0.74));
+      pointer-events: none;
+    }
+    .mock-scan {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(100deg, transparent, rgba(244,212,197,0.18), transparent);
+      transform: translateX(-120%);
+      animation: scan 2.6s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 2;
+    }
+    @keyframes kenburns { from { transform: scale(1.02); } to { transform: scale(1.11); } }
+    @keyframes scan { from { transform: translateX(-120%); opacity: 0; } 35% { opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
+    .generator-board {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      gap: 14px;
+    }
+    .mode-grid {
+      display: grid;
+      gap: 0.7rem;
+    }
+    .mode-card {
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      width: 100%;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 0.78rem;
+      padding: 0.85rem;
+      text-align: left;
+      border-radius: 8px;
+      color: rgba(68,64,60,0.78);
+      border: 1px solid rgba(61,43,37,0.1);
+      background: rgba(255,255,255,0.56);
+      transition: border-color .22s ease, background .22s ease, transform .18s ease, box-shadow .22s ease;
+    }
+    .mode-card:hover {
+      border-color: rgba(118,78,65,0.24);
+      background: rgba(255,250,246,0.9);
+      transform: translateY(-1px);
+      box-shadow: 0 18px 46px -36px rgba(54,35,30,0.45);
+    }
+    .mode-card:active {
+      transform: translateY(0) scale(0.985);
+    }
+    .mode-card:focus-visible {
+      outline: 2px solid rgba(118,78,65,0.38);
+      outline-offset: 3px;
+    }
+    .mode-card.active {
+      border-color: rgba(58,39,34,0.34);
+      background:
+        linear-gradient(135deg, rgba(244,212,197,0.55), rgba(255,250,246,0.94) 54%, rgba(212,180,110,0.18));
+      transform: translateY(-1px);
+      box-shadow: 0 20px 54px -36px rgba(54,35,30,0.56), inset 0 0 0 1px rgba(255,255,255,0.62);
+    }
+    .mode-card.active::after {
+      content: '已选';
+      position: absolute;
+      right: 0.78rem;
+      top: 0.7rem;
+      border-radius: 999px;
+      padding: 0.2rem 0.5rem;
+      color: #fff7ed;
+      background: rgba(58,39,34,0.88);
+      font-size: 0.68rem;
+      font-weight: 800;
+    }
+    .mode-card.mode-card-pop {
+      animation: modePop .24s ease-out;
+    }
+    @keyframes modePop {
+      0% { transform: translateY(0) scale(0.985); }
+      70% { transform: translateY(-2px) scale(1.012); }
+      100% { transform: translateY(-1px) scale(1); }
+    }
+    .mode-card strong {
+      display: block;
+      color: #17120f;
+      font-size: 0.96rem;
+      line-height: 1.35;
+    }
+    .mode-card span:first-child {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: #141016;
+      background: linear-gradient(145deg, #f4d4c5, #d4b46e);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+    .mode-card.active span:first-child {
+      color: #fff7ed;
+      background: linear-gradient(145deg, #3a2722, #7c3f35);
+      box-shadow: 0 12px 28px -20px rgba(58,39,34,0.75);
+    }
+    .mode-card p {
+      margin-top: 0.2rem;
+      color: rgba(68,64,60,0.68);
+      font-size: 0.78rem;
+      line-height: 1.65;
+    }
+    .preview-frame {
+      aspect-ratio: 4 / 3;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(61,43,37,0.12);
+      background: rgba(255,255,255,0.5);
+    }
+    .motion-style-btn {
+      position: relative;
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 0.7rem 0.85rem;
+      text-align: left;
+      border: 1px solid rgba(61,43,37,0.14);
+      background: rgba(255,255,255,0.55);
+      transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+      color: rgba(58,39,34,0.92);
+    }
+    .motion-style-btn:hover {
+      border-color: rgba(184,108,90,0.55);
+      background: rgba(255,255,255,0.85);
+      transform: translateY(-1px);
+    }
+    .motion-style-btn.active {
+      border-color: rgba(184,108,90,0.85);
+      background: linear-gradient(135deg, #ffe6dc, #ffd3c0);
+      box-shadow: 0 6px 16px -8px rgba(184,108,90,0.55), inset 0 0 0 1px rgba(184,108,90,0.35);
+    }
+    .motion-style-btn strong {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 800;
+      margin-bottom: 0.2rem;
+      letter-spacing: 0.02em;
+      color: rgba(58,39,34,0.95);
+    }
+    .motion-style-btn span {
+      display: block;
+      font-size: 0.74rem;
+      color: rgba(58,39,34,0.68);
+      line-height: 1.5;
+    }
+    .motion-style-btn.active strong { color: #5a2a1a; }
+    .motion-style-btn.active span { color: rgba(90,42,26,0.85); }
+    .motion-video-wrap {
+      aspect-ratio: 16 / 9;
+      max-height: 540px;
+    }
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.78rem;
+    }
+    .result-tile {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.58);
+      border: 1px solid rgba(61,43,37,0.1);
+    }
+    #resultPanel[data-mode="cinematic_storyboard"] .result-tile,
+    #resultPanel[data-mode="setup_comparison"] .result-tile,
+    #resultPanel[data-mode="design_render_scene"] .result-tile {
+      aspect-ratio: 16 / 9;
+    }
+    #resultPanel[data-mode="setup_comparison"] .result-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    #resultPanel[data-mode="design_render_scene"] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    #resultPanel[data-mode="design_render_scene"] .result-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    #resultPanel[data-mode="design_render_scene"] .copy-panel {
+      margin-top: 0;
+      max-width: 760px;
+    }
+    #resultPanel[data-mode="copy_title"] {
+      grid-template-columns: minmax(0, 720px);
+      justify-content: center;
+    }
+    #resultPanel[data-mode="copy_title"] > .card:first-child {
+      display: none;
+    }
+    #resultPanel[data-mode="copy_title"] .copy-panel {
+      margin-top: 0;
+    }
+    .result-tile.placeholder {
+      display: grid;
+      place-items: center;
+      color: rgba(68,64,60,0.58);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.68), rgba(255,244,237,0.46)),
+        radial-gradient(circle at 50% 38%, rgba(232,180,168,0.28), transparent 32%);
+      border-style: dashed;
+    }
+    .result-tile.placeholder::before {
+      content: '';
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 2px solid rgba(118,78,65,0.16);
+      border-top-color: rgba(118,78,65,0.54);
+      animation: spin .9s linear infinite;
+    }
+    .result-tile.ready {
+      animation: resultPop .32s ease-out;
+    }
+    .result-tile.can-preview {
+      cursor: zoom-in;
+    }
+    @keyframes resultPop {
+      from { opacity: 0.4; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .result-tile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .result-tile span {
+      position: absolute;
+      left: 0.45rem;
+      bottom: 0.45rem;
+      border-radius: 999px;
+      padding: 0.2rem 0.45rem;
+      background: rgba(0,0,0,0.54);
+      color: #fff7ed;
+      font-size: 0.66rem;
+      font-weight: 700;
+    }
+    .tile-save {
+      position: absolute;
+      right: 0.45rem;
+      top: 0.45rem;
+      z-index: 2;
+      border-radius: 999px;
+      padding: 0.24rem 0.56rem;
+      background: rgba(255,247,237,0.92);
+      color: #2b211d;
+      border: 1px solid rgba(255,255,255,0.54);
+      box-shadow: 0 14px 32px -18px rgba(0,0,0,0.5);
+      font-size: 0.68rem;
+      font-weight: 900;
+      line-height: 1;
+      text-decoration: none;
+      white-space: nowrap;
+      opacity: 0.92;
+      transition: opacity .18s ease, transform .18s ease, background .18s ease;
+    }
+    .tile-save:hover {
+      opacity: 1;
+      transform: translateY(-1px);
+      background: #fff7ed;
+    }
+    .save-notice {
+      position: fixed;
+      left: 50%;
+      bottom: max(5.8rem, calc(4.8rem + env(safe-area-inset-bottom)));
+      z-index: 5000;
+      max-width: min(88vw, 360px);
+      transform: translate(-50%, 18px);
+      opacity: 0;
+      pointer-events: none;
+      border-radius: 999px;
+      padding: 0.72rem 1rem;
+      background: rgba(23,18,15,0.9);
+      color: #fff7ed;
+      border: 1px solid rgba(255,247,237,0.16);
+      box-shadow: 0 18px 48px -24px rgba(0,0,0,0.72);
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-align: center;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .save-notice.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+    .tile-delete {
+      position: absolute;
+      left: 0.45rem;
+      top: 0.45rem;
+      z-index: 2;
+      border-radius: 999px;
+      padding: 0.24rem 0.56rem;
+      background: rgba(60,23,23,0.82);
+      color: #fff7ed;
+      border: 1px solid rgba(255,255,255,0.26);
+      box-shadow: 0 14px 32px -18px rgba(0,0,0,0.56);
+      font-size: 0.68rem;
+      font-weight: 900;
+      line-height: 1;
+      opacity: 0.9;
+      transition: opacity .18s ease, transform .18s ease, background .18s ease;
+    }
+    .tile-delete:hover {
+      opacity: 1;
+      transform: translateY(-1px);
+      background: rgba(127,29,29,0.94);
+    }
+    .tile-delete:disabled {
+      cursor: wait;
+      opacity: 0.72;
+      transform: none;
+    }
+    .tile-motion {
+      position: absolute;
+      left: 0.45rem;
+      bottom: 0.45rem;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.32rem;
+      border-radius: 999px;
+      padding: 0.34rem 0.7rem;
+      background: linear-gradient(135deg, rgba(232,180,168,0.95), rgba(212,180,110,0.95));
+      color: #2a1410;
+      border: 1px solid rgba(255,255,255,0.36);
+      box-shadow: 0 14px 32px -18px rgba(0,0,0,0.46);
+      font-size: 0.72rem;
+      font-weight: 900;
+      line-height: 1;
+      transition: opacity .18s ease, transform .18s ease, filter .18s ease;
+    }
+    .tile-motion:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+    }
+    .tile-motion span {
+      font-size: 0.62rem;
+    }
+    .motion-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 110;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(20,12,10,0.66);
+      backdrop-filter: blur(10px);
+    }
+    .motion-modal-overlay.hidden {
+      display: none;
+    }
+    .motion-modal-card {
+      position: relative;
+      max-width: 560px;
+      width: 100%;
+      background: rgba(255,250,246,0.96);
+      color: #2a1410;
+      border: 1px solid rgba(118,78,65,0.18);
+      border-radius: 22px;
+      box-shadow: 0 40px 100px -40px rgba(20,12,10,0.6);
+      padding: 26px 26px 22px;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+    }
+    .motion-modal-close {
+      position: absolute;
+      right: 14px;
+      top: 12px;
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      border: 1px solid rgba(61,43,37,0.14);
+      background: rgba(255,255,255,0.72);
+      color: rgba(58,39,34,0.78);
+      font-size: 1.05rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .motion-modal-close:hover {
+      color: #1a0f0c;
+      background: #fff;
+    }
+    .motion-modal-kicker {
+      font-size: 0.72rem;
+      font-weight: 900;
+      color: rgba(58,39,34,0.7);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .motion-modal-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      margin: 0.35rem 0 0.4rem;
+    }
+    .motion-modal-meta {
+      font-size: 0.84rem;
+      color: rgba(58,39,34,0.74);
+      line-height: 1.5;
+      margin: 0;
+    }
+    .motion-modal-source {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      margin: 16px 0;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(61,43,37,0.1);
+      border-radius: 14px;
+    }
+    .motion-modal-source img {
+      width: 88px;
+      height: 88px;
+      border-radius: 10px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .motion-modal-source div {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .motion-modal-source strong {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #1a0f0c;
+    }
+    .motion-modal-source span {
+      font-size: 0.78rem;
+      color: rgba(58,39,34,0.7);
+    }
+    .motion-modal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+      margin-bottom: 16px;
+    }
+    .motion-modal-refs {
+      margin: 0 0 16px;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.58);
+      border: 1px solid rgba(61,43,37,0.1);
+    }
+    .motion-modal-refs.hidden { display: none; }
+    .motion-modal-ref-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .motion-modal-ref-head strong {
+      font-size: 0.86rem;
+      font-weight: 900;
+      color: #2a1410;
+    }
+    .motion-modal-ref-head span {
+      font-size: 0.72rem;
+      color: rgba(58,39,34,0.66);
+      text-align: right;
+    }
+    .motion-modal-ref-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .motion-ref-btn {
+      border: 1px solid rgba(61,43,37,0.12);
+      background: rgba(255,255,255,0.76);
+      border-radius: 10px;
+      padding: 5px;
+      text-align: left;
+      cursor: pointer;
+      color: #2a1410;
+      transition: border-color .18s ease, transform .18s ease, background .18s ease;
+    }
+    .motion-ref-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(118,78,65,0.32);
+    }
+    .motion-ref-btn.active {
+      background: #fff7ed;
+      border-color: rgba(194,65,12,0.56);
+      box-shadow: 0 10px 24px -18px rgba(194,65,12,0.5);
+    }
+    .motion-ref-btn img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 7px;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .motion-ref-btn span {
+      display: block;
+      font-size: 0.68rem;
+      line-height: 1.25;
+      color: rgba(58,39,34,0.72);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .motion-modal-grid .motion-style-btn {
+      text-align: left;
+      padding: 0.7rem 0.85rem;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(61,43,37,0.1);
+      color: #2a1410;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .motion-modal-grid .motion-style-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(118,78,65,0.32);
+    }
+    .motion-modal-grid .motion-style-btn.active {
+      background: #fff7ed;
+      border-color: rgba(118,78,65,0.42);
+      box-shadow: 0 12px 26px -16px rgba(118,78,65,0.42);
+    }
+    .motion-modal-grid .motion-style-btn strong {
+      display: block;
+      font-size: 0.92rem;
+      font-weight: 900;
+      margin-bottom: 0.25rem;
+    }
+    .motion-modal-grid .motion-style-btn span {
+      display: block;
+      font-size: 0.74rem;
+      color: rgba(58,39,34,0.74);
+      line-height: 1.45;
+    }
+    .motion-modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .motion-modal-status {
+      font-size: 0.78rem;
+      color: rgba(127,29,29,0.92);
+      flex: 1;
+      min-width: 0;
+      word-break: break-all;
+    }
+    .motion-modal-submit {
+      padding: 0.7rem 1.15rem;
+      border-radius: 999px;
+      background: #1a0f0c;
+      color: #fff7ed;
+      font-weight: 900;
+      font-size: 0.86rem;
+      border: 1px solid rgba(255,255,255,0.18);
+      cursor: pointer;
+      transition: transform .18s ease, opacity .18s ease;
+    }
+    .motion-modal-submit:hover { transform: translateY(-1px); }
+    .motion-modal-submit:disabled {
+      cursor: wait;
+      opacity: 0.7;
+      transform: none;
+    }
+    body.modal-open {
+      overflow: hidden;
+    }
+    .image-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .image-modal.hidden {
+      display: none;
+    }
+    .image-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      border: 0;
+      background: rgba(8,8,12,0.78);
+      backdrop-filter: blur(10px);
+      cursor: zoom-out;
+    }
+    .image-modal-panel {
+      position: relative;
+      z-index: 1;
+      width: min(1120px, 94vw);
+      max-height: 92vh;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: #0b0b10;
+      box-shadow: 0 36px 100px -28px rgba(0,0,0,0.78);
+    }
+    .image-modal-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 14px;
+      color: #fff7ed;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(18,17,22,0.96);
+    }
+    .image-modal-bar strong {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 0.95rem;
+    }
+    .image-modal-bar div {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .image-modal-save,
+    .image-modal-close {
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      padding: 0.45rem 0.8rem;
+      background: rgba(255,247,237,0.1);
+      color: #fff7ed;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .image-modal-save {
+      background: #fff7ed;
+      color: #2b211d;
+    }
+    .image-modal-panel img {
+      width: 100%;
+      max-height: calc(92vh - 58px);
+      object-fit: contain;
+      background: #050507;
+    }
+    .collage-frame {
+      width: min(100%, 360px);
+      margin-inline: auto;
+      aspect-ratio: 3 / 4;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(61,43,37,0.12);
+      background: rgba(255,255,255,0.62);
+      box-shadow: 0 28px 70px -44px rgba(118,78,65,0.45);
+    }
+    #resultPanel[data-mode="cinematic_storyboard"] .collage-frame {
+      width: min(100%, 380px);
+      aspect-ratio: 3 / 4;
+    }
+    .collage-frame.pending {
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.68), rgba(255,244,237,0.46)),
+        radial-gradient(circle at 50% 38%, rgba(232,180,168,0.28), transparent 32%);
+    }
+    .collage-frame.pending::before {
+      content: '合成预览生成中';
+      color: rgba(68,64,60,0.64);
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+    .collage-frame.pending img {
+      display: none;
+    }
+    .collage-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .copy-panel {
+      border-radius: 8px;
+      border: 1px solid rgba(61,43,37,0.1);
+      background: rgba(255,250,246,0.76);
+      padding: 1rem;
+    }
+    .copy-panel textarea {
+      width: 100%;
+      min-height: 132px;
+      resize: vertical;
+      border: 0;
+      outline: 0;
+      color: #3a2722;
+      background: transparent;
+      font: inherit;
+      line-height: 1.75;
+    }
+    .resources-section {
+      color: #17120f;
+      background: #f8e7df;
+      border-color: rgba(61,43,37,0.08);
+    }
+    .resources-section .tag {
+      color: #3a2722;
+      border-color: rgba(61,43,37,0.12);
+      background: rgba(255,250,246,0.72);
+    }
+    .resources-section h2,
+    .resource-card h3 {
+      color: #17120f;
+    }
+    .resources-section .btn-ghost {
+      color: #3a2722;
+      border-color: rgba(61,43,37,0.14);
+      background: rgba(255,255,255,0.5);
+    }
+    .resources-section .btn-ghost:hover {
+      color: #17120f;
+      border-color: rgba(118,78,65,0.28);
+      background: rgba(255,255,255,0.82);
+    }
+    .resources-section .btn-primary {
+      background: #e8b4a8;
+      color: #17120f;
+      box-shadow: 0 14px 32px -22px rgba(118,78,65,0.55);
+    }
+    .logs-section {
+      color: #17120f;
+      background:
+        radial-gradient(circle at 86% 12%, rgba(125,211,252,0.12), transparent 26%),
+        linear-gradient(180deg, #fff8f4 0%, #f8e7df 100%);
+      border-color: rgba(61,43,37,0.08);
+    }
+    .logs-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+      gap: 1rem;
+      align-items: start;
+    }
+    .logs-summary-card,
+    .logs-list-card,
+    .logs-row {
+      border-radius: 8px;
+      border: 1px solid rgba(61,43,37,0.1);
+      background: rgba(255,250,246,0.78);
+      box-shadow: 0 26px 70px -48px rgba(54,35,30,0.56);
+    }
+    .logs-summary-card,
+    .logs-list-card {
+      padding: 1rem;
+    }
+    .logs-balance {
+      display: grid;
+      gap: 0.35rem;
+      margin: 0.9rem 0 1rem;
+      border-radius: 8px;
+      background: #3a2722;
+      color: #fff7ed;
+      padding: 1rem;
+    }
+    .logs-balance span {
+      color: rgba(255,247,237,0.65);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+    .logs-balance strong {
+      font-size: 2.35rem;
+      line-height: 1;
+    }
+    .logs-meta {
+      display: grid;
+      gap: 0.55rem;
+      color: rgba(58,39,34,0.68);
+      font-size: 0.84rem;
+      line-height: 1.6;
+    }
+    .logs-meta div {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.56);
+      padding: 0.62rem 0.72rem;
+    }
+    .logs-list-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 0.8rem;
+    }
+    .logs-list-head p {
+      color: rgba(68,64,60,0.68);
+      font-size: 0.85rem;
+      line-height: 1.65;
+      margin-top: 0.2rem;
+    }
+    .logs-list {
+      display: grid;
+      gap: 0.62rem;
+    }
+    .logs-row {
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr) auto;
+      gap: 0.8rem;
+      align-items: center;
+      padding: 0.82rem 0.9rem;
+      box-shadow: none;
+    }
+    .logs-row time {
+      color: rgba(68,64,60,0.62);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      white-space: nowrap;
+    }
+    .logs-row strong {
+      display: block;
+      color: #17120f;
+      font-size: 0.9rem;
+      margin-bottom: 0.16rem;
+    }
+    .logs-row p {
+      color: rgba(68,64,60,0.66);
+      font-size: 0.78rem;
+      line-height: 1.5;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .logs-points {
+      min-width: 58px;
+      text-align: right;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 900;
+    }
+    .logs-points.pos { color: #047857; }
+    .logs-points.neg { color: #b91c1c; }
+    .logs-empty {
+      border-radius: 8px;
+      border: 1px dashed rgba(118,78,65,0.24);
+      background: rgba(255,250,246,0.58);
+      padding: 1.25rem;
+      color: rgba(68,64,60,0.7);
+      line-height: 1.7;
+    }
+    .launch-band {
+      position: relative;
+      overflow: hidden;
+      color: #17120f;
+      background:
+        radial-gradient(circle at 84% 8%, rgba(212,180,110,0.18), transparent 28%),
+        linear-gradient(180deg, #f8e7df 0%, #f2d9d1 100%);
+      border-top: 1px solid rgba(61,43,37,0.08);
+    }
+    .pricing-grid,
+    .ops-grid,
+    .legal-grid {
+      display: grid;
+      gap: 14px;
+    }
+    .pricing-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .ops-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .legal-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .price-card,
+    .ops-card,
+    .legal-card {
+      border-radius: 8px;
+      border: 1px solid rgba(61,43,37,0.12);
+      background: rgba(255,250,246,0.74);
+      box-shadow: 0 28px 80px -54px rgba(54,35,30,0.5);
+      padding: 1.15rem;
+    }
+    .price-card.featured {
+      border-color: rgba(118,78,65,0.28);
+      background:
+        linear-gradient(145deg, rgba(255,250,246,0.9), rgba(244,212,197,0.42));
+      box-shadow: 0 34px 90px -52px rgba(118,78,65,0.66);
+    }
+    .price-value {
+      display: flex;
+      align-items: baseline;
+      gap: 0.25rem;
+      margin: 0.9rem 0 0.65rem;
+      color: #17120f;
+    }
+    .price-value strong {
+      font-size: clamp(2.1rem, 3.6vw, 3.2rem);
+      line-height: 1;
+    }
+    .price-list {
+      display: grid;
+      gap: 0.45rem;
+      margin: 0.9rem 0 1.1rem;
+      color: rgba(68,64,60,0.78);
+      font-size: 0.84rem;
+      line-height: 1.65;
+    }
+    .price-list li,
+    .ops-card li,
+    .legal-card li {
+      list-style: none;
+      position: relative;
+      padding-left: 1.05rem;
+    }
+    .price-list li::before,
+    .ops-card li::before,
+    .legal-card li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.72em;
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background: #b87865;
+    }
+    .account-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+    .account-flow {
+      display: grid;
+      gap: 0.65rem;
+    }
+    .account-flow div {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 0.75rem;
+      align-items: start;
+      border-radius: 8px;
+      border: 1px solid rgba(61,43,37,0.1);
+      background: rgba(255,255,255,0.5);
+      padding: 0.8rem;
+    }
+    .account-flow span {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: #3a2722;
+      color: #fff7ed;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 800;
+    }
+    .account-mock {
+      display: grid;
+      gap: 0.75rem;
+      align-content: start;
+    }
+    .account-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.54);
+      border: 1px solid rgba(61,43,37,0.1);
+      padding: 0.85rem 0.95rem;
+      color: rgba(58,39,34,0.82);
+    }
+    .account-row strong {
+      color: #17120f;
+    }
+    .ops-card ul,
+    .legal-card ul {
+      display: grid;
+      gap: 0.45rem;
+      margin-top: 0.85rem;
+      color: rgba(68,64,60,0.78);
+      font-size: 0.82rem;
+      line-height: 1.65;
+    }
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+      gap: 1.35rem;
+      align-items: start;
+      grid-auto-flow: row;
+    }
+    .resource-card {
+      border-radius: 8px;
+      border: 1px solid rgba(61,43,37,0.1);
+      background: rgba(255,250,246,0.78);
+      box-shadow: 0 26px 70px -48px rgba(54,35,30,0.56);
+      padding: 1rem;
+    }
+    .resource-thumbs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.58rem;
+    }
+    .resource-thumb {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.62);
+      border: 1px solid rgba(61,43,37,0.1);
+      cursor: zoom-in;
+      min-height: 120px;
+      box-sizing: border-box;
+      isolation: isolate;
+      contain: layout paint;
+    }
+    .resource-thumb img,
+    .resource-thumb video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .resource-thumb span {
+      position: absolute;
+      left: 0.42rem;
+      bottom: 0.42rem;
+      border-radius: 999px;
+      padding: 0.18rem 0.42rem;
+      background: rgba(0,0,0,0.5);
+      color: #fff7ed;
+      font-size: 0.62rem;
+      font-weight: 700;
+    }
+    .resource-empty {
+      border-radius: 8px;
+      border: 1px dashed rgba(118,78,65,0.24);
+      background: rgba(255,250,246,0.58);
+      padding: 1.25rem;
+      color: rgba(68,64,60,0.7);
+    }
+    .resource-card.asset-card {
+      padding: 0.35rem;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      min-width: 0;
+    }
+    .resource-card.asset-card.video-asset-card {
+      padding: 0;
+      border-radius: 8px;
+      background: rgba(255,250,246,0.78);
+      border: 1px solid rgba(61,43,37,0.1);
+      box-shadow: 0 20px 54px -42px rgba(54,35,30,0.58);
+      overflow: hidden;
+    }
+    .resource-card.asset-card .resource-thumb {
+      aspect-ratio: 4 / 3;
+      min-height: 0;
+      box-shadow: 0 20px 54px -42px rgba(54,35,30,0.58);
+    }
+    .resource-card.asset-card.video-asset-card .resource-thumb {
+      border: 0;
+      border-radius: 8px 8px 0 0;
+      box-shadow: none;
+    }
+    .resource-card.asset-card .resource-thumb.comparison-thumb {
+      background: rgba(23,18,15,0.9);
+    }
+    .resource-card.asset-card .resource-thumb.comparison-thumb img {
+      object-fit: contain;
+    }
+    .resource-card.asset-card .resource-thumb.video-thumb {
+      background: rgba(23,18,15,0.92);
+    }
+    .resource-thumb.video-thumb .tile-save {
+      top: auto;
+      right: 0.45rem;
+      bottom: 0.45rem;
+    }
+    .resource-video-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      padding: 0.55rem;
+      background: rgba(255,250,246,0.94);
+    }
+    .resource-video-action {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 900;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .resources-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.75rem;
+    }
+    .resources-category-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 1.15rem;
+    }
+    .resource-category-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      border-radius: 999px;
+      border: 1px solid rgba(61,43,37,0.12);
+      background: rgba(255,255,255,0.56);
+      color: rgba(58,39,34,0.72);
+      padding: 0.52rem 0.86rem;
+      font-size: 0.82rem;
+      font-weight: 900;
+      line-height: 1;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+    .resource-category-tab:hover {
+      transform: translateY(-1px);
+      background: rgba(255,250,246,0.9);
+      border-color: rgba(118,78,65,0.22);
+    }
+    .resource-category-tab.active {
+      color: #17120f;
+      background: #e8b4a8;
+      border-color: rgba(118,78,65,0.22);
+    }
+    .resource-category-tab b {
+      min-width: 1.35rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.58);
+      padding: 0.14rem 0.36rem;
+      font-size: 0.7rem;
+      text-align: center;
+    }
+    .resources-page-meta {
+      border-radius: 999px;
+      border: 1px solid rgba(61,43,37,0.1);
+      background: rgba(255,250,246,0.72);
+      color: rgba(58,39,34,0.68);
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 0.42rem 0.85rem;
+    }
+    .resources-page-meta[hidden] {
+      display: none;
+    }
+    .resources-pagination {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+    }
+    .resources-pagination[hidden] {
+      display: none;
+    }
+    .resources-pagination button {
+      min-width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid rgba(61,43,37,0.14);
+      background: rgba(255,255,255,0.56);
+      color: #3a2722;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+    .resources-pagination button.active {
+      color: #17120f;
+      background: #e8b4a8;
+      border-color: rgba(118,78,65,0.2);
+    }
+    .resources-pagination button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .resources-pagination span {
+      color: rgba(68,64,60,0.5);
+      font-weight: 800;
+      padding: 0 0.15rem;
+    }
+    .demo-section .tag {
+      color: #3a2722;
+      background: rgba(21,17,15,0.07);
+      border-color: rgba(21,17,15,0.12);
+    }
+    .demo-section .card {
+      color: #17120f;
+      background: rgba(255,250,246,0.72);
+      border: 1px solid rgba(61,43,37,0.12);
+      box-shadow: 0 24px 70px -54px rgba(54,35,30,0.5);
+      backdrop-filter: blur(16px);
+    }
+    .demo-section .btn-ghost {
+      color: #3a2722;
+      border-color: rgba(61,43,37,0.14);
+      background: rgba(255,255,255,0.56);
+    }
+    .demo-section .btn-ghost:hover {
+      color: #17120f;
+      border-color: rgba(118,78,65,0.28);
+      background: rgba(255,255,255,0.82);
+    }
+    .demo-section .text-stone-300,
+    .demo-section .text-stone-400,
+    .demo-section .text-stone-500 {
+      color: rgba(68,64,60,0.68);
+    }
+    .demo-section .text-rose-100,
+    .demo-section .text-rose-200 {
+      color: #7c3f35;
+    }
+    .motion-hero-title {
+      display: inline-block;
+    }
+    .motion-hero-title .motion-hero-accent {
+      color: #7c3f35;
+    }
+    .motion-proof-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 1.15rem;
+    }
+    .motion-proof-row span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(61,43,37,0.12);
+      background: rgba(255,255,255,0.56);
+      padding: 0.42rem 0.78rem;
+      color: rgba(58,39,34,0.78);
+      font-size: 0.78rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .motion-showcase {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      color: #fffaf5;
+      background:
+        linear-gradient(135deg, rgba(21,17,15,0.96), rgba(58,39,34,0.92) 52%, rgba(10,10,14,0.98));
+      border: 1px solid rgba(255,247,237,0.14);
+      box-shadow: 0 34px 90px -58px rgba(21,17,15,0.9);
+    }
+    .motion-showcase::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255,247,237,0.05) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,247,237,0.04) 1px, transparent 1px);
+      background-size: 38px 38px;
+      opacity: 0.42;
+      pointer-events: none;
+    }
+    .motion-showcase-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
+      gap: clamp(1rem, 2vw, 1.45rem);
+      align-items: center;
+      padding: clamp(1rem, 2.1vw, 1.5rem);
+    }
+    .motion-showcase-kicker {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,247,237,0.16);
+      background: rgba(255,247,237,0.08);
+      padding: 0.28rem 0.68rem;
+      color: rgba(255,250,245,0.72);
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .motion-showcase h3 {
+      margin-top: 1rem;
+      font-size: clamp(1.6rem, 2.4vw, 2.45rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    .motion-showcase p {
+      color: rgba(255,250,245,0.72);
+    }
+    .motion-value-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.55rem;
+      margin-top: 1rem;
+    }
+    .motion-value {
+      min-height: 74px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,247,237,0.12);
+      background: rgba(255,247,237,0.08);
+      padding: 0.7rem 0.72rem;
+    }
+    .motion-value strong {
+      display: block;
+      color: #fff7ed;
+      font-size: clamp(1rem, 1.4vw, 1.3rem);
+      line-height: 1;
+    }
+    .motion-value span {
+      display: block;
+      margin-top: 0.42rem;
+      color: rgba(255,250,245,0.62);
+      font-size: 0.72rem;
+      line-height: 1.35;
+    }
+    .motion-video-frame {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      background: #050507;
+      border: 1px solid rgba(255,247,237,0.12);
+      box-shadow: 0 24px 60px -34px rgba(0,0,0,0.9);
+    }
+    .motion-video-frame video {
+      width: 100%;
+      display: block;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+    }
+    .video-fullscreen-target {
+      position: relative;
+    }
+    .video-fullscreen-target:fullscreen,
+    .video-fullscreen-target:-webkit-full-screen {
+      display: grid;
+      place-items: center;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      border-radius: 0;
+    }
+    .video-fullscreen-target:fullscreen video,
+    .video-fullscreen-target:-webkit-full-screen video {
+      width: 100%;
+      height: 100%;
+      max-height: 100vh;
+      aspect-ratio: auto;
+      object-fit: contain;
+    }
+    .video-fullscreen-target:fullscreen > :not(video):not(.video-fullscreen-btn),
+    .video-fullscreen-target:-webkit-full-screen > :not(video):not(.video-fullscreen-btn) {
+      display: none;
+    }
+    .video-fullscreen-btn {
+      position: absolute;
+      right: 0.55rem;
+      top: 0.55rem;
+      z-index: 12;
+      min-width: 4.2rem;
+      min-height: 2.15rem;
+      border: 1px solid rgba(255,247,237,0.32);
+      border-radius: 999px;
+      background: rgba(8,8,12,0.72);
+      color: #fff7ed;
+      padding: 0.42rem 0.78rem;
+      font-size: 0.76rem;
+      font-weight: 900;
+      line-height: 1;
+      box-shadow: 0 14px 34px -22px rgba(0,0,0,0.85);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      appearance: none;
+    }
+    .video-fullscreen-btn:hover {
+      background: rgba(8,8,12,0.9);
+    }
+    .video-fullscreen-btn:focus-visible {
+      outline: 2px solid rgba(255,247,237,0.72);
+      outline-offset: 2px;
+    }
+    body.video-lightbox-open {
+      overflow: hidden;
+    }
+    body.video-save-panel-open {
+      overflow: hidden;
+    }
+    .video-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      display: grid;
+      place-items: center;
+      background: #000;
+      padding: clamp(0.75rem, 2vw, 1.5rem);
+    }
+    .video-lightbox video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+    .video-lightbox-actions {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 3001;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .video-lightbox-save,
+    .video-lightbox-close {
+      border: 1px solid rgba(255,247,237,0.18);
+      border-radius: 999px;
+      background: rgba(20,20,24,0.78);
+      color: #fff7ed;
+      padding: 0.52rem 0.86rem;
+      font-size: 0.82rem;
+      font-weight: 900;
+      box-shadow: 0 18px 42px -24px rgba(0,0,0,0.9);
+      backdrop-filter: blur(10px);
+    }
+    .video-lightbox-save {
+      background: #fff7ed;
+      color: #2b211d;
+    }
+    .video-lightbox-close:hover {
+      background: rgba(20,20,24,0.96);
+    }
+    .video-save-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 3200;
+      display: grid;
+      place-items: center;
+      padding: max(0.9rem, env(safe-area-inset-top)) 0.9rem max(0.9rem, env(safe-area-inset-bottom));
+      background: rgba(10,8,8,0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .video-save-sheet {
+      width: min(560px, 100%);
+      max-height: 100%;
+      overflow: auto;
+      border-radius: 8px;
+      border: 1px solid rgba(255,247,237,0.18);
+      background: #fff7f2;
+      color: #211916;
+      box-shadow: 0 24px 90px -36px rgba(0,0,0,0.72);
+      padding: 0.8rem;
+    }
+    .video-save-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.2rem 0.2rem 0.7rem;
+    }
+    .video-save-title {
+      font-family: 'Noto Sans SC', system-ui, sans-serif;
+      font-size: 1rem;
+      font-weight: 900;
+    }
+    .video-save-close,
+    .video-save-primary,
+    .video-save-secondary {
+      border: 1px solid rgba(43,33,29,0.12);
+      border-radius: 999px;
+      min-height: 2.55rem;
+      padding: 0.58rem 0.9rem;
+      font-family: 'Noto Sans SC', system-ui, sans-serif;
+      font-size: 0.88rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .video-save-close,
+    .video-save-secondary {
+      background: rgba(255,255,255,0.72);
+      color: #3a2a24;
+    }
+    .video-save-primary {
+      background: linear-gradient(135deg, #e9ad9d, #d7a65e);
+      color: #231813;
+      box-shadow: 0 16px 34px -24px rgba(104,59,28,0.78);
+    }
+    .video-save-sheet video {
+      width: 100%;
+      display: block;
+      aspect-ratio: 16 / 9;
+      border-radius: 8px;
+      background: #080808;
+      object-fit: contain;
+    }
+    .video-save-note {
+      margin: 0.7rem 0 0;
+      color: #7d6e68;
+      font-size: 0.82rem;
+      line-height: 1.6;
+    }
+    .video-save-actions {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr 1fr;
+      gap: 0.55rem;
+      margin-top: 0.8rem;
+    }
+    .video-result-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+    .motion-video-badges {
+      position: absolute;
+      left: 0.7rem;
+      top: 0.7rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      pointer-events: none;
+    }
+    .motion-video-badges span {
+      border-radius: 999px;
+      background: rgba(10,10,14,0.68);
+      border: 1px solid rgba(255,247,237,0.16);
+      color: #fff7ed;
+      padding: 0.28rem 0.58rem;
+      font-size: 0.7rem;
+      font-weight: 900;
+      backdrop-filter: blur(10px);
+    }
+    .video-control-panel {
+      position: relative;
+      overflow: hidden;
+      color: #231611;
+      background:
+        linear-gradient(180deg, rgba(255,250,246,0.96), rgba(255,244,237,0.86));
+      border-color: rgba(61,43,37,0.12);
+      box-shadow: 0 30px 80px -58px rgba(54,35,30,0.62);
+    }
+    .video-control-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(61,43,37,0.045) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(61,43,37,0.035) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(180deg, #000, transparent 62%);
+      pointer-events: none;
+    }
+    .video-control-head,
+    .video-control-body {
+      position: relative;
+      z-index: 1;
+    }
+    .video-control-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.72fr);
+      gap: 1rem;
+      align-items: center;
+      padding: clamp(1rem, 2vw, 1.35rem);
+      border-bottom: 1px solid rgba(61,43,37,0.1);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.56), rgba(255,244,237,0.68));
+    }
+    .video-control-kicker {
+      margin-bottom: 0.4rem;
+      color: rgba(58,39,34,0.54);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.66rem;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .video-control-head h3 {
+      font-size: clamp(1.3rem, 2vw, 1.9rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    .video-control-head p {
+      margin-top: 0.5rem;
+      max-width: 36rem;
+      color: rgba(68,64,60,0.62);
+      font-size: 0.78rem;
+      line-height: 1.7;
+    }
+    .video-control-specs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid rgba(61,43,37,0.1);
+      background: rgba(255,255,255,0.62);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.62);
+    }
+    .video-control-specs span {
+      min-height: 68px;
+      display: grid;
+      align-content: center;
+      gap: 0.3rem;
+      padding: 0.65rem 0.72rem;
+      border-right: 1px solid rgba(61,43,37,0.08);
+    }
+    .video-control-specs span:last-child { border-right: 0; }
+    .video-control-specs b {
+      color: #17120f;
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(1rem, 1.6vw, 1.35rem);
+      line-height: 1;
+    }
+    .video-control-specs small {
+      color: rgba(68,64,60,0.58);
+      font-size: 0.7rem;
+      line-height: 1.2;
+    }
+    .video-control-body {
+      padding: clamp(1rem, 2vw, 1.35rem);
+    }
+    .video-flow {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.55rem;
+      margin-bottom: 0.9rem;
+    }
+    .video-flow span {
+      min-height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(61,43,37,0.1);
+      background: rgba(255,255,255,0.56);
+      color: rgba(58,39,34,0.7);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+    .video-upload-requirements {
+      margin: 0.85rem auto 1.1rem;
+      max-width: 580px;
+      display: grid;
+      gap: 0.45rem;
+      text-align: left;
+      color: rgba(68,64,60,0.68);
+      font-size: 0.74rem;
+      line-height: 1.55;
+    }
+    .video-upload-requirements li {
+      display: grid;
+      grid-template-columns: 8px minmax(0, 1fr);
+      gap: 0.45rem;
+      align-items: start;
+    }
+    .video-upload-requirements li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      margin-top: 0.48em;
+      border-radius: 999px;
+      background: rgba(184,108,90,0.72);
+    }
+    .video-upload-advice {
+      margin-top: 0.75rem;
+      color: rgba(68,64,60,0.68);
+      font-size: 0.74rem;
+      line-height: 1.55;
+    }
+    .video-upload-advice.warn {
+      color: rgba(139,63,50,0.92);
+      font-weight: 700;
+    }
+    .video-input-preview-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.6rem;
+      margin-top: 0.75rem;
+    }
+    .video-input-preview-item {
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+    }
+    .video-input-preview-item img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: rgba(0,0,0,0.24);
+    }
+    .video-input-preview-item span {
+      display: block;
+      padding: 0.42rem 0.5rem;
+      color: rgba(68,64,60,0.76);
+      font-size: 0.72rem;
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .video-control-panel .motion-style-btn {
+      min-height: 92px;
+      padding: 0.85rem 0.95rem 0.82rem;
+      background: rgba(255,255,255,0.62);
+      border-color: rgba(61,43,37,0.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+    .video-control-panel .motion-style-btn::after {
+      content: '';
+      position: absolute;
+      right: 0.86rem;
+      top: 0.86rem;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(61,43,37,0.16);
+    }
+    .video-control-panel .motion-style-btn.active {
+      background: linear-gradient(135deg, rgba(255,226,215,0.96), rgba(255,207,188,0.92));
+      border-color: rgba(184,108,90,0.8);
+      box-shadow: 0 18px 42px -34px rgba(118,78,65,0.8), inset 0 0 0 1px rgba(184,108,90,0.22);
+    }
+    .video-control-panel .motion-style-btn.active::after {
+      background: #8b3f32;
+      box-shadow: 0 0 0 5px rgba(139,63,50,0.12);
+    }
+    .video-runtime-note {
+      margin-top: 0.9rem;
+      color: rgba(68,64,60,0.58);
+      font-size: 0.76rem;
+      line-height: 1.65;
+    }
+    .video-progress-card {
+      margin-top: 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(61,43,37,0.1);
+      background: rgba(255,255,255,0.58);
+      padding: 0.85rem 0.95rem;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.58);
+    }
+    .video-progress-card .progress-track {
+      height: 7px;
+      border-radius: 999px;
+    }
+    .video-action-row {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .video-action-row #videoGenerateBtn {
+      min-height: 48px;
+      padding-inline: 1.35rem;
+    }
+    .video-action-row #videoPointHint {
+      margin-left: auto;
+      border-radius: 999px;
+      border: 1px solid rgba(61,43,37,0.1);
+      background: rgba(255,255,255,0.58);
+      padding: 0.52rem 0.78rem;
+      color: rgba(58,39,34,0.66);
+      font-size: 0.72rem;
+    }
+    .video-generation-log {
+      margin-top: 1rem;
+      min-height: 92px;
+      height: auto;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.62), rgba(255,250,246,0.42));
+      border-color: rgba(61,43,37,0.1);
+      color: rgba(58,39,34,0.68);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.58);
+    }
+    .video-log-title {
+      margin-bottom: 0.55rem;
+      color: rgba(58,39,34,0.42);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.64rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .video-log-placeholder {
+      color: rgba(58,39,34,0.48);
+      font-family: 'Noto Sans SC', system-ui, sans-serif;
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+    .video-generation-log.has-logs .video-log-placeholder {
+      display: none;
+    }
+    .demo-section .upload-content > div:first-child {
+      color: #7c3f35;
+      background: rgba(255,250,246,0.72);
+      border-color: rgba(61,43,37,0.12);
+      box-shadow: 0 20px 50px -36px rgba(54,35,30,0.56);
+    }
+    .progress-track {
+      background: rgba(61,43,37,0.1);
+      border: 1px solid rgba(255,255,255,0.42);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.42);
+    }
+    .generation-log {
+      color: #5f473f;
+      background: rgba(255,250,246,0.72);
+      border: 1px solid rgba(61,43,37,0.1);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+    }
+    .generation-log .text-stone-500,
+    .generation-log #logStream {
+      color: rgba(68,64,60,0.72);
+    }
+    .demo-section .video-generation-log {
+      min-height: 92px;
+      height: auto;
+      color: rgba(58,39,34,0.68);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.62), rgba(255,250,246,0.42));
+      border-color: rgba(61,43,37,0.1);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.58);
+    }
+    .demo-section #apiStatus {
+      color: rgba(58,39,34,0.72);
+      background: rgba(255,255,255,0.58);
+      border-color: rgba(61,43,37,0.12);
+    }
+    .demo-section #copyTags span {
+      color: #3a2722;
+      border-color: rgba(61,43,37,0.1);
+      background: rgba(255,255,255,0.58);
+    }
+    .suite-card.video-demo {
+      grid-column: span 2;
+      min-height: 214px;
+      display: grid;
+      grid-template-columns: minmax(0, 0.76fr) minmax(290px, 1fr);
+      gap: 1rem;
+      align-items: stretch;
+      padding: 1.1rem;
+      color: #fffaf5;
+      border-color: rgba(255,247,237,0.14);
+      background:
+        radial-gradient(circle at 78% 0%, rgba(240,194,181,0.24), transparent 32%),
+        linear-gradient(135deg, #15110f 0%, #2a1d1a 48%, #0e1016 100%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 28px 70px -46px rgba(21,17,15,0.9);
+    }
+    .suite-card.video-demo.locked {
+      opacity: 1;
+    }
+    .suite-card.video-demo::before {
+      width: 240px;
+      height: 240px;
+      right: -74px;
+      bottom: -118px;
+      background: radial-gradient(circle, rgba(212,180,110,0.28), transparent 68%);
+      opacity: 1;
+    }
+    .suite-card.video-demo::after {
+      color: rgba(255,247,237,0.14);
+    }
+    .suite-card.video-demo > .suite-icon {
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      width: 44px;
+      height: 44px;
+      color: #fff7ed;
+      border-color: rgba(255,255,255,0.18);
+      background: rgba(255,247,237,0.08);
+    }
+    .suite-card.video-demo > .suite-copy {
+      padding-left: 3.75rem;
+      padding-right: 0;
+      align-self: center;
+    }
+    .suite-card.video-demo p {
+      color: rgba(255,250,245,0.72);
+    }
+    .suite-card.video-demo .suite-chip {
+      border-color: rgba(255,247,237,0.18);
+      color: rgba(255,247,237,0.72);
+      background: rgba(255,247,237,0.08);
+    }
+    .suite-card.video-demo .request-feature {
+      color: #17120f;
+      border-color: rgba(255,255,255,0.18);
+      background: linear-gradient(135deg, #f4d4c5, #d4b46e);
+      box-shadow: 0 18px 40px -30px rgba(244,212,197,0.9);
+    }
+    .video-card-preview {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background:
+        linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px),
+        radial-gradient(circle at 86% 12%, rgba(240,194,181,0.18), transparent 28%),
+        linear-gradient(145deg, rgba(255,247,237,0.08), rgba(255,247,237,0.035));
+      background-size: 100% 100%, 36px 36px, auto, auto;
+      min-height: 184px;
+      aspect-ratio: 16 / 10;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 22px 46px -34px rgba(0,0,0,0.88);
+    }
+    .video-mock-top {
+      position: absolute;
+      left: 0.7rem;
+      right: 0.7rem;
+      top: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      z-index: 2;
+    }
+    .video-mock-dots {
+      display: flex;
+      gap: 0.26rem;
+    }
+    .video-mock-dots span {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255,247,237,0.42);
+    }
+    .video-mock-top strong {
+      color: rgba(255,247,237,0.76);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+    }
+    .video-workflow-panel {
+      position: absolute;
+      left: 0.78rem;
+      right: 0.78rem;
+      top: 2.45rem;
+      bottom: 2.75rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(10,10,14,0.42);
+      padding: 0.48rem;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .video-flow-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 0.5rem;
+      min-height: 28px;
+      border-radius: 6px;
+      padding: 0.28rem 0.42rem;
+      color: rgba(255,247,237,0.7);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.055);
+      font-size: 0.66rem;
+      font-weight: 800;
+    }
+    .video-flow-row b {
+      width: 18px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      color: #15110f;
+      background: rgba(244,212,197,0.82);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+    }
+    .video-flow-row em {
+      justify-self: end;
+      font-style: normal;
+      color: rgba(244,212,197,0.74);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.56rem;
+    }
+    .video-flow-row:last-child {
+      color: #15110f;
+      background: linear-gradient(135deg, #f4d4c5, #d4b46e);
+      border-color: rgba(255,255,255,0.26);
+      box-shadow: 0 14px 36px -28px rgba(244,212,197,0.95);
+    }
+    .video-flow-row:last-child b {
+      background: rgba(21,17,15,0.9);
+      color: #fff7ed;
+    }
+    .video-flow-row:last-child em {
+      color: rgba(21,17,15,0.62);
+    }
+    .video-card-progress {
+      position: absolute;
+      left: 0.55rem;
+      right: 0.55rem;
+      bottom: 0.55rem;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.16);
+      overflow: hidden;
+    }
+    .video-card-progress span {
+      display: block;
+      width: 68%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #f0c2b5, #d4b46e);
+    }
+    .video-card-note {
+      position: relative;
+      border-radius: 999px;
+      padding: 0.28rem 0.58rem;
+      background: rgba(255,247,237,0.12);
+      color: #fff7ed;
+      font-size: 0.68rem;
+      font-weight: 800;
+    }
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .75s ease, transform .75s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .page-section {
+      display: none;
+      min-height: 100vh;
+    }
+    .page-section.active {
+      display: block;
+    }
+    .studio-hero.page-section.active {
+      display: grid;
+    }
+    .internal-only {
+      display: none !important;
+    }
+    .nav-page-link.active {
+      color: #000;
+      font-weight: 800;
+    }
+    .mobile-tabbar {
+      display: none;
+    }
+    @media (max-width: 767px) {
+      body { padding-bottom: calc(4.7rem + env(safe-area-inset-bottom)); }
+      .site-nav-inner { min-width: 0; padding: 0.75rem 1rem; gap: 0.75rem; }
+      .brand-mark { width: 38px; height: 38px; border-radius: 12px; flex: 0 0 auto; }
+      .site-nav-inner > a:first-child { min-width: 0; gap: 0.58rem; }
+      .site-nav-inner > a:first-child .leading-none { min-width: 0; }
+      .site-nav-inner > a:first-child .text-\[9px\] { letter-spacing: 0.16em; }
+      .nav-cta { flex: 0 1 auto; max-width: 7.4rem; min-height: 38px; padding: 0.58rem 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .mobile-tabbar {
+        position: fixed;
+        left: max(0.75rem, env(safe-area-inset-left));
+        right: max(0.75rem, env(safe-area-inset-right));
+        bottom: max(0.75rem, env(safe-area-inset-bottom));
+        z-index: 60;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 0.25rem;
+        padding: 0.35rem;
+        border: 1px solid rgba(61,43,37,0.12);
+        border-radius: 999px;
+        background: rgba(255,250,246,0.88);
+        box-shadow: 0 18px 50px -28px rgba(54,35,30,0.58);
+        backdrop-filter: blur(18px) saturate(160%);
+        -webkit-backdrop-filter: blur(18px) saturate(160%);
+      }
+      .mobile-tabbar a {
+        display: grid;
+        place-items: center;
+        min-height: 38px;
+        border-radius: 999px;
+        color: rgba(58,39,34,0.68);
+        font-size: 0.78rem;
+        font-weight: 900;
+        line-height: 1;
+        text-decoration: none;
+      }
+      .mobile-tabbar a.active {
+        color: #17120f;
+        background: linear-gradient(135deg, #f4d4c5, #d4b46e);
+        box-shadow: 0 10px 24px -18px rgba(118,78,65,0.8);
+      }
+      .page-section { min-height: calc(100vh - 4.7rem); }
+      .page-section:not(.studio-hero) { padding-left: 1rem; padding-right: 1rem; padding-top: 4.4rem; padding-bottom: 5.5rem; scroll-margin-top: 5rem; }
+      .studio-hero { min-height: auto; padding: 5.8rem 1rem 5.6rem; align-items: start; }
+      .hero-copy h1 { font-size: 2.85rem; line-height: 0.96; }
+      .hero-copy p { width: min(100%, 310px); margin-inline: auto; font-size: 0.92rem; line-height: 1.9; }
+      .hero-actions { display: grid; grid-template-columns: 1fr; width: min(100%, 310px); margin-inline: auto; }
+      .hero-actions a { width: 100%; justify-content: center; min-height: 46px; padding-inline: 1rem; }
+      .hero-meta { width: min(100%, 320px); max-width: none; grid-template-columns: 1fr; border-radius: 12px; }
+      .hero-meta div { border-right: 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
+      .hero-meta div:last-child { border-bottom: 0; }
+      .home-video-signal { width: min(100%, 330px); max-width: none; grid-template-columns: 1fr; text-align: center; }
+      .home-video-flow { justify-content: center; }
+      .scene-sphere { right: 10%; top: 34%; opacity: 0.78; }
+      .scene-stairs { left: 22%; width: 74vw; }
+      .scene-window { left: 67%; }
+      .demo-top { gap: 1rem; margin-bottom: 1rem; }
+      .demo-top h2,
+      .motion-hero-title,
+      #launch h2,
+      #resources h2,
+      #logs h2,
+      #faq h2 {
+        display: block;
+        max-width: 100%;
+        font-size: 2.25rem;
+        line-height: 1.12;
+        overflow-wrap: anywhere;
+        text-wrap: balance;
+      }
+      .demo-top p { font-size: 0.92rem; line-height: 1.85; }
+      .motion-hero-title .motion-hero-accent { display: block; }
+      .tag { max-width: 100%; white-space: normal; }
+      .demo-shell { padding: 0.75rem; }
+      .demo-workspace { padding: 0.75rem; }
+      #stepIndicator.step-track { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 0.45rem; }
+      .step-item { min-height: 38px; padding: 0.48rem; justify-content: center; }
+      .step-item .step-dot { width: 8px; height: 8px; }
+      .step-item span:last-child { display: none; }
+      .suite-layout,
+      .demo-top,
+      .demo-shell,
+      .generator-board,
+      .suite-feature,
+      .motion-showcase-grid,
+      .video-control-head,
+      .suite-card.video-demo { grid-template-columns: 1fr; }
+      .suite-feature,
+      .suite-card,
+      .card,
+      .logs-summary-card,
+      .logs-list-card,
+      .price-card,
+      .ops-card,
+      .legal-card,
+      .resource-card { border-radius: 8px; }
+      .suite-feature { padding: 0.75rem; }
+      .suite-feature h2 { font-size: 2.15rem; }
+      .suite-feature-action { flex-direction: column; align-items: stretch; }
+      .suite-feature-action .btn-primary { text-align: center; }
+      .suite-card { min-height: auto; padding: 1rem; gap: 0.78rem; }
+      .suite-copy { padding-right: 0; }
+      .suite-icon { width: 46px; height: 46px; }
+      .suite-card.video-demo > .suite-icon { left: 1rem; top: 1rem; }
+      .video-card-preview { min-height: 168px; }
+      .video-control-head,
+      .video-control-body { padding: 0.9rem; }
+      .video-control-specs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .video-control-specs span { min-height: 58px; padding: 0.55rem 0.45rem; text-align: center; }
+      .video-flow { grid-template-columns: 1fr; }
+      .motion-proof-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.45rem; }
+      .motion-proof-row span { min-height: 32px; white-space: normal; text-align: center; justify-content: center; padding: 0.38rem 0.58rem; }
+      .motion-showcase { margin-top: 1.5rem; }
+      .motion-showcase-grid { padding: 0.9rem; }
+      .motion-video-badges { left: 0.5rem; top: 0.5rem; right: 0.5rem; }
+      .motion-video-badges span { font-size: 0.62rem; padding: 0.24rem 0.45rem; }
+      .video-action-row { display: grid; grid-template-columns: 1fr; }
+      .video-action-row #videoGenerateBtn,
+      .video-action-row #videoRestartBtn,
+      .video-action-row #videoPointHint { width: 100%; margin-left: 0; text-align: center; justify-content: center; }
+      .video-result-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
+      .video-result-actions .btn-primary,
+      .video-result-actions .btn-ghost { width: 100%; justify-content: center; text-align: center; }
+      .video-fullscreen-btn { top: 0.45rem; right: 0.45rem; min-height: 2rem; min-width: 3.8rem; padding: 0.36rem 0.62rem; font-size: 0.7rem; }
+      .video-lightbox-actions { top: max(0.8rem, env(safe-area-inset-top)); left: 0.8rem; right: 0.8rem; display: grid; grid-template-columns: 1fr 1fr; }
+      .video-lightbox-save,
+      .video-lightbox-close { width: 100%; padding: 0.62rem 0.75rem; }
+      .video-save-panel { align-items: end; padding-left: 0; padding-right: 0; padding-bottom: 0; }
+      .video-save-sheet { width: 100%; border-radius: 8px 8px 0 0; max-height: 92vh; }
+      .video-save-actions { grid-template-columns: 1fr; }
+      .video-input-preview-list { grid-template-columns: 1fr; }
+      .motion-value-grid { grid-template-columns: 1fr; }
+      .suite-card.video-demo > .suite-copy { padding-left: 3.5rem; }
+      .suite-feature { min-height: auto; }
+      .suite-grid { grid-template-columns: 1fr; }
+      .suite-card.accent { grid-column: span 1; }
+      .suite-card.rednote-demo { grid-column: span 1; }
+      .title-copy-card-preview { display: none; }
+      .rednote-content { grid-template-columns: 1fr; }
+      .rednote-content > .flex { gap: 0.78rem; }
+      .rednote-preview { display: none; }
+      .pricing-grid,
+      .ops-grid,
+      .legal-grid,
+      .logs-layout,
+      .account-panel { grid-template-columns: 1fr; }
+      .resources-actions { align-items: flex-start; }
+      .resources-actions,
+      .resources-actions button,
+      .resources-page-meta { width: 100%; }
+      .resources-page-meta { text-align: center; border-radius: 8px; }
+      .resources-category-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.45rem; }
+      .resource-category-tab { justify-content: center; min-height: 38px; padding: 0.45rem 0.5rem; font-size: 0.78rem; }
+      .resources-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+      .resource-card { padding: 0.7rem; }
+      .logs-list-head { align-items: flex-start; }
+      .logs-meta div { display: grid; grid-template-columns: 1fr; gap: 0.22rem; }
+      .logs-row { grid-template-columns: 1fr auto; gap: 0.45rem 0.75rem; align-items: start; }
+      .logs-row time { grid-column: 1 / -1; font-size: 0.7rem; }
+      .logs-row p { white-space: normal; }
+      .logs-points { min-width: 0; }
+      .upload-zone { min-height: 300px; padding: 1rem; }
+      .upload-content { width: 100%; padding-inline: 0.25rem; }
+      .mode-card { grid-template-columns: minmax(0, 1fr); gap: 0.55rem; padding: 0.78rem; }
+      .mode-card span:first-child { width: 30px; height: 30px; }
+      .mode-card.active::after { top: 0.65rem; right: 0.65rem; }
+      .result-grid { grid-template-columns: 1fr; }
+      #resultPanel[data-mode="similar_style"] .result-grid,
+      #resultPanel[data-mode="multi_angle"] .result-grid,
+      #resultPanel[data-mode="detail_pack"] .result-grid,
+      #resultPanel[data-mode="design_render_scene"] .result-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .result-tile span,
+      .tile-save,
+      .tile-delete,
+      .tile-motion { font-size: 0.62rem; }
+      .tile-save { max-width: calc(100% - 0.9rem); overflow: hidden; text-overflow: ellipsis; }
+      .image-modal { padding: 0.6rem; }
+      .image-modal-panel { width: 100%; max-height: calc(100vh - 1.2rem); }
+      .image-modal-bar { align-items: flex-start; }
+      .image-modal-bar div { flex-wrap: wrap; justify-content: flex-end; }
+      .motion-modal-overlay { padding: 0.75rem; }
+      .motion-modal-card { border-radius: 14px; padding: 1.2rem 1rem 1rem; max-height: calc(100vh - 1.5rem); }
+      .motion-modal-source { align-items: flex-start; }
+      .motion-modal-source img { width: 72px; height: 72px; }
+      .motion-modal-grid { grid-template-columns: 1fr; }
+      .motion-modal-ref-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      footer { padding-bottom: 5.6rem; }
+    }
+    @media (max-width: 370px) {
+      .hero-copy h1 { font-size: 2.45rem; }
+      .demo-top h2,
+      .motion-hero-title,
+      #launch h2,
+      #resources h2,
+      #logs h2,
+      #faq h2 { font-size: 2rem; }
+      .site-nav-inner { padding-inline: 0.75rem; }
+      .brand-mark { width: 34px; height: 34px; }
+      .site-nav-inner > a:first-child .font-semibold { font-size: 0.88rem; }
+      .site-nav-inner > a:first-child .text-\[9px\] { display: none; }
+      .nav-cta { max-width: 5.6rem; padding-inline: 0.72rem; }
+      .mobile-tabbar a { font-size: 0.72rem; }
+      .hero-actions,
+      .home-video-signal,
+      .hero-meta { width: 100%; }
+    }
+
+  </style>
+</head>
+<body>
+  <nav class="fixed top-0 left-0 right-0 z-50 glass">
+    <div class="site-nav-inner max-w-7xl mx-auto px-6 py-3.5 flex items-center justify-between">
+      <a href="#home" class="flex items-center gap-3 nav-page-link" data-page-link="home">
+        <div class="brand-mark" data-brand-mark>
+          <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M6.8 8.4L10.6 23.2L16 12.1L21.4 23.2L25.2 8.4" stroke="url(#brandArch)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M19.4 11.1L24.1 13.8L19.4 16.5V11.1Z" fill="url(#brandPlay)"/>
+            <circle cx="8.4" cy="7.6" r="1.35" fill="#7dd3fc"/>
+            <defs>
+              <linearGradient id="brandArch" x1="8" y1="10" x2="24" y2="24"><stop stop-color="#fff7ed"/><stop offset="0.58" stop-color="#f0c2b5"/><stop offset="1" stop-color="#d4b46e"/></linearGradient>
+              <linearGradient id="brandPlay" x1="14" y1="15" x2="20" y2="22"><stop stop-color="#fff7ed"/><stop offset="1" stop-color="#f0c2b5"/></linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="leading-none">
+          <div class="font-semibold text-[15px]" data-brand-name>WedScene</div>
+          <div class="text-[9px] text-stone-600 mt-1.5 tracking-[0.28em] uppercase font-mono" data-brand-tagline>AI · 婚礼</div>
+        </div>
+      </a>
+      <div class="hidden md:flex items-center gap-5 text-[13px] font-medium text-stone-800">
+        <a href="#products" class="nav-page-link hover:text-black transition" data-page-link="products">产品矩阵</a>
+        <a href="#demo" class="nav-page-link hover:text-black transition" data-page-link="demo">图文生成</a>
+        <a href="#video" class="nav-page-link hover:text-black transition" data-page-link="video">视频生成</a>
+        <a href="#resources" class="nav-page-link hover:text-black transition" data-page-link="resources">资源库</a>
+        <a href="#logs" class="nav-page-link hover:text-black transition" data-page-link="logs">点数日志</a>
+        <a href="#launch" class="nav-page-link hover:text-black transition" data-page-link="launch">公测说明</a>
+        <a href="#faq" class="nav-page-link hover:text-black transition" data-page-link="faq">常见问题</a>
+      </div>
+      <button id="authEntryBtn" type="button" class="nav-cta btn-primary px-5 py-2 rounded-full text-[13px]">登录 / 注册</button>
+    </div>
+  </nav>
+
+  <div class="mobile-tabbar" aria-label="移动端快捷导航">
+    <a href="#home" class="nav-page-link" data-page-link="home">首页</a>
+    <a href="#demo" class="nav-page-link" data-page-link="demo">生图</a>
+    <a href="#video" class="nav-page-link" data-page-link="video">视频</a>
+    <a href="#resources" class="nav-page-link" data-page-link="resources">资源</a>
+    <a href="#logs" class="nav-page-link" data-page-link="logs">点数</a>
+  </div>
+
+  <section id="home" class="studio-hero page-section active" data-page="home">
+    <div class="studio-scene" aria-hidden="true">
+      <div class="scene-arch"></div>
+      <div class="scene-window"></div>
+      <div class="scene-window small"></div>
+      <div class="scene-stairs"><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="scene-water"></div>
+      <div class="scene-sphere"></div>
+    </div>
+    <div class="hero-copy">
+      <div class="hero-pill font-mono"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> VIRAL WEDDING CONTENT STUDIO</div>
+      <h1 class="font-bold" data-brand-hero>WedScene<br/><em>AI</em></h1>
+      <p class="font-cn text-[15px] md:text-lg leading-8 text-stone-700 max-w-2xl mx-auto">
+        上传婚礼现场照或设计图，生成摄像师专业分镜图、真实现场候选图、爆款图文，也能把空景照一键做成高清电影感运镜视频。
+      </p>
+      <div class="hero-actions mt-6 flex items-center justify-center gap-3 flex-wrap">
+        <a href="#demo" class="btn-dark px-6 py-3 rounded-full text-sm inline-flex items-center gap-2 nav-page-link" data-page-link="demo">一键生成爆款图文 <span>→</span></a>
+        <a href="#video" class="btn-primary px-6 py-3 rounded-full text-sm inline-flex items-center gap-2 nav-page-link" data-page-link="video">生成高清运镜视频 <span>→</span></a>
+        <a href="login.html?tab=register" class="bg-white/55 border border-white/60 text-stone-800 px-6 py-3 rounded-full text-sm font-bold" data-auth-link>注册 / 登录</a>
+      </div>
+      <div class="hero-meta">
+        <div><strong class="font-cn">1-6 张生图</strong><span>按模式生成参考素材</span></div>
+        <div><strong class="font-cn">爆款封面</strong><span>适合图文首图展示</span></div>
+        <div><strong class="font-cn">高清视频</strong><span>8 秒空景运镜成片</span></div>
+        <div><strong class="font-cn">发布文案</strong><span>标题正文话题一并生成</span></div>
+      </div>
+      <div class="home-video-signal" aria-label="高清婚礼视频生成功能">
+        <a class="home-video-thumb nav-page-link" href="#video" data-page-link="video" aria-label="查看高清空景运镜视频生成">
+          <video src="assets/motion-demo-showcase.mp4?v=20260529-other-only-hq" muted autoplay loop playsinline preload="metadata"></video>
+        </a>
+        <div class="home-video-copy">
+          <strong class="font-cn">视频功能已开放：1-3 张空景图生成连续转场 MP4</strong>
+          <p class="font-cn">适合婚礼团队做视频号、门店屏幕和案例预览，生成完成后自动进入资源库的视频分组。</p>
+          <div class="home-video-flow" aria-hidden="true">
+            <span>上传空景图</span>
+            <span>自动整理运镜</span>
+            <span>输出高清 MP4</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <section id="products" class="product-suite page-section relative z-10 px-6 py-20 scroll-mt-24" data-page="products">
+    <div class="max-w-7xl mx-auto">
+      <div class="suite-layout">
+        <div class="suite-feature reveal">
+          <div class="suite-preview">
+            <img src="assets/demo/product-showcase.webp" alt="婚礼 AI 产品视觉" />
+            <div class="suite-preview-label">
+              <div>
+                <div class="font-cn text-[12px] tracking-[0.18em] text-rose-100">开放功能</div>
+                <div class="font-cn text-xl font-bold mt-1">核心生图工具</div>
+              </div>
+            </div>
+          </div>
+          <div class="suite-feature-body">
+            <div class="tag">◆ MVP 已开放</div>
+            <h2 class="font-cn font-black">现场照生成婚礼素材</h2>
+            <p class="text-stone-700 leading-7 max-w-2xl">
+              先把客户最容易理解、最容易转发的内容闭环做出来：婚礼延展图、爆款首图、标题正文和高清空景运镜视频。
+            </p>
+            <div class="suite-flow">
+              <div class="suite-flow-item">
+                <span>01</span>
+                <div><strong class="font-cn">上传现场照</strong><p>用真实案例图作为参考，提取场地、色系、花艺和灯光风格。</p></div>
+              </div>
+              <div class="suite-flow-item">
+                <span>02</span>
+                <div><strong class="font-cn">选择生成模式</strong><p>图文素材、高清空景运镜、电影感分镜和对比图，分别用于内容发布、短视频展示和方案沟通。</p></div>
+              </div>
+              <div class="suite-flow-item">
+                <span>03</span>
+                <div><strong class="font-cn">导出发布素材</strong><p>生成爆款图文图片、发布文案和 MP4 视频，直接用于获客内容。</p></div>
+              </div>
+            </div>
+            <div class="title-copy-strip">
+              <div class="title-copy-strip-head">
+                <strong class="font-cn">单独写爆款标题文案</strong>
+                <span class="font-mono">COPY</span>
+              </div>
+              <div class="title-copy-examples font-cn">
+                <span>紫色花艺 + 水晶吊顶，婚礼现场太出片</span>
+                <span>香槟色布幔婚礼，谁看了不心动</span>
+              </div>
+              <a href="#demo" class="request-feature" data-select-mode="copy_title">开始写标题</a>
+            </div>
+          </div>
+          <div class="suite-feature-action">
+            <div class="text-xs text-stone-500 leading-5">当前开放图文发布包、对比图和高清空景运镜视频。</div>
+            <a href="#demo" class="btn-primary px-4 py-2 rounded-full text-[13px] whitespace-nowrap">开始生图</a>
+          </div>
+        </div>
+
+        <div class="suite-grid">
+          <article class="suite-card accent reveal" data-code="01">
+            <div class="suite-icon">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M10 13l5 2.5-5 2.5z"/></svg>
+            </div>
+            <div class="suite-copy">
+              <div class="suite-chip">OPEN NOW</div>
+              <h3 class="font-cn font-bold text-2xl mb-2">婚礼分镜素材</h3>
+              <p class="text-sm leading-relaxed mb-4">上传一张婚礼现场图，生成参考图片、爆款首图和可复制发布文案。</p>
+              <a href="#demo" class="inline-flex items-center gap-2 text-sm font-bold text-rose-100">立即生成 <span>→</span></a>
+            </div>
+          </article>
+          <article class="suite-card video-demo motion reveal" data-code="02">
+            <div class="suite-icon">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="8" width="12" height="9" rx="2"/><path d="M15 11l6-2.5v8L15 14z"/><path d="M7 4h5"/></svg>
+            </div>
+            <div class="suite-copy">
+              <div class="suite-chip">OPEN NOW · 4K</div>
+              <h3 class="font-cn font-bold text-xl mb-2">4K 空景运镜视频</h3>
+              <p class="text-[13px] leading-relaxed">上传 1-3 张婚礼空景图，按顺序生成 8 秒电影感运镜视频，适合门店展示、视频号和案例预览。</p>
+              <a href="#video" class="request-feature" data-page-link="video">开始生成视频</a>
+            </div>
+            <div class="video-card-preview">
+              <div class="video-mock-top">
+                <div class="video-mock-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+                <strong>4K VIDEO</strong>
+                <div class="video-card-note">已开放</div>
+              </div>
+              <div class="video-workflow-panel" aria-hidden="true">
+                <div class="video-flow-row"><b>1</b><span>上传空景图</span><em>1-3 张</em></div>
+                <div class="video-flow-row"><b>2</b><span>整理视频提示词</span><em>自动</em></div>
+                <div class="video-flow-row"><b>3</b><span>生成高清运镜</span><em>8 秒</em></div>
+                <div class="video-flow-row"><b>4</b><span>下载 MP4</span><em>完成</em></div>
+              </div>
+              <div class="video-card-progress" aria-hidden="true"><span></span></div>
+            </div>
+          </article>
+          <article class="suite-card build wide locked reveal" data-code="03">
+            <div class="suite-icon">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 18h16"/><path d="M6 18V9l6-4 6 4v9"/><path d="M9 18v-6h6v6"/><path d="M8 9h8"/></svg>
+            </div>
+            <div class="suite-copy">
+              <div class="suite-chip">申请试用</div>
+              <h3 class="font-cn font-bold text-lg mb-2">婚礼搭建视频</h3>
+              <p class="text-[13px] leading-relaxed">围绕空场、结构进场、花艺灯光和成片效果，生成更完整的搭建过程视频，用于方案讲解和案例展示。</p>
+              <button class="request-feature" type="button" data-request-feature="婚礼搭建视频">申请使用</button>
+            </div>
+          </article>
+          <article class="suite-card rednote-demo copy reveal" data-code="04">
+            <div class="rednote-content">
+              <div class="flex gap-4">
+                <div class="suite-icon">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M9 8h5M9 12h6M9 16h4"/></svg>
+                </div>
+                <div class="suite-copy">
+                  <div class="suite-chip">爆款图文</div>
+                  <h3 class="font-cn font-bold text-xl mb-2">婚礼图文素材</h3>
+                  <p class="text-[13px] leading-relaxed mb-3">上传一张婚礼现场照，自动生成爆款图片，并配好标题、正文文案和话题标签，做成可直接发布的图文内容。</p>
+                  <div class="flex flex-wrap gap-2 text-[11px] font-cn text-stone-700">
+                    <span class="rounded-full bg-white/60 border border-stone-900/10 px-2.5 py-1">爆款图片</span>
+                    <span class="rounded-full bg-white/60 border border-stone-900/10 px-2.5 py-1">标题文案</span>
+                    <span class="rounded-full bg-white/60 border border-stone-900/10 px-2.5 py-1">话题标签</span>
+                  </div>
+                  <a href="#demo" class="request-feature">开始生图</a>
+                </div>
+              </div>
+              <div class="rednote-preview">
+                <div class="rednote-grid" aria-hidden="true">
+                  <span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div class="rednote-meta">
+                  <div><strong>标题</strong>现场布置从 0 到成片</div>
+                  <div><strong>话题</strong>#婚礼布置 #婚礼灵感</div>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="suite-card design reveal" data-code="05">
+            <div class="suite-icon">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 17h16"/><path d="M7 14l3-5 3 5 3-7 3 7"/><path d="M4 5h16v14H4z"/></svg>
+            </div>
+            <div class="suite-copy">
+              <div class="suite-chip">OPEN NOW</div>
+              <h3 class="font-cn font-bold text-lg mb-2">布置前后对比图</h3>
+              <p class="text-[13px] leading-relaxed">上传已布置好的婚礼现场照，AI 反推同一场地未布置前的空场地，拼成 3:4 前后对比首图。</p>
+              <a href="#demo" class="request-feature" data-select-mode="setup_comparison">开始生成</a>
+            </div>
+          </article>
+          <article class="suite-card design reveal" data-code="06">
+            <div class="suite-icon">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 19h16"/><path d="M6 16V9l6-4 6 4v7"/><path d="M9 16v-5h6v5"/><path d="M8 7l8 8"/><path d="M16 7l-8 8"/></svg>
+            </div>
+            <div class="suite-copy">
+              <div class="suite-chip">OPEN NOW</div>
+              <h3 class="font-cn font-bold text-lg mb-2">效果图转实景</h3>
+              <p class="text-[13px] leading-relaxed">上传婚礼效果图或设计图，一次生成 4 张真实落地现场候选图，适合提案沟通和营销发布。</p>
+              <a href="#demo" class="request-feature" data-select-mode="design_render_scene">开始生成</a>
+            </div>
+          </article>
+          <article class="suite-card invite locked reveal" data-code="07">
+            <div class="suite-icon">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 8l9 6 9-6"/></svg>
+            </div>
+            <div class="suite-copy">
+              <div class="suite-chip">INVITE</div>
+              <h3 class="font-cn font-bold text-lg mb-2">婚礼请柬动效</h3>
+              <p class="text-[13px] leading-relaxed">给静态请柬加入花瓣、烫金和光影轻动效，适合发给宾客。</p>
+              <button class="request-feature" type="button" data-request-feature="婚礼请柬动效">申请使用</button>
+            </div>
+          </article>
+          <article class="suite-card album locked reveal" data-code="08">
+            <div class="suite-icon">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="6" width="14" height="14" rx="2"/><path d="M8 13l2 2 3-4 5 7"/><circle cx="9" cy="10" r="1"/></svg>
+            </div>
+            <div class="suite-copy">
+              <div class="suite-chip">MEMORY</div>
+              <h3 class="font-cn font-bold text-lg mb-2">回忆相册视频</h3>
+              <p class="text-[13px] leading-relaxed">多张婚礼照片自动组织成回忆短片，保留节奏和转场框架。</p>
+              <button class="request-feature" type="button" data-request-feature="回忆相册视频">申请使用</button>
+            </div>
+          </article>
+          <article class="suite-card retouch locked reveal" data-code="09">
+            <div class="suite-icon">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.5-3h5L16 7"/><circle cx="12" cy="13.5" r="3"/></svg>
+            </div>
+            <div class="suite-copy">
+              <div class="suite-chip">RETOUCH</div>
+              <h3 class="font-cn font-bold text-lg mb-2">婚纱照 AI 修图</h3>
+              <p class="text-[13px] leading-relaxed">统一光线、背景和色调，让案例素材更适合展示。</p>
+              <button class="request-feature" type="button" data-request-feature="婚纱照 AI 修图">申请使用</button>
+            </div>
+          </article>
+          <article class="suite-card mc locked reveal" data-code="10">
+            <div class="suite-icon">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11c0 3 3 5 6 5s6-2 6-5M12 16v4M9 20h6"/></svg>
+            </div>
+            <div class="suite-copy">
+              <div class="suite-chip">SCRIPT</div>
+              <h3 class="font-cn font-bold text-lg mb-2">婚礼 MC 文案</h3>
+              <p class="text-[13px] leading-relaxed">按新人故事、仪式流程和现场风格生成主持串词。</p>
+              <button class="request-feature" type="button" data-request-feature="婚礼 MC 文案">申请使用</button>
+            </div>
+          </article>
+          <article class="suite-card title-copy copy reveal" data-code="11">
+            <div class="suite-icon">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 5h14"/><path d="M7 9h10"/><path d="M7 13h7"/><path d="M5 19l3.5-2H19a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2z"/></svg>
+            </div>
+            <div class="suite-copy">
+              <div class="suite-chip">TITLE</div>
+              <h3 class="font-cn font-bold text-lg mb-2">爆款标题文案</h3>
+              <p class="text-[13px] leading-relaxed">单独根据婚礼图片写爆款标题、正文和话题，跟上方发布包使用同一套看图文案模型。</p>
+              <a href="#demo" class="request-feature" data-select-mode="copy_title">开始写标题</a>
+            </div>
+            <div class="title-copy-card-preview font-cn" aria-hidden="true">
+              <span>紫色花艺婚礼也太出片了</span>
+              <span>#婚礼灵感 #花艺布置</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+  <main id="demo" class="demo-section page-section relative z-10 px-6 py-20 scroll-mt-24" data-page="demo">
+    <div class="max-w-7xl mx-auto">
+      <div class="demo-top reveal">
+        <div>
+          <div class="tag mb-5">◆ 生图演示</div>
+          <h2 class="font-cn font-black">上传一张婚礼现场照或设计图，一键生成爆款图文</h2>
+          <p class="text-stone-400 leading-7 max-w-2xl mt-4">上传现场照/设计图，选择生成方向，系统会输出参考图片、真实现场候选图或发布文案。</p>
+        </div>
+      </div>
+
+      <div class="demo-shell reveal">
+        <section class="demo-workspace">
+          <div id="stepIndicator" class="step-track"></div>
+
+          <div class="generator-board">
+            <aside class="card rounded-lg p-4 md:p-5">
+              <div class="text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 mb-3">上传素材</div>
+              <div id="generatorUploadZone" class="upload-zone text-center cursor-pointer">
+                <div class="upload-content">
+                  <div class="w-16 h-16 rounded-lg mx-auto mb-5 grid place-items-center bg-white/[0.08] border border-white/10 shadow-2xl shadow-rose-200/10">
+                    <svg class="w-8 h-8 text-rose-200" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                  </div>
+                  <h3 id="generatorUploadTitle" class="font-cn text-2xl font-black mb-3">上传婚礼现场照 / 设计图</h3>
+                  <p id="generatorUploadHint" class="text-stone-400 mb-7 text-sm">JPG / PNG · 建议原图 · ≤ 10MB</p>
+                  <button type="button" class="btn-primary px-7 py-3 rounded-full text-sm">选择照片</button>
+                  <input id="generatorFileInput" type="file" accept="image/*" class="hidden" />
+                </div>
+              </div>
+
+              <div id="inputPreviewWrap" class="hidden mt-4">
+                <div class="preview-frame">
+                  <img id="inputPreview" class="w-full h-full object-cover" alt="上传的婚礼现场照或设计图" />
+                </div>
+                <button id="replaceImageBtn" type="button" class="mt-3 btn-ghost px-4 py-2 rounded-full text-sm">换一张照片</button>
+              </div>
+
+              <div id="fusionMaterialPanel" class="fusion-material-panel hidden mt-4">
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <div class="text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 mb-1">第二张素材</div>
+                    <strong class="font-cn text-sm text-stone-900">上传婚礼素材图</strong>
+                    <p class="text-xs leading-5 text-stone-500 mt-1">提取这张图里的花艺、布幔、灯光、舞台和通道风格。</p>
+                  </div>
+                  <button id="fusionMaterialPickBtn" type="button" class="btn-ghost px-3 py-2 rounded-full text-xs shrink-0">选择素材</button>
+                </div>
+                <input id="fusionMaterialInput" type="file" accept="image/*" class="hidden" />
+                <div id="fusionMaterialPreviewWrap" class="hidden mt-3">
+                  <div class="fusion-material-preview">
+                    <img id="fusionMaterialPreview" alt="上传的婚礼素材图" />
+                  </div>
+                  <button id="replaceFusionMaterialBtn" type="button" class="mt-3 btn-ghost px-4 py-2 rounded-full text-sm">更换婚礼素材</button>
+                </div>
+              </div>
+
+              <button id="sampleDemoBtn" type="button" class="mt-4 w-full btn-ghost px-5 py-2.5 rounded-full text-sm">没有照片？用示例图跑一遍</button>
+            </aside>
+
+            <section class="card rounded-lg p-4 md:p-5">
+              <div class="flex items-start justify-between gap-4 mb-4">
+                <div>
+                  <div class="text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 mb-2">生成方向</div>
+                  <h3 class="font-cn text-xl font-bold">选择这次要生成什么</h3>
+                </div>
+                <span id="apiStatus" class="rounded-full bg-white/[0.06] border border-white/[0.08] px-3 py-1 text-[11px] text-stone-400">服务检测中</span>
+              </div>
+
+              <div class="mode-grid" id="modeGrid">
+                <button class="mode-card active" type="button" data-mode="cinematic_storyboard" aria-pressed="true">
+                  <span>01</span>
+                  <div><strong class="font-cn">电影感分镜图</strong><p>按摄像师顺序生成 16:9 镜头：建立场、主视觉、花艺、灯光空间、通道和道具前景。</p></div>
+                </button>
+                <button class="mode-card" type="button" data-mode="similar_style" aria-pressed="false">
+                  <span>02</span>
+                  <div><strong class="font-cn">类似婚礼</strong><p>生成 6 张同色系类似婚礼，单图比例跟上传图一致，并拼成 3:4 六宫格头图。</p></div>
+                </button>
+                <button class="mode-card" type="button" data-mode="setup_comparison" aria-pressed="false">
+                  <span>03</span>
+                  <div><strong class="font-cn">布置前后对比图</strong><p>上传已布置好的现场照，AI 反推出同一场地「未布置前」的空场地，拼成 3:4 前后对比首图并配文案。</p></div>
+                </button>
+                <button class="mode-card" type="button" data-mode="design_render_scene" aria-pressed="false">
+                  <span>04</span>
+                  <div><strong class="font-cn">设计图转实景</strong><p>上传婚礼设计图或效果图，一次生成 4 张真实落地现场候选图，不做对比拼图。</p></div>
+                </button>
+                <button class="mode-card" type="button" data-mode="venue_fusion" aria-pressed="false">
+                  <span>05</span>
+                  <div><strong class="font-cn">空地婚礼融合图</strong><p>上传 1 张空地/空场图和 1 张婚礼素材图，把婚礼风格真实融合到这个场地上。</p></div>
+                </button>
+                <button class="mode-card" type="button" data-mode="copy_title" aria-pressed="false">
+                  <span>06</span>
+                  <div><strong class="font-cn">只写标题文案</strong><p>上传婚礼图片后不生成图片，直接根据画面色系、花艺、灯光和布幔写爆款标题正文。</p></div>
+                </button>
+              </div>
+
+              <div class="mt-5">
+                <div class="flex items-center justify-between mb-2">
+                  <span id="jobStatusText" class="text-sm text-stone-400">等待上传素材</span>
+                  <span id="overallProgress" class="text-sm font-mono text-rose-200">0%</span>
+                </div>
+                <div class="progress-track h-1 rounded-full overflow-hidden">
+                  <div id="progressBar" class="progress-fill h-full" style="width:0%; background: linear-gradient(90deg, #e8b4a8, #c9a961);"></div>
+                </div>
+              </div>
+
+              <div class="mt-5 flex flex-wrap items-center gap-3">
+                <button id="generateBtn" type="button" class="btn-primary px-6 py-3 rounded-full text-sm disabled:opacity-40 disabled:cursor-not-allowed" disabled>生成电影感分镜图</button>
+                <button id="restartBtn" type="button" class="btn-ghost px-5 py-3 rounded-full text-sm">重新开始</button>
+              </div>
+
+              <div class="generation-log mt-5 rounded-lg p-4 font-mono text-xs h-28 overflow-hidden">
+                <div id="logStream"></div>
+              </div>
+            </section>
+          </div>
+
+          <section id="resultPanel" class="hidden mt-4 grid lg:grid-cols-[minmax(0,1fr)_390px] gap-4">
+            <div class="card rounded-lg p-4 md:p-5">
+              <div class="flex items-center justify-between gap-4 mb-4">
+                <div>
+                  <div class="text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 mb-2">生成素材</div>
+                  <h3 class="font-cn text-xl font-bold">生成的镜头 / 参考素材</h3>
+                </div>
+                <button type="button" id="downloadAllBtn" class="hidden btn-ghost px-4 py-2 rounded-full text-sm">一键下载所有图片</button>
+              </div>
+              <div id="resultGrid" class="result-grid"></div>
+            </div>
+
+            <aside class="card rounded-lg p-4 md:p-5">
+              <div id="resultOverview" class="result-overview">
+                <div id="overviewKicker" class="text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 mb-2">合成预览</div>
+                <h3 id="overviewTitle" class="font-cn text-xl font-bold mb-4">分镜总览 / 爆款首图</h3>
+                <div class="collage-frame">
+                  <img id="collageImg" alt="生成素材合成预览" />
+                </div>
+                <a id="downloadCollageBtn" href="#" class="mt-4 w-full btn-primary px-5 py-3 rounded-full text-sm text-center block" download="wedscene-viral-cover.jpg">下载爆款首图</a>
+              </div>
+
+              <div class="copy-panel mt-4">
+                <div class="text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 mb-2">发布文案</div>
+                <h4 id="copyTitle" class="font-cn text-lg font-bold text-rose-100 mb-2"></h4>
+                <textarea id="copyBody" readonly></textarea>
+                <div id="copyTags" class="mt-3 flex flex-wrap gap-2 text-[11px] text-stone-300"></div>
+                <button id="copyTextBtn" type="button" class="mt-4 w-full btn-ghost px-5 py-2.5 rounded-full text-sm">复制文案</button>
+              </div>
+            </aside>
+          </section>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <main id="video" class="demo-section page-section relative z-10 px-6 py-20 scroll-mt-24" data-page="video">
+    <div class="max-w-7xl mx-auto">
+      <div class="demo-top reveal">
+        <div>
+          <div class="tag mb-5">◆ AI · 视频</div>
+          <h2 class="motion-hero-title font-cn font-black text-4xl md:text-5xl"><span class="motion-hero-accent">高清电影感</span>婚礼空景运镜</h2>
+          <p class="text-stone-500 leading-7 max-w-2xl mt-4">上传 1-3 张婚礼现场空景照，生成可直接发布的电影感短视频。4K 输出、8 秒成片，每条只需 60 灵感值，适合婚礼团队低成本做案例展示和获客素材。</p>
+          <div class="motion-proof-row" aria-label="视频生成优势">
+            <span>4K 输出</span>
+            <span>60 灵感值 / 条</span>
+            <span>失败自动退点</span>
+            <span>资源库自动保存</span>
+          </div>
+        </div>
+        <div class="hero-meta">
+          <div><strong class="font-cn">4K</strong><span>清晰成片输出</span></div>
+          <div><strong class="font-cn">8 秒</strong><span>电影感运镜</span></div>
+          <div><strong class="font-cn">60 灵感值</strong><span>单条低成本</span></div>
+        </div>
+      </div>
+
+      <section class="reveal mt-10 motion-showcase">
+        <div class="motion-showcase-grid">
+          <div>
+            <div class="motion-showcase-kicker">Showcase</div>
+            <h3 class="font-cn font-black">一眼看到成片质感</h3>
+            <p class="text-sm leading-relaxed mt-3">客户进入页面先看到真实运镜效果：空间、灯光、花艺和布幔被顺滑拉开，静态空景变成更有传播感的视频素材。</p>
+            <div class="motion-value-grid" aria-label="产品优势">
+              <div class="motion-value"><strong class="font-cn">4K</strong><span>适合门店展示和高清发布</span></div>
+              <div class="motion-value"><strong class="font-cn">60 灵感值</strong><span>单条成本低，方便多方案试片</span></div>
+              <div class="motion-value"><strong class="font-cn">8 秒</strong><span>短视频平台友好的成片长度</span></div>
+            </div>
+          </div>
+          <div class="motion-video-frame">
+            <video src="assets/motion-demo-showcase.mp4?v=20260529-other-only-hq" controls preload="metadata" muted playsinline></video>
+            <div class="motion-video-badges" aria-hidden="true">
+              <span>4K MOVIE</span>
+              <span>60 灵感值 / 条</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="reveal mt-4 grid lg:grid-cols-[420px_minmax(0,1fr)] gap-4">
+        <div class="card rounded-lg p-4 md:p-5">
+          <div class="text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 mb-3">第一步 · 上传空景照</div>
+          <div id="videoUploadZone" class="upload-zone text-center cursor-pointer">
+            <div class="upload-content">
+              <div class="w-14 h-14 rounded-lg mx-auto mb-4 grid place-items-center bg-white/[0.08] border border-white/10 shadow-2xl shadow-rose-200/10">
+                <svg class="w-7 h-7 text-rose-200" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+              </div>
+              <h3 class="font-cn text-xl font-black mb-2">上传 1-3 张婚礼空景照</h3>
+              <p class="text-stone-400 mb-5 text-xs">建议按镜头顺序上传：第 1 张全景开场，第 2 张中景/走道，第 3 张作为结尾画面 · JPG / PNG</p>
+              <ul class="video-upload-requirements">
+                <li>优先上传同一场婚礼、同一色系、同一横竖比例的清晰横图。</li>
+                <li>第 1 张要完整交代场地；第 2 张带通道或中景关系；第 3 张会作为最终画面，上传什么角度就按什么角度收尾。</li>
+                <li>避免人物、严重水印、过暗、强裁切、重复角度和完全不相关的场景。</li>
+              </ul>
+              <button type="button" class="btn-primary px-6 py-2.5 rounded-full text-sm">选择照片</button>
+              <input id="videoFileInput" type="file" accept="image/*" multiple class="hidden" />
+            </div>
+          </div>
+          <div id="videoInputPreviewWrap" class="hidden mt-4">
+            <div class="rounded-lg overflow-hidden bg-black/20 border border-white/[0.06]">
+              <img id="videoInputPreview" alt="婚礼空景照预览" class="w-full block" />
+            </div>
+            <div id="videoInputPreviewList" class="video-input-preview-list" aria-label="已上传镜头顺序"></div>
+            <button type="button" id="videoReplaceBtn" class="mt-3 btn-ghost px-4 py-2 rounded-full text-xs">重新选择</button>
+            <p id="videoUploadAdvice" class="video-upload-advice"></p>
+          </div>
+        </div>
+
+        <section class="card rounded-lg video-control-panel">
+          <div class="video-control-head">
+            <div>
+              <div class="video-control-kicker">第二步 · 一键生成</div>
+              <h3 class="font-cn font-black">连续转场成片</h3>
+              <p>系统会按上传顺序自动串联多张空景，用快速剪辑切换保留三段画面时长。</p>
+            </div>
+            <div class="video-control-specs" aria-label="生成规格">
+              <span><b>4K</b><small>高清输出</small></span>
+              <span><b>8 秒</b><small>电影感成片</small></span>
+              <span><b>60</b><small>灵感值 / 条</small></span>
+            </div>
+          </div>
+
+          <div class="video-control-body">
+            <div class="video-flow" aria-label="生成流程">
+              <span>上传参考</span>
+              <span>自动串联</span>
+              <span>生成成片</span>
+            </div>
+            <p class="video-runtime-note">已提交上游后通常需 3-20 分钟；超时失败会自动退回灵感值。</p>
+
+            <div class="video-progress-card">
+              <div class="flex items-center justify-between mb-2">
+                <span id="videoJobStatusText" class="text-sm text-stone-400">等待上传照片</span>
+                <span id="videoOverallProgress" class="text-sm font-mono text-rose-200">0%</span>
+              </div>
+              <div class="progress-track overflow-hidden">
+                <div id="videoProgressBar" class="progress-fill h-full" style="width:0%; background: linear-gradient(90deg, #e8b4a8, #c9a961);"></div>
+              </div>
+            </div>
+
+            <div class="video-action-row">
+              <button id="videoGenerateBtn" type="button" class="btn-primary rounded-full text-sm disabled:opacity-40 disabled:cursor-not-allowed" disabled>一键生成连续转场视频（60 灵感值）</button>
+              <button id="videoRestartBtn" type="button" class="btn-ghost px-5 py-3 rounded-full text-sm">重新开始</button>
+              <span id="videoPointHint" class="font-mono">每条 60 灵感值 · 4K · 8 秒</span>
+            </div>
+
+            <div class="generation-log video-generation-log rounded-lg p-4 font-mono text-xs overflow-hidden">
+              <div class="video-log-title">生成进度</div>
+              <div class="video-log-placeholder">上传照片并开始生成后，这里会显示任务进度；成片完成后会自动出现在下方「生成结果」区域。</div>
+              <div id="videoLogStream"></div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section id="videoResultPanel" class="hidden reveal mt-4 card rounded-lg p-4 md:p-5">
+        <div class="flex items-center justify-between gap-4 mb-4">
+          <div>
+            <div class="text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 mb-2">生成结果</div>
+            <h3 class="font-cn text-xl font-bold">连续转场视频</h3>
+          </div>
+          <div class="video-result-actions">
+            <button id="videoPreviewBtn" type="button" class="hidden btn-ghost px-5 py-2.5 rounded-full text-sm">预览视频</button>
+            <a id="videoDownloadBtn" href="#" class="hidden btn-primary px-5 py-2.5 rounded-full text-sm" download="wedscene-motion.mp4">下载视频</a>
+          </div>
+        </div>
+        <div class="motion-video-wrap relative rounded-lg overflow-hidden bg-black">
+          <video id="videoResultVideo" class="w-full block" controls preload="metadata" playsinline></video>
+        </div>
+        <div class="mt-3 flex flex-wrap items-center gap-3 text-xs text-stone-400">
+          <span id="videoResultMeta" class="font-mono"></span>
+        </div>
+      </section>
+
+      <section class="reveal mt-12">
+        <div class="flex items-end justify-between gap-4 mb-5">
+          <div>
+            <div class="text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 mb-2">最近生成</div>
+            <h3 class="font-cn text-xl font-bold">我的视频</h3>
+          </div>
+          <a href="#resources" class="text-xs text-stone-400 font-mono hover:text-rose-200" data-page-link="resources">查看全部 →</a>
+        </div>
+        <div id="videoHistoryGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+        <div id="videoHistoryEmpty" class="card rounded-lg p-8 text-center text-sm text-stone-400">还没有视频。上传一张婚礼空景照开始生成，或在「资源库」里点击图片右下角的「生成视频」。</div>
+      </section>
+    </div>
+  </main>
+
+  <section id="launch" class="launch-band page-section relative z-10 px-6 py-20 scroll-mt-24" data-page="launch">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-10">
+        <div class="tag mb-5">◆ 注意事项</div>
+        <h2 class="font-cn font-black text-4xl md:text-5xl">使用前请先看这里</h2>
+        <p class="text-stone-700 leading-7 max-w-2xl mx-auto mt-4">为了让生成结果更稳定，请尽量上传清晰、完整、已授权使用的婚礼现场图片。</p>
+      </div>
+      <div class="ops-grid">
+        <article class="ops-card reveal">
+          <div class="suite-chip">UPLOAD</div>
+          <h3 class="font-cn font-bold text-lg">上传规范</h3>
+          <ul><li>建议上传清晰现场照或案例图</li><li>画面越完整，风格越稳定</li><li>避免过暗、严重裁切和水印图</li></ul>
+        </article>
+        <article class="ops-card reveal">
+          <div class="suite-chip">RESULT</div>
+          <h3 class="font-cn font-bold text-lg">生成结果</h3>
+          <ul><li>生成图会参考上传图片的色调和布置风格</li><li>结果适合作为灵感图和内容素材</li><li>重要客户方案建议人工复核后再使用</li></ul>
+        </article>
+        <article class="ops-card reveal">
+          <div class="suite-chip">SAVE</div>
+          <h3 class="font-cn font-bold text-lg">资源保存</h3>
+          <ul><li>生成完成后素材会进入资源库</li><li>图片、视频和对比图会分组展示</li><li>每组资源都可以保存或删除</li></ul>
+        </article>
+        <article class="ops-card reveal">
+          <div class="suite-chip">LICENSE</div>
+          <h3 class="font-cn font-bold text-lg">素材授权</h3>
+          <ul><li>请确认上传图片有使用授权</li><li>不要上传违法、侵权或敏感内容</li><li>商用前请自行确认最终使用范围</li></ul>
+        </article>
+      </div>
+      <div class="legal-grid mt-4">
+        <article class="legal-card reveal">
+          <h3 class="font-cn font-bold text-lg">隐私与素材</h3>
+          <ul><li>上传图片仅用于当前生成任务和资源保存</li><li>历史资源会按账号隔离</li><li>可在资源库自行删除不再需要的历史资源</li></ul>
+        </article>
+        <article class="legal-card reveal">
+          <h3 class="font-cn font-bold text-lg">服务条款</h3>
+          <ul><li>禁止上传违法、侵权、敏感或无授权素材</li><li>生成结果需由客户自行确认可商用范围</li><li>公测期功能体验可能根据反馈持续调整</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="resources" class="resources-section page-section relative z-10 px-6 py-20 scroll-mt-24 border-y border-white/[0.05]" data-page="resources">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+        <div>
+          <div class="tag mb-5">◆ 资源库</div>
+          <h2 class="font-cn font-black text-4xl md:text-5xl">资源库</h2>
+          <p class="text-stone-500 leading-7 max-w-2xl mt-4">生成完成后的图片、视频和对比图会自动保存到这里，可按分类预览和保存。</p>
+          <div id="resourcesCategoryTabs" class="resources-category-tabs" aria-label="资源分类"></div>
+        </div>
+        <div class="resources-actions">
+          <div id="resourcesPageMeta" class="resources-page-meta" hidden></div>
+          <button id="refreshResourcesBtn" type="button" class="btn-ghost px-5 py-3 rounded-full text-sm">刷新资源</button>
+        </div>
+      </div>
+      <div id="resourcesEmpty" class="resource-empty hidden">还没有保存的图片或视频。完成一次生成后会出现在这里。</div>
+      <div id="resourcesGrid" class="resources-grid"></div>
+      <div id="resourcesPagination" class="resources-pagination" hidden></div>
+    </div>
+  </section>
+
+  <section id="logs" class="logs-section page-section relative z-10 px-6 py-20 scroll-mt-24 border-y border-white/[0.05]" data-page="logs">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+        <div>
+          <div class="tag mb-5">◆ 点数日志</div>
+          <h2 class="font-cn font-black text-4xl md:text-5xl">点数日志</h2>
+          <p class="text-stone-600 leading-7 max-w-2xl mt-4">查看当前灵感值余额、充值记录、生成扣点和失败返还。</p>
+        </div>
+        <div class="flex gap-3 flex-wrap">
+          <button id="refreshAccountLogsBtn" type="button" class="btn-ghost px-5 py-3 rounded-full text-sm">刷新日志</button>
+          <button id="rechargeFromLogsBtn" type="button" class="btn-primary px-5 py-3 rounded-full text-sm">购买灵感值</button>
+        </div>
+      </div>
+      <div class="logs-layout">
+        <aside class="logs-summary-card reveal visible">
+          <div class="suite-chip">ACCOUNT</div>
+          <h3 class="font-cn font-bold text-xl mt-3">账号概览</h3>
+          <div id="accountLogsSummary" class="logs-balance">
+            <span>当前可用</span>
+            <strong>--</strong>
+          </div>
+          <div class="logs-meta" id="accountLogsMeta">
+            <div><span>账号</span><strong>未登录</strong></div>
+            <div><span>图文消耗</span><strong>--</strong></div>
+            <div><span>视频消耗</span><strong>--</strong></div>
+          </div>
+        </aside>
+        <div class="logs-list-card reveal visible">
+          <div class="logs-list-head">
+            <div>
+              <h3 class="font-cn font-bold text-xl">最近流水</h3>
+              <p>后台充值、生成扣点和失败返还会按时间倒序显示。</p>
+            </div>
+          </div>
+          <div id="accountLogsEmpty" class="logs-empty hidden">暂无点数日志。</div>
+          <div id="accountLogsList" class="logs-list"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" class="internal-only relative z-10 px-6 py-20 scroll-mt-24 border-y border-white/[0.05] bg-white/[0.015]">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid lg:grid-cols-[0.9fr_1.1fr] gap-8 items-start">
+        <div class="reveal">
+          <div class="tag mb-5">◆ WHY IT WORKS</div>
+          <h2 class="font-cn text-4xl md:text-5xl font-black mb-5">把一张现场照变成可发布内容</h2>
+          <p class="text-stone-400 leading-7 max-w-xl">
+            婚礼团队最缺的不是单张完工照，而是能连续发、能讲清风格、能让客户保存参考的内容包。爆款图文把大景、侧面、细节和氛围放在一起，更适合内容获客。
+          </p>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <article class="card rounded-2xl p-6 reveal">
+            <div class="text-rose-100 font-mono text-sm mb-5">01</div>
+            <h3 class="font-cn font-bold text-lg mb-2">参考真实现场</h3>
+            <p class="text-[13px] text-stone-400 leading-relaxed">从上传图片里提取色系、花艺、灯光和空间关系，减少风格跑偏。</p>
+          </article>
+          <article class="card rounded-2xl p-6 reveal">
+            <div class="text-rose-100 font-mono text-sm mb-5">02</div>
+            <h3 class="font-cn font-bold text-lg mb-2">多角度补齐内容</h3>
+            <p class="text-[13px] text-stone-400 leading-relaxed">大景、侧面、通道、花艺和灯光分开生成，让一张案例图变成一组内容。</p>
+          </article>
+          <article class="card rounded-2xl p-6 reveal">
+            <div class="text-rose-100 font-mono text-sm mb-5">03</div>
+            <h3 class="font-cn font-bold text-lg mb-2">过程可见可控</h3>
+            <p class="text-[13px] text-stone-400 leading-relaxed">任务状态、生成日志、进度条和结果区分开展示，避免用户不知道等什么。</p>
+          </article>
+          <article class="card rounded-2xl p-6 reveal">
+            <div class="text-rose-100 font-mono text-sm mb-5">04</div>
+            <h3 class="font-cn font-bold text-lg mb-2">直接服务发布</h3>
+            <p class="text-[13px] text-stone-400 leading-relaxed">最终交付爆款首图、单图素材和标题文案，减少发内容前的整理成本。</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="scenarios" class="internal-only relative z-10 px-6 py-20 scroll-mt-24">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-12 reveal">
+        <div class="tag mb-5">◆ ACQUISITION PLAYBOOK</div>
+        <h2 class="font-cn text-4xl md:text-5xl font-black mb-4">三类团队都能用来获客</h2>
+        <p class="text-stone-400 max-w-2xl mx-auto">不是单一生成按钮，而是围绕婚礼团队日常销售、方案沟通和案例沉淀设计的展示工具。</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4">
+        <article class="card rounded-2xl p-6 reveal">
+          <div class="w-11 h-11 rounded-xl bg-amber-200/10 border border-amber-200/20 grid place-items-center mb-5">
+            <svg class="w-6 h-6 text-amber-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19V7l8-4 8 4v12"/><path d="M8 19v-7h8v7"/><path d="M10 9h4"/></svg>
+          </div>
+          <h3 class="font-cn font-bold text-xl mb-3">婚庆策划 / 工作室</h3>
+            <p class="text-sm text-stone-400 leading-relaxed">把已有案例延展成爆款图文素材，用在日常发帖、私域咨询和方案沟通里。</p>
+        </article>
+        <article class="card rounded-2xl p-6 reveal">
+          <div class="w-11 h-11 rounded-xl bg-rose-200/10 border border-rose-200/20 grid place-items-center mb-5">
+            <svg class="w-6 h-6 text-rose-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20h16"/><path d="M6 20V8l6-4 6 4v12"/><path d="M9 14h6"/><path d="M9 10h6"/></svg>
+          </div>
+          <h3 class="font-cn font-bold text-xl mb-3">舞美 / 花艺团队</h3>
+          <p class="text-sm text-stone-400 leading-relaxed">把花艺、灯光、桌景和空间层次拆成可看的细节图，展示审美和执行质感。</p>
+        </article>
+        <article class="card rounded-2xl p-6 reveal">
+          <div class="w-11 h-11 rounded-xl bg-sky-200/10 border border-sky-200/20 grid place-items-center mb-5">
+            <svg class="w-6 h-6 text-sky-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7l1.5-3h5L16 7"/><circle cx="12" cy="13.5" r="3"/></svg>
+          </div>
+          <h3 class="font-cn font-bold text-xl mb-3">摄影 / 跟拍团队</h3>
+          <p class="text-sm text-stone-400 leading-relaxed">把现场照片延展成图文发布素材，作为交付增值项或获客样片入口。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="page-section relative z-10 px-6 py-20 scroll-mt-24" data-page="faq">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-10 reveal">
+        <div class="tag mb-5">◆ FAQ</div>
+        <h2 class="font-cn text-4xl md:text-5xl font-black mb-4">常见问题</h2>
+        <p class="text-stone-400">面向婚礼团队的生图 MVP，重点展示从现场照到爆款图文的完整体验。</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <article class="card rounded-2xl p-6 reveal">
+          <h3 class="font-cn font-bold text-lg mb-3">需要提供什么照片？</h3>
+          <p class="text-sm text-stone-400 leading-relaxed">一张清晰的婚礼现场照、搭建完成照或案例图就可以。画面越完整，越适合提取风格并生成多角度素材。</p>
+        </article>
+        <article class="card rounded-2xl p-6 reveal">
+          <h3 class="font-cn font-bold text-lg mb-3">能生成什么内容？</h3>
+          <p class="text-sm text-stone-400 leading-relaxed">当前开放婚礼生图、爆款首图、标题正文和话题标签。其他能力先收集申请。</p>
+        </article>
+        <article class="card rounded-2xl p-6 reveal">
+          <h3 class="font-cn font-bold text-lg mb-3">适合发到哪些平台？</h3>
+          <p class="text-sm text-stone-400 leading-relaxed">生成内容优先服务爆款图文发布，也可以把单图拆出来发朋友圈、私域或方案沟通页。</p>
+        </article>
+        <article class="card rounded-2xl p-6 reveal">
+          <h3 class="font-cn font-bold text-lg mb-3">现在可以用来获客吗？</h3>
+          <p class="text-sm text-stone-400 leading-relaxed">可以先作为对外演示和客户沟通入口，验证需求、收集案例和意向客户。确认合作后，再按你的真实案例素材和交付流程做定制接入。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-8 px-6 border-t border-white/[0.06]">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-stone-500">
+      <div>© 2026 <span class="text-stone-300" data-brand-footer>WedScene</span> · 一键生成爆款图文</div>
+      <div class="flex items-center gap-4">
+        <a href="terms.html" class="hover:text-stone-300 transition-colors">用户协议</a>
+        <a href="privacy.html" class="hover:text-stone-300 transition-colors">隐私政策</a>
+        <span class="font-mono">ONLINE PREVIEW</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="site-config.js?v=20260531-server-api-1"></script>
+  <script src="app.js?v=20260605-4k-restore-1"></script>
+</body>
+</html>

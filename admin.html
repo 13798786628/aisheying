@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>WedScene 管理后台</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #0a0a0c; color: #e7e5e4; min-height: 100vh; padding: 24px; }
+    .wrap { max-width: 1200px; margin: 0 auto; }
+    h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .sub { color: #a8a29e; font-size: 13px; margin-bottom: 20px; }
+    .card { background: #18181b; border: 1px solid #27272a; border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    input, select, button { background: #0f0f12; border: 1px solid #27272a; color: #e7e5e4; padding: 8px 12px; border-radius: 6px; font-size: 13px; font-family: inherit; }
+    input:focus, select:focus { outline: none; border-color: #f59e0b; }
+    button { cursor: pointer; transition: background 0.15s; }
+    button:hover { background: #27272a; }
+    button.primary { background: linear-gradient(90deg, #f59e0b, #d97706); border: none; color: #1c1917; font-weight: 600; }
+    button.primary:hover { filter: brightness(1.1); }
+    button.danger { background: #7f1d1d; border-color: #991b1b; }
+    button.danger:hover { background: #991b1b; }
+    button.ghost { background: transparent; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #27272a; }
+    th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #a8a29e; font-weight: 600; }
+    tr:hover td { background: #1c1c1f; }
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+    .pill-active { background: #064e3b; color: #6ee7b7; }
+    .pill-disabled { background: #450a0a; color: #fca5a5; }
+    .ledger-type { color: #a8a29e; font-size: 11px; }
+    .points-pos { color: #6ee7b7; }
+    .points-neg { color: #fca5a5; }
+    .toast { position: fixed; top: 20px; right: 20px; background: #1c1917; border: 1px solid #d97706; padding: 12px 16px; border-radius: 8px; font-size: 13px; max-width: 400px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); z-index: 100; }
+    .toast.error { border-color: #991b1b; }
+    .hidden { display: none; }
+    code { background: #0f0f12; padding: 2px 6px; border-radius: 3px; font-size: 12px; color: #fbbf24; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+    .stat-card { background: #0f0f12; border: 1px solid #27272a; border-radius: 8px; padding: 12px; }
+    .stat-card span { display: block; color: #a8a29e; font-size: 11px; margin-bottom: 6px; }
+    .stat-card strong { font-size: 20px; color: #f5f5f4; }
+    .plan-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .plan-chip { background: #0f0f12; border: 1px solid #27272a; border-radius: 8px; padding: 12px; min-height: 104px; }
+    .plan-chip.featured { border-color: #d97706; background: linear-gradient(145deg, #18181b, #22170c); }
+    .plan-chip .badge { float: right; background: #d97706; color: #1c1917; border-radius: 999px; padding: 2px 7px; font-size: 10px; font-weight: 700; }
+    .plan-chip strong { display: block; font-size: 18px; margin-bottom: 3px; }
+    .plan-chip span { display: block; color: #a8a29e; font-size: 11px; line-height: 1.5; }
+    .table-tools { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+    .tenant-list { display: grid; gap: 10px; max-height: 280px; overflow: auto; padding-right: 2px; }
+    .tenant-card { background: #0f0f12; border: 1px solid #27272a; border-radius: 8px; padding: 12px; }
+    .tenant-card strong { display: block; font-size: 14px; margin-bottom: 4px; color: #f5f5f4; }
+    .tenant-card span { display: block; color: #a8a29e; font-size: 11px; line-height: 1.55; word-break: break-all; }
+    .tenant-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+    @media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+    @media (max-width: 920px) { .stats-grid, .plan-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 520px) {
+      body { padding: 14px; }
+      .card { padding: 14px; }
+      .stats-grid, .plan-strip { grid-template-columns: 1fr; }
+      .row { align-items: stretch; }
+      input, select, button { width: 100% !important; min-width: 0 !important; min-height: 42px; }
+      .toast { left: 14px; right: 14px; max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>WedScene 管理后台</h1>
+    <div class="sub">用户账号 / 点数管理 / 流水查询</div>
+
+    <div id="loginCard" class="card">
+      <h3 style="font-size: 15px; margin-bottom: 12px;">管理员登录</h3>
+      <div class="row">
+        <input id="adminToken" type="password" placeholder="输入 ADMIN_TOKEN" style="flex: 1; min-width: 240px;" />
+        <button class="primary" id="loginBtn">进入</button>
+      </div>
+      <div class="sub" style="margin-top: 8px;">在 <code>.env</code> 设置 <code>ADMIN_TOKEN=...</code> 后启动服务即可。</div>
+    </div>
+
+    <div id="dashboard" class="hidden">
+      <div class="card">
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="sub" style="margin-bottom: 8px;">充值套餐</div>
+        <div class="plan-strip" id="planStrip"></div>
+      </div>
+
+      <div class="card">
+        <div class="row" style="justify-content: space-between; margin-bottom: 12px;">
+          <h3 style="font-size: 15px;">代理 / 白标合作方</h3>
+          <button class="ghost" id="tenantRefreshBtn">↻ 刷新合作方</button>
+        </div>
+        <div class="grid-2">
+          <div>
+            <div class="sub" style="margin-bottom: 6px;">新建合作方</div>
+            <div class="row">
+              <input id="tenantName" placeholder="品牌名，如 某某婚礼影像" style="flex: 1; min-width: 170px;" />
+              <input id="tenantSlug" placeholder="英文标识，如 demo-studio" style="flex: 1; min-width: 160px;" />
+              <input id="tenantLogoText" placeholder="Logo字母" maxlength="2" style="width: 90px;" />
+              <input id="tenantLogoUrl" placeholder="Logo图片URL（可选）" style="flex: 1; min-width: 180px;" />
+              <input id="tenantWechat" placeholder="合作方客服微信（可选）" style="flex: 1; min-width: 160px;" />
+              <input id="tenantDomains" placeholder="绑定域名，多个用逗号隔开（可选）" style="flex: 1; min-width: 220px;" />
+              <button class="primary" id="tenantCreateBtn">创建合作方</button>
+            </div>
+          </div>
+          <div>
+            <div class="sub" style="margin-bottom: 6px;">已开通合作方</div>
+            <div class="tenant-list" id="tenantList"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row" style="justify-content: space-between; margin-bottom: 12px;">
+          <h3 style="font-size: 15px;">客户账号</h3>
+          <button class="ghost" id="refreshBtn">↻ 刷新</button>
+        </div>
+        <div class="grid-2">
+          <div>
+            <div class="sub" style="margin-bottom: 6px;">新建/重置账号</div>
+            <div class="row">
+              <input id="newLogin" placeholder="账号 / 手机号" style="flex: 1; min-width: 140px;" />
+              <input id="newName" placeholder="姓名（可选）" style="flex: 1; min-width: 100px;" />
+              <input id="newPoints" type="number" placeholder="初始点数" value="5" style="width: 100px;" />
+              <input id="newCode" placeholder="登录码（留空自动生成）" style="flex: 1; min-width: 140px;" />
+              <select id="newTenant" style="flex: 1; min-width: 150px;">
+                <option value="">平台账号</option>
+              </select>
+              <select id="newTenantRole" style="width: 130px;">
+                <option value="">普通用户</option>
+                <option value="tenant_admin">代理管理员</option>
+              </select>
+              <button class="primary" id="createBtn">创建/更新</button>
+            </div>
+          </div>
+          <div>
+            <div class="sub" style="margin-bottom: 6px;">手动充值/扣点</div>
+            <div class="row">
+              <input id="rechargeLogin" placeholder="账号 / 手机号" style="flex: 1; min-width: 140px;" />
+              <select id="rechargePlan" style="flex: 1; min-width: 150px;">
+                <option value="">自定义点数</option>
+              </select>
+              <input id="rechargePoints" type="number" placeholder="点数（负数为扣点）" style="width: 160px;" />
+              <input id="rechargeNote" placeholder="备注（可选）" style="flex: 1; min-width: 140px;" />
+              <button class="primary" id="rechargeBtn">提交</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size: 15px; margin-bottom: 12px;">账号列表</h3>
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>账号</th>
+                <th>姓名</th>
+                <th>点数</th>
+                <th>有效期</th>
+                <th>状态</th>
+                <th>身份</th>
+                <th>合作方</th>
+                <th>创建时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="accountTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="table-tools">
+          <h3 style="font-size: 15px;">最近流水</h3>
+          <input id="ledgerFilter" placeholder="筛选账号 / 类型 / 备注" style="width: 240px; max-width: 100%;" />
+        </div>
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>时间</th>
+                <th>账号</th>
+                <th>合作方</th>
+                <th>类型</th>
+                <th>点数</th>
+                <th>余额</th>
+                <th>备注</th>
+                <th>任务</th>
+              </tr>
+            </thead>
+            <tbody id="ledgerTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="site-config.js?v=20260531-server-api-1"></script>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    let adminToken = sessionStorage.getItem('admin_token') || '';
+    let rechargePlans = [];
+    let lastAccounts = [];
+    let lastLedger = [];
+    let tenants = [];
+
+    function escapeHtml(value = '') {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function toast(message, isError) {
+      const el = document.createElement('div');
+      el.className = 'toast' + (isError ? ' error' : '');
+      el.textContent = message;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 3500);
+    }
+
+    async function api(path, method = 'GET', body = null) {
+      const init = {
+        method,
+        headers: { 'x-admin-token': adminToken },
+      };
+      if (body) {
+        init.headers['Content-Type'] = 'application/json';
+        init.body = JSON.stringify(body);
+      }
+      const response = await fetch(path, init);
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
+      return data;
+    }
+
+    function formatDate(iso) {
+      if (!iso) return '';
+      const d = new Date(iso);
+      return d.toLocaleString('zh-CN', { hour12: false });
+    }
+
+    function formatMembershipExpiry(account) {
+      const expiresAt = account?.membershipExpiresAt;
+      if (!expiresAt) return '未开通';
+      const d = new Date(expiresAt);
+      if (Number.isNaN(d.getTime())) return '未开通';
+      const label = d.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+      return account.membershipStatus === 'expired' ? `已过期 ${label}` : `有效至 ${label}`;
+    }
+
+    function tenantLabel(id = '', slug = '') {
+      const tenant = tenants.find((item) => item.id === id || item.slug === slug);
+      return tenant ? `${tenant.name || tenant.slug} / ${tenant.slug}` : (slug || '平台');
+    }
+
+    function tenantInviteUrl(tenant = {}) {
+      const fallback = tenant.slug ? `/?partner=${encodeURIComponent(tenant.slug)}` : '/';
+      return new URL(tenant.inviteUrl || fallback, location.origin).href;
+    }
+
+    function renderTenants() {
+      const list = $('tenantList');
+      if (!list) return;
+      if (!tenants.length) {
+        list.innerHTML = '<div class="sub" style="margin:0;">暂无合作方，先创建一个用于测试分享链接。</div>';
+      } else {
+        list.innerHTML = tenants.map((tenant) => {
+          const inviteUrl = tenantInviteUrl(tenant);
+          const domains = Array.isArray(tenant.domains) && tenant.domains.length ? tenant.domains.join(', ') : '未绑定独立域名';
+          return `
+            <div class="tenant-card">
+              <strong>${escapeHtml(tenant.name || tenant.slug || '')}</strong>
+              <span>标识：${escapeHtml(tenant.slug || '')} · 状态：${escapeHtml(tenant.status || 'active')}</span>
+              <span>分享链接：${escapeHtml(inviteUrl)}</span>
+              <span>域名：${escapeHtml(domains)}</span>
+              <div class="tenant-actions">
+                <button data-action="copylink" data-url="${escapeHtml(inviteUrl)}">复制链接</button>
+                <button data-action="filltenant" data-id="${escapeHtml(tenant.id)}">用于新账号</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      const select = $('newTenant');
+      if (select) {
+        const current = select.value;
+        select.innerHTML = '<option value="">平台账号</option>' + tenants.map((tenant) => (
+          `<option value="${escapeHtml(tenant.id)}">${escapeHtml(tenant.name || tenant.slug)} / ${escapeHtml(tenant.slug)}</option>`
+        )).join('');
+        if (tenants.some((tenant) => tenant.id === current)) select.value = current;
+      }
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+      const input = document.createElement('textarea');
+      input.value = text;
+      input.style.position = 'fixed';
+      input.style.left = '-9999px';
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      input.remove();
+    }
+
+    async function loadTenants() {
+      try {
+        const data = await api('/api/admin/tenants');
+        tenants = Array.isArray(data.tenants) ? data.tenants : [];
+        renderTenants();
+        if (lastAccounts.length) renderAccounts(lastAccounts);
+        if (lastLedger.length) renderLedger(lastLedger);
+      } catch (error) {
+        toast(error.message, true);
+      }
+    }
+
+    function renderStats(stats = {}) {
+      const items = [
+        ['总账号', `${stats.totalUsers ?? 0}`, `正常 ${stats.activeUsers ?? 0}`],
+        ['总余额', `${stats.totalBalance ?? 0}`, '全站可用灵感值'],
+        ['今日充值', `+${stats.todayRechargePoints ?? 0}`, `新用户 ${stats.todayNewUsers ?? 0}`],
+        ['今日消耗', `-${stats.todayConsumedPoints ?? 0}`, `返还 ${stats.todayRefundPoints ?? 0}`],
+      ];
+      $('statsGrid').innerHTML = items.map(([label, value, sub]) => `
+        <div class="stat-card">
+          <span>${escapeHtml(label)}</span>
+          <strong>${escapeHtml(value)}</strong>
+          <span>${escapeHtml(sub)}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderRechargePlans(plans = []) {
+      $('planStrip').innerHTML = plans.length ? plans.map((plan) => `
+        <div class="plan-chip${plan.featured ? ' featured' : ''}" data-plan-id="${escapeHtml(plan.id)}">
+          ${plan.badge ? `<span class="badge">${escapeHtml(plan.badge)}</span>` : ''}
+          <strong>${escapeHtml(plan.priceText || '')}</strong>
+          <span>${escapeHtml(plan.name || '')} · ${escapeHtml(plan.pointsText || '')}</span>
+          <span>${escapeHtml(plan.durationText || '')}</span>
+          <span>约 ${plan.singleImageGenerations ?? plan.imageGenerations ?? 0} 次单图 / ${plan.sixImageGenerations ?? 0} 次 6图</span>
+          <span>约 ${plan.motionGenerations ?? 0} 条视频</span>
+          <span>${escapeHtml(plan.description || '')}</span>
+        </div>
+      `).join('') : '<div class="sub">暂无套餐配置，请在 .env 设置 RECHARGE_PLANS。</div>';
+    }
+
+    function populateRechargePlanOptions(plans = []) {
+      const select = $('rechargePlan');
+      const current = select.value;
+      select.innerHTML = '<option value="">自定义点数</option>' + plans.map((plan) => (
+        `<option value="${escapeHtml(plan.id)}">${escapeHtml(plan.priceText)} · ${escapeHtml(plan.pointsText)}${plan.durationText ? ` · ${escapeHtml(plan.durationText)}` : ''}</option>`
+      )).join('');
+      if (plans.some((plan) => plan.id === current)) select.value = current;
+    }
+
+    function ledgerTypeLabel(type = '') {
+      return {
+        manual_recharge: '人工充值',
+        manual_adjustment: '人工调整',
+        generate: '生成扣点',
+        refund: '失败返还',
+        trial: '试用赠送',
+        self_register_trial: '注册赠送',
+      }[type] || type || '点数变动';
+    }
+
+    function renderAccounts(accounts) {
+      const tbody = $('accountTable');
+      tbody.innerHTML = '';
+      if (!accounts.length) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #a8a29e; padding: 24px;">暂无账号</td></tr>';
+        return;
+      }
+      const roleMap = {
+        planner: '策划师', host: '主持人',
+        photographer: '摄影摄像', mua: '化妆师',
+        lighting: '灯光师', bride_groom: '备婚新人',
+        other: '其他'
+      };
+      for (const a of accounts) {
+        const tr = document.createElement('tr');
+        const status = a.status === 'disabled'
+          ? '<span class="pill pill-disabled">已禁用</span>'
+          : '<span class="pill pill-active">正常</span>';
+        const srcLabel = a.tenantRole === 'tenant_admin'
+          ? '代理管理员'
+          : (roleMap[a.role] || a.role || '—');
+        tr.innerHTML = `
+          <td><code>${escapeHtml(a.login)}</code></td>
+          <td>${escapeHtml(a.name || '')}</td>
+          <td><strong>${a.points ?? 0}</strong></td>
+          <td style="color: #a8a29e; font-size: 11px;">${escapeHtml(formatMembershipExpiry(a))}</td>
+          <td>${status}</td>
+          <td style="color: #a8a29e; font-size: 11px;">${escapeHtml(srcLabel)}</td>
+          <td style="color: #a8a29e; font-size: 11px;">${escapeHtml(tenantLabel(a.tenantId, a.tenantSlug))}</td>
+          <td style="color: #a8a29e; font-size: 11px;">${formatDate(a.createdAt)}</td>
+          <td>
+            <button data-action="history" data-login="${escapeHtml(a.login)}">流水</button>
+            <button data-action="addone" data-login="${escapeHtml(a.login)}">+1</button>
+            <button data-action="addten" data-login="${escapeHtml(a.login)}">+10</button>
+            <button data-action="resetcode" data-login="${escapeHtml(a.login)}">重置码</button>
+            <button data-action="toggle" data-login="${escapeHtml(a.login)}" data-status="${escapeHtml(a.status)}" class="${a.status === 'disabled' ? '' : 'danger'}">${a.status === 'disabled' ? '启用' : '禁用'}</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
+
+    function renderLedger(ledger) {
+      const tbody = $('ledgerTable');
+      const keyword = $('ledgerFilter')?.value.trim().toLowerCase() || '';
+      const rows = keyword
+        ? ledger.filter((item) => [item.login, item.type, ledgerTypeLabel(item.type), item.note, item.jobId, item.planName, item.tenantSlug, tenantLabel(item.tenantId, item.tenantSlug)]
+          .some((value) => String(value || '').toLowerCase().includes(keyword)))
+        : ledger;
+      tbody.innerHTML = '';
+      if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #a8a29e; padding: 24px;">暂无流水</td></tr>';
+        return;
+      }
+      for (const l of rows) {
+        const points = Number(l.points || 0);
+        const pointsText = points > 0 ? `+${points}` : `${points}`;
+        const cls = points >= 0 ? 'points-pos' : 'points-neg';
+        const expiry = l.membershipExpiresAt ? ` · 有效至 ${formatDate(l.membershipExpiresAt)}` : '';
+        const note = l.planName ? `${l.planName} · ${l.note || ''}${expiry}` : `${l.note || ''}${expiry}`;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="color: #a8a29e; font-size: 11px;">${formatDate(l.createdAt)}</td>
+          <td><code>${escapeHtml(l.login)}</code></td>
+          <td style="color: #a8a29e; font-size: 11px;">${escapeHtml(tenantLabel(l.tenantId, l.tenantSlug))}</td>
+          <td><span class="ledger-type">${escapeHtml(ledgerTypeLabel(l.type))}</span></td>
+          <td class="${cls}"><strong>${pointsText}</strong></td>
+          <td>${l.balanceAfter ?? ''}</td>
+          <td>${escapeHtml(note)}</td>
+          <td style="color: #a8a29e; font-size: 11px;">${escapeHtml(l.jobId || '')}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
+
+    async function loadAccounts() {
+      try {
+        const data = await api('/api/admin/accounts');
+        rechargePlans = Array.isArray(data.rechargePlans) ? data.rechargePlans : [];
+        lastAccounts = Array.isArray(data.accounts) ? data.accounts : [];
+        lastLedger = Array.isArray(data.ledger) ? data.ledger : [];
+        renderStats(data.stats || {});
+        renderRechargePlans(rechargePlans);
+        populateRechargePlanOptions(rechargePlans);
+        renderAccounts(lastAccounts);
+        renderLedger(lastLedger);
+      } catch (error) {
+        toast(error.message, true);
+        if (error.message.includes('密钥') || error.message.includes('401')) {
+          showLogin();
+        }
+      }
+    }
+
+    function showLogin() {
+      adminToken = '';
+      sessionStorage.removeItem('admin_token');
+      $('loginCard').classList.remove('hidden');
+      $('dashboard').classList.add('hidden');
+    }
+
+    function showDashboard() {
+      $('loginCard').classList.add('hidden');
+      $('dashboard').classList.remove('hidden');
+      loadTenants();
+      loadAccounts();
+    }
+
+    $('loginBtn').addEventListener('click', async () => {
+      const token = $('adminToken').value.trim();
+      if (!token) return toast('请输入 ADMIN_TOKEN', true);
+      adminToken = token;
+      try {
+        await api('/api/admin/accounts');
+        sessionStorage.setItem('admin_token', token);
+        showDashboard();
+      } catch (error) {
+        toast(error.message, true);
+        adminToken = '';
+      }
+    });
+
+    $('refreshBtn').addEventListener('click', loadAccounts);
+    $('tenantRefreshBtn').addEventListener('click', loadTenants);
+
+    $('rechargePlan').addEventListener('change', () => {
+      const plan = rechargePlans.find((item) => item.id === $('rechargePlan').value);
+      if (!plan) return;
+      $('rechargePoints').value = plan.points || '';
+      $('rechargeNote').value = `套餐充值：${plan.name || plan.priceText} ${plan.priceText} / ${plan.pointsText}${plan.durationText ? ` / ${plan.durationText}` : ''}`;
+    });
+
+    $('ledgerFilter').addEventListener('input', () => renderLedger(lastLedger));
+
+    $('planStrip').addEventListener('click', (event) => {
+      const card = event.target.closest('[data-plan-id]');
+      if (!card) return;
+      $('rechargePlan').value = card.dataset.planId;
+      $('rechargePlan').dispatchEvent(new Event('change'));
+      $('rechargeLogin').focus();
+    });
+
+    $('createBtn').addEventListener('click', async () => {
+      const login = $('newLogin').value.trim();
+      const tenantId = $('newTenant').value;
+      if (!login) return toast('请输入账号', true);
+      try {
+        const data = await api('/api/admin/accounts', 'POST', {
+          login,
+          name: $('newName').value.trim() || login,
+          points: Number($('newPoints').value) || 0,
+          code: $('newCode').value.trim() || undefined,
+          tenantId: tenantId || undefined,
+          tenantRole: $('newTenantRole').value || undefined,
+        });
+        toast(`已${data.created ? '创建' : '更新'}：${login}，登录码 ${data.loginCode}`);
+        $('newLogin').value = '';
+        $('newName').value = '';
+        $('newCode').value = '';
+        $('newTenantRole').value = '';
+        loadAccounts();
+      } catch (error) {
+        toast(error.message, true);
+      }
+    });
+
+    $('tenantCreateBtn').addEventListener('click', async () => {
+      const name = $('tenantName').value.trim();
+      const slug = $('tenantSlug').value.trim();
+      if (!name || !slug) return toast('请输入合作方品牌名和英文标识', true);
+      try {
+        const data = await api('/api/admin/tenants', 'POST', {
+          name,
+          slug,
+          logoText: $('tenantLogoText').value.trim() || name.slice(0, 1),
+          logoUrl: $('tenantLogoUrl').value.trim(),
+          tagline: `${name} AI`,
+          supportWechat: $('tenantWechat').value.trim(),
+          domains: $('tenantDomains').value.trim(),
+          plan: 'affiliate',
+          status: 'active',
+        });
+        toast(`合作方已创建：${data.tenant?.name || name}`);
+        ['tenantName', 'tenantSlug', 'tenantLogoText', 'tenantLogoUrl', 'tenantWechat', 'tenantDomains'].forEach((id) => { $(id).value = ''; });
+        await loadTenants();
+      } catch (error) {
+        toast(error.message, true);
+      }
+    });
+
+    $('tenantList').addEventListener('click', async (event) => {
+      const btn = event.target.closest('button');
+      if (!btn) return;
+      const action = btn.dataset.action;
+      if (action === 'copylink') {
+        await copyText(btn.dataset.url || '');
+        toast('分享链接已复制');
+      } else if (action === 'filltenant') {
+        $('newTenant').value = btn.dataset.id || '';
+        $('newTenantRole').value = 'tenant_admin';
+        $('newLogin').focus();
+        toast('已填入新账号归属，可创建代理管理员账号');
+      }
+    });
+
+    $('rechargeBtn').addEventListener('click', async () => {
+      const login = $('rechargeLogin').value.trim();
+      const points = Number($('rechargePoints').value);
+      const planId = $('rechargePlan').value;
+      const selectedPlan = rechargePlans.find((item) => item.id === planId);
+      const displayPoints = selectedPlan ? Number(selectedPlan.points || 0) : points;
+      if (!login || (!points && !planId)) return toast('请输入账号和点数', true);
+      try {
+        await api('/api/admin/recharge', 'POST', {
+          login,
+          points,
+          planId: planId || undefined,
+          note: $('rechargeNote').value.trim() || (points > 0 ? '管理员加点' : '管理员扣点'),
+        });
+        toast(`${login} ${displayPoints > 0 ? '+' : ''}${displayPoints} 点成功`);
+        $('rechargeLogin').value = '';
+        $('rechargePlan').value = '';
+        $('rechargePoints').value = '';
+        $('rechargeNote').value = '';
+        loadAccounts();
+      } catch (error) {
+        toast(error.message, true);
+      }
+    });
+
+    $('accountTable').addEventListener('click', async (event) => {
+      const btn = event.target.closest('button');
+      if (!btn) return;
+      const login = btn.dataset.login;
+      const action = btn.dataset.action;
+      try {
+        if (action === 'history') {
+          $('ledgerFilter').value = login;
+          renderLedger(lastLedger);
+          $('ledgerFilter').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        } else if (action === 'addone') {
+          await api('/api/admin/recharge', 'POST', { login, points: 1, note: '快捷加 1 点' });
+          toast(`${login} +1`);
+        } else if (action === 'addten') {
+          await api('/api/admin/recharge', 'POST', { login, points: 10, note: '快捷加 10 点' });
+          toast(`${login} +10`);
+        } else if (action === 'resetcode') {
+          if (!confirm(`重置 ${login} 的登录码？旧码会失效`)) return;
+          const data = await api('/api/admin/accounts', 'POST', { login });
+          toast(`新登录码：${data.loginCode}`);
+        } else if (action === 'toggle') {
+          const next = btn.dataset.status === 'disabled' ? 'active' : 'disabled';
+          if (next === 'disabled' && !confirm(`禁用 ${login}？该用户将无法登录和生成`)) return;
+          await api('/api/admin/accounts', 'POST', { login, status: next });
+          toast(`${login} 已${next === 'disabled' ? '禁用' : '启用'}`);
+        }
+        loadAccounts();
+      } catch (error) {
+        toast(error.message, true);
+      }
+    });
+
+    $('adminToken').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('loginBtn').click(); });
+
+    if (adminToken) {
+      api('/api/admin/accounts').then(showDashboard).catch(showLogin);
+    }
+  </script>
+</body>
+</html>

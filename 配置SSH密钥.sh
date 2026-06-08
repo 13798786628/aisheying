@@ -1,0 +1,63 @@
+#!/bin/bash
+# SSH 密钥配置助手
+
+SERVER_IP="106.53.167.63"
+PUBLIC_KEY=$(cat ~/.ssh/wedscene_rsa.pub)
+
+echo "🔑 SSH 密钥配置助手"
+echo "================================"
+echo ""
+echo "✅ 步骤 1：已生成 SSH 密钥"
+echo ""
+echo "📋 你的公钥内容："
+echo "--------------------------------"
+echo "$PUBLIC_KEY"
+echo "--------------------------------"
+echo ""
+echo "📝 步骤 2：配置服务器"
+echo ""
+echo "请在新的终端窗口执行以下命令："
+echo ""
+echo "1. 登录服务器（需要微信扫码）："
+echo "   ssh root@$SERVER_IP"
+echo ""
+echo "2. 在服务器上执行："
+echo "   mkdir -p ~/.ssh && chmod 700 ~/.ssh"
+echo ""
+echo "3. 添加公钥："
+echo "   echo '$PUBLIC_KEY' >> ~/.ssh/authorized_keys"
+echo ""
+echo "4. 设置权限："
+echo "   chmod 600 ~/.ssh/authorized_keys"
+echo ""
+echo "5. 退出服务器："
+echo "   exit"
+echo ""
+echo "================================"
+echo ""
+echo "⏳ 配置完成后，按回车继续测试连接..."
+read
+
+echo ""
+echo "🔍 测试 SSH 密钥连接..."
+ssh -i ~/.ssh/wedscene_rsa -o "StrictHostKeyChecking=no" root@$SERVER_IP "echo '✅ SSH 密钥认证成功！'"
+
+if [ $? -eq 0 ]; then
+    echo ""
+    echo "================================"
+    echo "✅ 配置成功！"
+    echo "================================"
+    echo ""
+    echo "现在可以免密码、免扫码登录了！"
+    echo ""
+    echo "🚀 开始部署："
+    echo "   bash 快速部署-106.53.167.63-密钥版.sh"
+    echo ""
+else
+    echo ""
+    echo "❌ 连接失败，请检查："
+    echo "   1. 是否正确执行了服务器端配置"
+    echo "   2. authorized_keys 文件内容是否正确"
+    echo "   3. 文件权限是否正确"
+    echo ""
+fi

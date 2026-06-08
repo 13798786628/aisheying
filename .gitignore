@@ -1,0 +1,45 @@
+node_modules/
+dist/
+.data/
+output/
+wedscene-ai-launch.zip
+WedSceneAI-2026.pdf
+*.zip
+*.log
+server.*.log
+.DS_Store
+Thumbs.db
+npm-debug.log*
+*.local
+.env
+.env.*
+!.env.example
+.cache/
+.claude/
+coverage/
+deploy/
+
+# Local diagnostic media and old demo variants. The active demo videos are
+# assets/motion-demo.mp4 and assets/motion-demo-showcase.mp4.
+assets/motion-demo-[0-9]*.mp4
+assets/motion-demo.old.mp4
+watermark-*.png
+veo-*.png
+
+# Local demo source media; the production build uses the optimized .webp files.
+assets/demo/*.jpg
+assets/demo/*.png
+assets/demo/*.mp4
+!assets/demo/*.webp
+!assets/demo/README.md
+
+# Local release archives and proposal materials.
+*.tar.gz
+婚礼商家的 AI内容获客工具.pdf
+
+# Local deployment notes and task reports that may include server details.
+完整操作指南.md
+工具任务执行完成-Final.md
+立即开始部署.md
+给Codex的部署指令.md
+轻量云服务器部署指南.md
