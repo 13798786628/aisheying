@@ -1,6 +1,6 @@
 (function () {
   const config = {
-    apiBaseUrl: 'https://sixty-eagles-show.loca.lt',
+    apiBaseUrl: 'https://wedsceneai.com',
   };
   const apiBase = String(config.apiBaseUrl || '').replace(/\/+$/, '');
   let apiOrigin = '';
