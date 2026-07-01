@@ -1,6 +1,6 @@
 (function () {
   const config = {
-    apiBaseUrl: '',
+    apiBaseUrl: 'https://sixty-eagles-show.loca.lt',
   };
   const apiBase = String(config.apiBaseUrl || '').replace(/\/+$/, '');
   let apiOrigin = '';
@@ -10,19 +10,33 @@
     apiOrigin = '';
   }
   const isLocalHost = /^(localhost|127(?:\.\d{1,3}){3}|0\.0\.0\.0|::1)$/i.test(location.hostname);
-  const isGithubPages = /\.github\.io$/i.test(location.hostname);
   const fileApiBase = location.protocol === 'file:' ? 'http://127.0.0.1:5173' : '';
-  const activeApiBase = fileApiBase || (apiBase && isGithubPages && !isLocalHost && location.origin !== apiOrigin ? apiBase : '');
+  const activeApiBase = fileApiBase || (apiBase && !isLocalHost && location.origin !== apiOrigin ? apiBase : '');
 
   window.WEDSCENE_CONFIG = config;
   window.WEDSCENE_API_BASE = activeApiBase;
 
   if (typeof window.fetch !== 'function') return;
 
+  function isApiRequest(input) {
+    try {
+      if (typeof input === 'string') {
+        return new URL(input, window.location.href).pathname.startsWith('/api');
+      }
+      if (input instanceof Request) {
+        return new URL(input.url).pathname.startsWith('/api');
+      }
+    } catch {
+      return false;
+    }
+    return false;
+  }
+
   const originalFetch = window.fetch.bind(window);
   window.fetch = function patchedWedSceneFetch(input, init) {
     const options = init ? { ...init } : {};
     let target = input;
+    const apiRequest = isApiRequest(input);
 
     if (activeApiBase) {
       if (typeof input === 'string' && input.startsWith('/api')) {
@@ -35,7 +49,7 @@
       }
     }
 
-    if (target !== input) {
+    if (apiRequest || target !== input) {
       options.credentials = options.credentials || 'include';
     }
     return originalFetch(target, options);
