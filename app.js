@@ -5645,6 +5645,18 @@ function dataUrlToChatFile(dataUrl = '', name = 'reference.jpg') {
   return new File([bytes], safeName.includes('.') ? safeName : `${safeName}.${extension}`, { type: mime });
 }
 
+function chatLooksLikeImageRequest(text = '', images = []) {
+  const clean = String(text || '').trim();
+  if (!clean) return false;
+  const explicitImageIntent = /(生成|出|做|画|绘制|设计|create|make|draw|generate)/i.test(clean);
+  const imageTarget = /(图片|图像|效果图|出图|生图|画图|主图|海报|封面|视觉图|场景图|方案图|image|picture|render)/i.test(clean);
+  const directImageRequest = /(出图|生图|画图|生成图片|生成一张|生成.*图|画一张|画.*(图|海报|封面|主图|视觉)|做一张|做.*(图|海报|封面|主图|视觉)|设计一张|设计.*(图|海报|封面|主图|视觉)|create.*image|generate.*image)/i.test(clean);
+  const promptOnly = /(提示词|prompt|文案|脚本|分析|评价|建议|怎么|如何|拆解|改写|润色)/i.test(clean)
+    && !/(直接|现在|立刻|马上|帮我|给我).{0,10}(生成|出图|生图|画图|做图)/i.test(clean);
+  if (promptOnly) return false;
+  return directImageRequest || (!!images.length && explicitImageIntent && imageTarget);
+}
+
 function fitChatPromptInput() {
   if (!els.chatPromptInput) return;
   els.chatPromptInput.style.height = 'auto';
@@ -5791,18 +5803,23 @@ async function sendChatMessage() {
     showAuthNotice();
     return;
   }
-  const requiredPoints = chatPointCostValue();
-  if (accountRequired && Number(currentUser?.points || 0) < requiredPoints) {
-    chatStatus('灵感值不足，请先充值');
-    updateChatCostText(`需要 ${requiredPoints} 灵感值 / 次`);
-    showAuthNotice();
-    return;
-  }
 
   const content = String(els.chatPromptInput.value || '').replace(/\s+$/g, '');
   const imagesForRequest = chatReferenceImages.map((image) => ({ ...image }));
   if (!content.trim() && !imagesForRequest.length) {
     els.chatPromptInput.focus();
+    return;
+  }
+  if (chatLooksLikeImageRequest(content, imagesForRequest)) {
+    await generateChatImage();
+    return;
+  }
+
+  const requiredPoints = chatPointCostValue();
+  if (accountRequired && Number(currentUser?.points || 0) < requiredPoints) {
+    chatStatus('灵感值不足，请先充值');
+    updateChatCostText(`需要 ${requiredPoints} 灵感值 / 次`);
+    showAuthNotice();
     return;
   }
 
@@ -5966,7 +5983,7 @@ async function generateChatImage() {
   const previewText = currentInstruction.trim() || '请根据当前对话上下文生成一张图片。';
   chatMessages.push({
     role: 'user',
-    content: `生成图片：${previewText}`,
+    content: previewText,
     images: currentImages,
   });
   const references = chatContextReferenceImages(currentImages);
