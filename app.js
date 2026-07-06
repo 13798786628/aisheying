@@ -1448,7 +1448,7 @@ function isTransientPollingError(message = '') {
 function cleanErrorMessage(message = '') {
   const text = String(message || '').trim();
   if (/Failed to fetch|Load failed|NetworkError|fetch failed|ECONNRESET|ERR_FAILED|ERR_NETWORK/i.test(text)) {
-    return '网络连接中断，或参考图过大导致请求没有发出。请刷新后重试，或重新上传较小的参考图。';
+    return '网络连接中断，请刷新后重试；如果还失败，请检查本地预览服务或线上接口是否在线。';
   }
   if (/<!doctype\s+html|<html[\s>]|cloudflare|attention required|cf-error|sorry,\s*you have been blocked|ray id/i.test(text)) {
     return 'n1n.ai 接口被 Cloudflare 拦截，当前网络/IP/代理被上游拒绝访问。请换网络或代理、联系 n1n.ai 放行/更换可用 API 域名，或临时切回官方 OpenAI 接口。';
@@ -5939,18 +5939,30 @@ async function sendChatMessage() {
     const payload = {
       system: String(els.chatSystemInput?.value || '').trim(),
       messages: chatPayloadMessages(),
-      images: imagesForRequest.map((image) => ({
-        name: image.name || '参考图',
-        dataUrl: image.dataUrl,
-      })),
+      images: [],
     };
-    const requestBody = JSON.stringify(payload);
-    if (requestBody.length > CHAT_REQUEST_MAX_BODY_CHARS) {
-      throw new Error('参考图总大小过大，请删除几张或重新上传较小图片后再试。');
+    let requestBody = null;
+    let requestHeaders = null;
+    if (imagesForRequest.length) {
+      const form = new FormData();
+      form.append('system', payload.system);
+      form.append('messages', JSON.stringify(payload.messages));
+      imagesForRequest.forEach((image, index) => {
+        const file = dataUrlToChatFile(image.dataUrl, image.name || `reference-${index + 1}.jpg`);
+        if (file) form.append('images', file, file.name || `reference-${index + 1}.jpg`);
+      });
+      requestBody = form;
+    } else {
+      const jsonBody = JSON.stringify(payload);
+      if (jsonBody.length > CHAT_REQUEST_MAX_BODY_CHARS) {
+        throw new Error('对话内容过长，请减少历史内容后再试。');
+      }
+      requestBody = jsonBody;
+      requestHeaders = { 'Content-Type': 'application/json' };
     }
     const response = await fetch(apiUrl('/api/chat'), {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      ...(requestHeaders ? { headers: requestHeaders } : {}),
       body: requestBody,
     });
     const data = await response.json().catch(() => ({}));

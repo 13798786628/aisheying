@@ -330,6 +330,8 @@ const CHAT_REQUEST_TIMEOUT_MS = Number(process.env.CHAT_REQUEST_TIMEOUT_MS || 18
 const CHAT_JSON_BODY_LIMIT = process.env.CHAT_JSON_BODY_LIMIT || process.env.CHAT_BODY_LIMIT || '32mb';
 const CHAT_IMAGE_LIMIT = Math.max(1, Math.min(8, Number(process.env.CHAT_IMAGE_LIMIT || 6)));
 const CHAT_IMAGE_MAX_DATA_URL_LENGTH = Math.max(100_000, Number(process.env.CHAT_IMAGE_MAX_DATA_URL_LENGTH || 4_000_000));
+const CHAT_UPLOAD_IMAGE_MAX_BYTES = Math.max(100_000, Number(process.env.CHAT_UPLOAD_IMAGE_MAX_BYTES || 6_000_000));
+const CHAT_UPLOAD_FIELD_SIZE = Math.max(16_000, Number(process.env.CHAT_UPLOAD_FIELD_SIZE || 512_000));
 const CHAT_POINT_COST = Math.max(0, Number(process.env.CHAT_POINT_COST || 1));
 const CHAT_MAX_HISTORY_MESSAGES = Math.max(2, Math.min(40, Number(process.env.CHAT_MAX_HISTORY_MESSAGES || 24)));
 const CHAT_MAX_TOKENS = Math.max(256, Math.min(8000, Number(process.env.CHAT_MAX_TOKENS || 2400)));
@@ -919,6 +921,26 @@ const upload = multer({
     cb(new Error('Unsupported upload type. Please upload JPG, PNG, WebP, HEIC, or HEIF images.'));
   },
 });
+
+const chatUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: CHAT_UPLOAD_IMAGE_MAX_BYTES,
+    files: CHAT_IMAGE_LIMIT,
+    fields: 6,
+    parts: CHAT_IMAGE_LIMIT + 8,
+    fieldNameSize: 80,
+    fieldSize: CHAT_UPLOAD_FIELD_SIZE,
+  },
+  fileFilter: (_req, file, cb) => {
+    const mimetype = String(file.mimetype || '').toLowerCase();
+    if (ALLOWED_UPLOAD_MIME_TYPES.has(mimetype)) {
+      cb(null, true);
+      return;
+    }
+    cb(new Error('Unsupported upload type. Please upload JPG、PNG、WebP、HEIC 或 HEIF 图片.'));
+  },
+}).array('images', CHAT_IMAGE_LIMIT);
 
 const jobs = new Map();
 const openai = USE_OPENAI_COMPAT ? new OpenAI({
@@ -3586,6 +3608,67 @@ function normalizeChatImages(value = []) {
     })
     .filter(Boolean)
     .slice(0, CHAT_IMAGE_LIMIT);
+}
+
+function parseChatJsonField(value, fallback) {
+  if (Array.isArray(value) || (value && typeof value === 'object')) return value;
+  const raw = String(value || '').trim();
+  if (!raw) return fallback;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return fallback;
+  }
+}
+
+async function normalizeChatUploadedImages(files = []) {
+  const normalized = [];
+  for (const file of Array.isArray(files) ? files : []) {
+    if (!file?.buffer?.length) continue;
+    try {
+      const buffer = await sharp(file.buffer)
+        .rotate()
+        .resize({ width: 960, height: 960, fit: 'inside', withoutEnlargement: true })
+        .jpeg({ quality: 72, mozjpeg: true })
+        .toBuffer();
+      const dataUrl = `data:image/jpeg;base64,${buffer.toString('base64')}`;
+      if (dataUrl.length > CHAT_IMAGE_MAX_DATA_URL_LENGTH) continue;
+      normalized.push({
+        name: normalizeChatText(file.originalname || 'reference image', 120),
+        dataUrl,
+      });
+    } catch (error) {
+      console.warn(`[chat-upload] failed to normalize image ${file.originalname || ''}: ${error.message}`);
+    }
+  }
+  return normalized.slice(0, CHAT_IMAGE_LIMIT);
+}
+
+function parseChatBody(req, res, next) {
+  if (/^multipart\/form-data/i.test(String(req.headers['content-type'] || ''))) {
+    chatUpload(req, res, async (error) => {
+      if (error) {
+        next(error);
+        return;
+      }
+      try {
+        const body = req.body || {};
+        const uploadedImages = await normalizeChatUploadedImages(req.files || []);
+        const jsonImages = normalizeChatImages(parseChatJsonField(body.images, []));
+        req.body = {
+          ...body,
+          system: normalizeChatText(body.system || '', 1200),
+          messages: parseChatJsonField(body.messages, []),
+          images: [...jsonImages, ...uploadedImages].slice(0, CHAT_IMAGE_LIMIT),
+        };
+        next();
+      } catch (innerError) {
+        next(innerError);
+      }
+    });
+    return;
+  }
+  chatJsonParser(req, res, next);
 }
 
 function chatMessageContentWithImages(text = '', images = []) {
@@ -11963,7 +12046,7 @@ app.post('/api/chat', rateLimit(GENERATE_IP_RATE, {
   limit: 40,
   windowMs: 60_000,
   message: 'AI 对话请求过于频繁，请稍后再试',
-}), requireAccess, chatJsonParser, async (req, res) => {
+}), requireAccess, parseChatBody, async (req, res) => {
   let chatRequestId = '';
   let chargedPointCost = 0;
   let chargedUser = req.user;
