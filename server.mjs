@@ -845,6 +845,22 @@ app.use((req, res, next) => {
   defaultJsonParser(req, res, next);
 });
 
+app.use((err, req, res, next) => {
+  if (!err) {
+    next();
+    return;
+  }
+  if (err.type === 'entity.too.large' || err.status === 413) {
+    res.status(413).json({ error: '上传内容过大，请压缩图片、减少参考图数量后再试。' });
+    return;
+  }
+  if (err instanceof SyntaxError && 'body' in err) {
+    res.status(400).json({ error: '请求内容格式不正确，请刷新页面后重试。' });
+    return;
+  }
+  next(err);
+});
+
 const ALLOWED_UPLOAD_MIME_TYPES = new Set([
   'image/jpeg',
   'image/png',
@@ -15631,6 +15647,14 @@ app.get('/tenant-assets/:tenantId/:filename', (req, res) => {
 });
 
 app.use((err, _req, res, next) => {
+  if (err?.type === 'entity.too.large' || err?.status === 413) {
+    res.status(413).json({ error: '上传内容过大，请压缩图片、减少参考图数量后再试。' });
+    return;
+  }
+  if (err instanceof SyntaxError && 'body' in err) {
+    res.status(400).json({ error: '请求内容格式不正确，请刷新页面后重试。' });
+    return;
+  }
   if (err instanceof multer.MulterError) {
     const messages = {
       LIMIT_FILE_SIZE: '上传文件过大，请压缩后再试',

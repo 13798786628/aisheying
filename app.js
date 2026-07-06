@@ -935,6 +935,11 @@ let lastResources = [];
 let currentResourceCategory = 'images';
 const deletingResourceIds = new Set();
 const CHAT_REFERENCE_LIMIT = 6;
+const CHAT_REFERENCE_MAX_EDGE = 960;
+const CHAT_REFERENCE_QUALITY = 0.68;
+const CHAT_REFERENCE_MAX_BYTES = 1.6 * 1024 * 1024;
+const CHAT_REFERENCE_MAX_TOTAL_BYTES = 7.5 * 1024 * 1024;
+const CHAT_REQUEST_MAX_BODY_CHARS = 9 * 1024 * 1024;
 const EXTERNAL_IMPORT_MAINTENANCE = window.WEDSCENE_CONFIG?.externalImportMaintenance !== false;
 const EXTERNAL_IMPORT_MAINTENANCE_MESSAGE = String(
   window.WEDSCENE_CONFIG?.externalImportMaintenanceMessage
@@ -1442,8 +1447,14 @@ function isTransientPollingError(message = '') {
 
 function cleanErrorMessage(message = '') {
   const text = String(message || '').trim();
+  if (/Failed to fetch|Load failed|NetworkError|fetch failed|ECONNRESET|ERR_FAILED|ERR_NETWORK/i.test(text)) {
+    return '网络连接中断，或参考图过大导致请求没有发出。请刷新后重试，或重新上传较小的参考图。';
+  }
   if (/<!doctype\s+html|<html[\s>]|cloudflare|attention required|cf-error|sorry,\s*you have been blocked|ray id/i.test(text)) {
     return 'n1n.ai 接口被 Cloudflare 拦截，当前网络/IP/代理被上游拒绝访问。请换网络或代理、联系 n1n.ai 放行/更换可用 API 域名，或临时切回官方 OpenAI 接口。';
+  }
+  if (/request entity too large|payload too large|entity\.too\.large|HTTP\s*413/i.test(text)) {
+    return '参考图总大小过大，请删除几张或重新上传较小图片后再试。';
   }
   return text.replace(/\s+/g, ' ').slice(0, 260);
 }
@@ -1761,6 +1772,54 @@ function blobToFile(blob, sourceFile, extension = 'jpg') {
     type,
     lastModified: Date.now(),
   });
+}
+
+function estimateDataUrlBytes(dataUrl = '') {
+  const text = String(dataUrl || '');
+  const commaIndex = text.indexOf(',');
+  const payload = commaIndex >= 0 ? text.slice(commaIndex + 1) : text;
+  return Math.ceil(payload.length * 0.75);
+}
+
+function chatReferenceTotalBytes(images = []) {
+  return images.reduce((total, image) => total + estimateDataUrlBytes(image?.dataUrl || ''), 0);
+}
+
+function loadImageElementFromFile(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const image = new Image();
+    image.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(image);
+    };
+    image.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('图片读取失败'));
+    };
+    image.src = url;
+  });
+}
+
+async function compressImageFileWithCanvas(file, options = {}) {
+  if (!/^image\/(jpeg|jpg|png|webp)$/i.test(file?.type || '')) return file;
+  const image = await loadImageElementFromFile(file);
+  const maxWidth = options.maxWidth || CHAT_REFERENCE_MAX_EDGE;
+  const maxHeight = options.maxHeight || CHAT_REFERENCE_MAX_EDGE;
+  const scale = Math.min(1, maxWidth / Math.max(1, image.naturalWidth || image.width), maxHeight / Math.max(1, image.naturalHeight || image.height));
+  const width = Math.max(1, Math.round((image.naturalWidth || image.width) * scale));
+  const height = Math.max(1, Math.round((image.naturalHeight || image.height) * scale));
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return file;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, width, height);
+  ctx.drawImage(image, 0, 0, width, height);
+  const quality = options.quality || CHAT_REFERENCE_QUALITY;
+  const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', quality));
+  return blob ? blobToFile(blob, file, 'jpg') : file;
 }
 
 function compressImageFile(file, options = {}) {
@@ -5679,6 +5738,45 @@ function renderChatReferenceImages() {
   updateChatImageButtonText(chatSending);
 }
 
+async function prepareChatReferenceUpload(file) {
+  if (!validateSourceImageFile(file)) return null;
+  try {
+    let optimizedFile = await compressImageFile(file, {
+      allowCrop: false,
+      maxWidth: CHAT_REFERENCE_MAX_EDGE,
+      maxHeight: CHAT_REFERENCE_MAX_EDGE,
+      quality: CHAT_REFERENCE_QUALITY,
+      mimeType: 'image/jpeg',
+    });
+    if (optimizedFile.size > CHAT_REFERENCE_MAX_BYTES || optimizedFile === file) {
+      optimizedFile = await compressImageFileWithCanvas(optimizedFile, {
+        maxWidth: CHAT_REFERENCE_MAX_EDGE,
+        maxHeight: CHAT_REFERENCE_MAX_EDGE,
+        quality: CHAT_REFERENCE_QUALITY,
+      });
+    }
+    if (optimizedFile.size > CHAT_REFERENCE_MAX_BYTES) {
+      optimizedFile = await compressImageFileWithCanvas(optimizedFile, {
+        maxWidth: 760,
+        maxHeight: 760,
+        quality: 0.62,
+      });
+    }
+    const dataUrl = await readFileAsDataUrl(optimizedFile);
+    if (estimateDataUrlBytes(dataUrl) > CHAT_REFERENCE_MAX_BYTES * 1.15) {
+      showSaveNotice('这张参考图仍然偏大，请换一张更小的图片');
+      return null;
+    }
+    if (optimizedFile.size < file.size * 0.96) {
+      showSaveNotice(`参考图已压缩：${formatFileSize(file.size)} → ${formatFileSize(optimizedFile.size)}`);
+    }
+    return { file: optimizedFile, dataUrl };
+  } catch (error) {
+    alert(error.message || '参考图处理失败，请换一张图片重试');
+    return null;
+  }
+}
+
 async function handleChatReferenceFiles(fileList) {
   const slots = Math.max(0, CHAT_REFERENCE_LIMIT - chatReferenceImages.length);
   const files = Array.from(fileList || []).filter(Boolean).slice(0, slots);
@@ -5688,18 +5786,18 @@ async function handleChatReferenceFiles(fileList) {
   }
   chatStatus('正在处理参考图');
   for (const file of files) {
-    const prepared = await prepareImageUpload(file, {
-      allowCrop: false,
-      maxWidth: 1280,
-      maxHeight: 1280,
-      quality: 0.78,
-    });
+    const prepared = await prepareChatReferenceUpload(file);
     if (!prepared) continue;
-    chatReferenceImages.push({
+    const nextImage = {
       id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
       name: prepared.file?.name || file.name || '参考图',
       dataUrl: prepared.dataUrl,
-    });
+    };
+    if (chatReferenceTotalBytes([...chatReferenceImages, nextImage]) > CHAT_REFERENCE_MAX_TOTAL_BYTES) {
+      showSaveNotice('参考图总大小偏大，请先删除几张或换更小图片');
+      continue;
+    }
+    chatReferenceImages.push(nextImage);
   }
   if (els.chatReferenceInput) els.chatReferenceInput.value = '';
   renderChatReferenceImages();
@@ -5838,17 +5936,22 @@ async function sendChatMessage() {
   updateChatCostText(`正在消耗 ${requiredPoints} 灵感值`);
 
   try {
+    const payload = {
+      system: String(els.chatSystemInput?.value || '').trim(),
+      messages: chatPayloadMessages(),
+      images: imagesForRequest.map((image) => ({
+        name: image.name || '参考图',
+        dataUrl: image.dataUrl,
+      })),
+    };
+    const requestBody = JSON.stringify(payload);
+    if (requestBody.length > CHAT_REQUEST_MAX_BODY_CHARS) {
+      throw new Error('参考图总大小过大，请删除几张或重新上传较小图片后再试。');
+    }
     const response = await fetch(apiUrl('/api/chat'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        system: String(els.chatSystemInput?.value || '').trim(),
-        messages: chatPayloadMessages(),
-        images: imagesForRequest.map((image) => ({
-          name: image.name || '参考图',
-          dataUrl: image.dataUrl,
-        })),
-      }),
+      body: requestBody,
     });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
