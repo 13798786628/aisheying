@@ -5628,7 +5628,7 @@ function chatPointCostValue() {
 
 function updateChatCostText(text = '') {
   if (!els.chatUsageText) return;
-  els.chatUsageText.textContent = text || `${chatPointCostValue()} 灵感值 / 次`;
+  els.chatUsageText.textContent = text || '按最终结果自动结算';
 }
 
 function chatImagePointCostValue(hasReferences = false) {
@@ -5638,10 +5638,9 @@ function chatImagePointCostValue(hasReferences = false) {
 
 function updateChatImageButtonText(isGenerating = false) {
   if (!els.chatImageBtn) return;
-  const hasReferences = !!chatContextReferenceImages(chatReferenceImages).length;
   els.chatImageBtn.textContent = isGenerating
     ? '生成中...'
-    : `生成图片（${chatImagePointCostValue(hasReferences)} 灵感值）`;
+    : '生成图片';
 }
 
 function chatImageSource(image = {}) {
@@ -5890,7 +5889,7 @@ function setChatSending(isSending) {
   chatSending = isSending;
   if (els.chatSendBtn) {
     els.chatSendBtn.disabled = isSending;
-    els.chatSendBtn.textContent = isSending ? '回复中' : '发送';
+    els.chatSendBtn.textContent = isSending ? '处理中' : '发送';
   }
   if (els.chatImageBtn) {
     els.chatImageBtn.disabled = isSending;
@@ -5905,15 +5904,6 @@ function setChatSending(isSending) {
       button.disabled = isSending;
     });
   }
-}
-
-function formatChatUsage(usage = null) {
-  const total = Number(usage?.total_tokens || usage?.totalTokens || 0);
-  if (total > 0) return `tokens ${total}`;
-  const prompt = Number(usage?.prompt_tokens || 0);
-  const completion = Number(usage?.completion_tokens || 0);
-  if (prompt || completion) return `tokens ${prompt + completion}`;
-  return '';
 }
 
 async function sendChatMessage() {
@@ -5940,8 +5930,8 @@ async function sendChatMessage() {
 
   const requiredPoints = chatPointCostValue();
   if (accountRequired && Number(currentUser?.points || 0) < requiredPoints) {
-    chatStatus('灵感值不足，请先充值');
-    updateChatCostText(`需要 ${requiredPoints} 灵感值 / 次`);
+    chatStatus('余额不足，请先充值');
+    updateChatCostText('余额不足');
     showAuthNotice();
     return;
   }
@@ -5958,7 +5948,7 @@ async function sendChatMessage() {
   renderChatMessages();
   setChatSending(true);
   chatStatus('AI 正在回复');
-  updateChatCostText(`正在消耗 ${requiredPoints} 灵感值`);
+  updateChatCostText('正在生成回复');
 
   try {
     const payload = {
@@ -6009,9 +5999,7 @@ async function sendChatMessage() {
       content: answer || '模型没有返回内容，请换一种问法再试。',
       model: data.model || '',
     });
-    const chargedPointCost = Number(data.pointCost || requiredPoints || 1);
-    const usageText = formatChatUsage(data.usage);
-    updateChatCostText(`已消耗 ${chargedPointCost} 灵感值${usageText ? ` · ${usageText}` : ''}`);
+    updateChatCostText('回复完成');
     chatStatus('回复完成');
   } catch (error) {
     const message = cleanErrorMessage(error.message || '对话失败');
@@ -6057,14 +6045,14 @@ async function pollChatImageJob(jobId, messageId, pointCost, retry = 0) {
         ? job.result.images
         : partialImages;
       target.pending = false;
-      target.content = `图片已生成，已消耗 ${pointCost} 灵感值。`;
+      target.content = '图片已生成。';
       target.images = resultImages.map((image, index) => ({
         label: image.label || `生成图片 ${index + 1}`,
         url: image.url,
         downloadUrl: image.downloadUrl || image.url,
       }));
       chatStatus('图片已生成');
-      updateChatCostText(`已消耗 ${pointCost} 灵感值`);
+      updateChatCostText('图片已生成');
       renderChatMessages();
       setChatSending(false);
       return;
@@ -6132,12 +6120,12 @@ async function generateChatImage() {
   if (accountRequired && Number(currentUser?.points || 0) < requiredPoints) {
     chatMessages.push({
       role: 'assistant',
-      content: `灵感值不足：生成图片需要 ${requiredPoints} 灵感值，请先充值。`,
+      content: '余额不足，请先充值后继续生成。',
       error: true,
     });
     renderChatMessages();
-    chatStatus('灵感值不足，请先充值');
-    updateChatCostText(`生成图片需要 ${requiredPoints} 灵感值`);
+    chatStatus('余额不足，请先充值');
+    updateChatCostText('余额不足');
     showAuthNotice();
     return;
   }
@@ -6155,7 +6143,7 @@ async function generateChatImage() {
   renderChatMessages();
   setChatSending(true);
   chatStatus('正在生成图片');
-  updateChatCostText(`生成图片将消耗 ${requiredPoints} 灵感值`);
+  updateChatCostText('正在生成图片');
 
   try {
     const form = new FormData();
