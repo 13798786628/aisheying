@@ -3796,7 +3796,7 @@ function normalizeFreeImagePrompt(value = '') {
     .replace(/[\u0000-\u001f\u007f]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
-    .slice(0, 1600);
+    .slice(0, Number(process.env.FREE_IMAGE_PROMPT_MAX_LENGTH || 2800));
 }
 
 function normalizeFreeImageSize(value = '') {

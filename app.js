@@ -633,6 +633,7 @@ const els = {
   chatSystemInput: $('#chatSystemInput'),
   chatPromptInput: $('#chatPromptInput'),
   chatSendBtn: $('#chatSendBtn'),
+  chatImageBtn: $('#chatImageBtn'),
   chatClearBtn: $('#chatClearBtn'),
   chatCopyBtn: $('#chatCopyBtn'),
   chatQuickPrompts: $('#chatQuickPrompts'),
@@ -5571,6 +5572,79 @@ function updateChatCostText(text = '') {
   els.chatUsageText.textContent = text || `${chatPointCostValue()} 灵感值 / 次`;
 }
 
+function chatImagePointCostValue(hasReferences = false) {
+  const mode = hasReferences ? 'free_image_image' : 'free_text_image';
+  return Math.max(1, Number(pointCosts.byMode?.[mode] || pointCosts.freeImage || 10));
+}
+
+function updateChatImageButtonText(isGenerating = false) {
+  if (!els.chatImageBtn) return;
+  const hasReferences = !!chatContextReferenceImages(chatReferenceImages).length;
+  els.chatImageBtn.textContent = isGenerating
+    ? '生成中...'
+    : `生成图片（${chatImagePointCostValue(hasReferences)} 灵感值）`;
+}
+
+function chatImageSource(image = {}) {
+  return image.url || image.dataUrl || '';
+}
+
+function chatImageName(image = {}, index = 0) {
+  return image.label || image.name || `生成图片 ${index + 1}`;
+}
+
+function chatContextReferenceImages(extraImages = []) {
+  const refs = [];
+  const seen = new Set();
+  const pushImage = (image = {}) => {
+    const dataUrl = String(image.dataUrl || '').trim();
+    if (!dataUrl || seen.has(dataUrl)) return;
+    seen.add(dataUrl);
+    refs.push({
+      id: image.id || `${Date.now()}-${refs.length}`,
+      name: image.name || `参考图 ${refs.length + 1}`,
+      dataUrl,
+    });
+  };
+  chatMessages.slice(-12).forEach((message) => {
+    if (!Array.isArray(message.images)) return;
+    message.images.forEach(pushImage);
+  });
+  extraImages.forEach(pushImage);
+  return refs.slice(-CHAT_REFERENCE_LIMIT);
+}
+
+function buildChatImagePrompt(currentInstruction = '', referenceCount = 0) {
+  const context = chatMessages
+    .filter((message) => !message.error && (message.role === 'user' || message.role === 'assistant') && String(message.content || '').trim())
+    .slice(-14)
+    .map((message) => `${message.role === 'user' ? '用户' : '助手'}：${String(message.content || '').trim()}`)
+    .join('\n');
+  const latest = String(currentInstruction || '').trim() || '请根据当前对话上下文生成一张婚礼视觉图片。';
+  return [
+    '请根据以下对话上下文，生成一张可直接用于婚礼方案沟通的高质量图片。',
+    '优先遵循最后一条用户要求；如果上下文里有风格、颜色、场地、花艺、灯光、材质、机位或修改意见，请合并成一个清晰画面。',
+    referenceCount ? `同时参考随请求附带的 ${referenceCount} 张参考图，保持其重要视觉锚点、空间关系、材质和风格方向。` : '',
+    `本次生成要求：${latest}`,
+    '画面要求：真实、完整、商业可用、高级婚礼审美、空间逻辑可信，不要水印、不要界面、不要随机文字、不要乱码。',
+    context ? `对话上下文：\n${context}` : '',
+  ].filter(Boolean).join('\n').slice(0, 2800);
+}
+
+function dataUrlToChatFile(dataUrl = '', name = 'reference.jpg') {
+  const match = /^data:([^;,]+);base64,(.+)$/i.exec(String(dataUrl || '').trim());
+  if (!match) return null;
+  const mime = match[1] || 'image/jpeg';
+  const binary = atob(match[2].replace(/\s+/g, ''));
+  const bytes = new Uint8Array(binary.length);
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+  const extension = mime.includes('png') ? 'png' : (mime.includes('webp') ? 'webp' : 'jpg');
+  const safeName = String(name || `reference.${extension}`).replace(/[^\w.-]+/g, '-').replace(/^-+|-+$/g, '') || `reference.${extension}`;
+  return new File([bytes], safeName.includes('.') ? safeName : `${safeName}.${extension}`, { type: mime });
+}
+
 function fitChatPromptInput() {
   if (!els.chatPromptInput) return;
   els.chatPromptInput.style.height = 'auto';
@@ -5590,6 +5664,7 @@ function renderChatReferenceImages() {
       ? `已添加 ${chatReferenceImages.length}/${CHAT_REFERENCE_LIMIT} 张参考图，发送后自动清空。`
       : `可一次上传多张参考图，最多 ${CHAT_REFERENCE_LIMIT} 张。`;
   }
+  updateChatImageButtonText(chatSending);
 }
 
 async function handleChatReferenceFiles(fileList) {
@@ -5647,11 +5722,18 @@ function renderChatMessages() {
     const role = message.role === 'user' ? 'user' : 'assistant';
     const roleLabel = role === 'user' ? 'You' : 'AI 助手';
     const errorClass = message.error ? ' error' : '';
+    const pendingClass = message.pending ? ' pending' : '';
     const images = Array.isArray(message.images) && message.images.length
-      ? `<div class="chat-message-images">${message.images.map((image) => `<img src="${escapeHtml(image.dataUrl)}" alt="${escapeHtml(image.name || '参考图')}" />`).join('')}</div>`
+      ? `<div class="chat-message-images">${message.images.map((image, index) => {
+        const src = chatImageSource(image);
+        if (!src) return '';
+        const label = chatImageName(image, index);
+        const download = image.downloadUrl || image.url || '';
+        return `<figure><img src="${escapeHtml(src)}" alt="${escapeHtml(label)}" />${download ? `<a href="${escapeHtml(download)}" target="_blank" rel="noreferrer">下载</a>` : ''}</figure>`;
+      }).join('')}</div>`
       : '';
     return `
-      <div class="chat-message ${role}${errorClass}">
+      <div class="chat-message ${role}${errorClass}${pendingClass}">
         <span class="chat-role">${roleLabel}</span>${escapeHtml(message.content || '')}${images}
       </div>
     `;
@@ -5674,6 +5756,10 @@ function setChatSending(isSending) {
   if (els.chatSendBtn) {
     els.chatSendBtn.disabled = isSending;
     els.chatSendBtn.textContent = isSending ? '回复中' : '发送';
+  }
+  if (els.chatImageBtn) {
+    els.chatImageBtn.disabled = isSending;
+    updateChatImageButtonText(isSending);
   }
   if (els.chatPromptInput) els.chatPromptInput.disabled = isSending;
   if (els.chatClearBtn) els.chatClearBtn.disabled = isSending;
@@ -5783,6 +5869,178 @@ async function sendChatMessage() {
     renderChatMessages();
     setChatSending(false);
     els.chatPromptInput?.focus();
+  }
+}
+
+async function pollChatImageJob(jobId, messageId, pointCost, retry = 0) {
+  try {
+    const response = await fetch(apiUrl(`/api/jobs/${jobId}`), { cache: 'no-store' });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const job = await response.json();
+    if (job.user) {
+      currentUser = job.user;
+      updateAccountUI();
+    }
+    const target = chatMessages.find((message) => message.id === messageId);
+    if (!target) {
+      setChatSending(false);
+      return;
+    }
+    const partialImages = Array.isArray(job.partialImages) ? job.partialImages : [];
+    if (partialImages.length) {
+      target.images = partialImages.map((image, index) => ({
+        label: image.label || `生成图片 ${index + 1}`,
+        url: image.url,
+        downloadUrl: image.downloadUrl || image.url,
+      }));
+    }
+
+    if (job.status === 'completed') {
+      const resultImages = Array.isArray(job.result?.images) && job.result.images.length
+        ? job.result.images
+        : partialImages;
+      target.pending = false;
+      target.content = `图片已生成，已消耗 ${pointCost} 灵感值。`;
+      target.images = resultImages.map((image, index) => ({
+        label: image.label || `生成图片 ${index + 1}`,
+        url: image.url,
+        downloadUrl: image.downloadUrl || image.url,
+      }));
+      chatStatus('图片已生成');
+      updateChatCostText(`已消耗 ${pointCost} 灵感值`);
+      renderChatMessages();
+      setChatSending(false);
+      return;
+    }
+
+    if (job.status === 'failed' || job.status === 'cancelled') {
+      target.pending = false;
+      target.error = true;
+      target.content = `图片生成失败：${cleanErrorMessage(job.error || '请稍后重试')}`;
+      chatStatus('图片生成失败');
+      updateChatCostText();
+      renderChatMessages();
+      setChatSending(false);
+      return;
+    }
+
+    target.content = job.stage || '正在根据对话上下文生成图片...';
+    renderChatMessages();
+    window.setTimeout(() => pollChatImageJob(jobId, messageId, pointCost, 0), 2500);
+  } catch (error) {
+    if (retry < 5) {
+      window.setTimeout(() => pollChatImageJob(jobId, messageId, pointCost, retry + 1), 1800 + retry * 800);
+      return;
+    }
+    const target = chatMessages.find((message) => message.id === messageId);
+    if (target) {
+      target.pending = false;
+      target.error = true;
+      target.content = `图片生成状态读取失败：${cleanErrorMessage(error.message || '网络异常')}`;
+      renderChatMessages();
+    }
+    chatStatus('图片生成失败');
+    updateChatCostText();
+    setChatSending(false);
+  }
+}
+
+async function generateChatImage() {
+  if (!els.chatPromptInput || chatSending) return;
+  if (!accessGranted) {
+    showAccessGate('请先输入公测访问码');
+    return;
+  }
+  if (accountRequired && !currentUser) {
+    showAuthNotice();
+    return;
+  }
+
+  const currentInstruction = String(els.chatPromptInput.value || '').replace(/\s+$/g, '');
+  const currentImages = chatReferenceImages.map((image) => ({ ...image }));
+  if (!currentInstruction.trim() && !currentImages.length && !chatMessages.length) {
+    els.chatPromptInput.focus();
+    return;
+  }
+
+  const previewText = currentInstruction.trim() || '请根据当前对话上下文生成一张图片。';
+  chatMessages.push({
+    role: 'user',
+    content: `生成图片：${previewText}`,
+    images: currentImages,
+  });
+  const references = chatContextReferenceImages(currentImages);
+  const hasReferences = references.length > 0;
+  const requiredPoints = chatImagePointCostValue(hasReferences);
+  if (accountRequired && Number(currentUser?.points || 0) < requiredPoints) {
+    chatMessages.push({
+      role: 'assistant',
+      content: `灵感值不足：生成图片需要 ${requiredPoints} 灵感值，请先充值。`,
+      error: true,
+    });
+    renderChatMessages();
+    chatStatus('灵感值不足，请先充值');
+    updateChatCostText(`生成图片需要 ${requiredPoints} 灵感值`);
+    showAuthNotice();
+    return;
+  }
+
+  els.chatPromptInput.value = '';
+  clearChatReferenceImages();
+  fitChatPromptInput();
+  const assistantMessageId = `chat-image-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  chatMessages.push({
+    id: assistantMessageId,
+    role: 'assistant',
+    content: '正在根据对话上下文生成图片...',
+    pending: true,
+  });
+  renderChatMessages();
+  setChatSending(true);
+  chatStatus('正在生成图片');
+  updateChatCostText(`生成图片将消耗 ${requiredPoints} 灵感值`);
+
+  try {
+    const form = new FormData();
+    form.append('mode', hasReferences ? 'free_image_image' : 'free_text_image');
+    form.append('prompt', buildChatImagePrompt(currentInstruction, references.length));
+    form.append('image_size', '1536x1024');
+    form.append('quality', 'high');
+    form.append('output_format', 'jpeg');
+    form.append('count', '1');
+    references.forEach((image, index) => {
+      const file = dataUrlToChatFile(image.dataUrl, image.name || `reference-${index + 1}.jpg`);
+      if (file) form.append('reference_images', file);
+    });
+    const response = await fetch(apiUrl('/api/jobs'), {
+      method: 'POST',
+      body: form,
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      if (data.accountRequired) showAuthNotice();
+      if (data.user) {
+        currentUser = data.user;
+        updateAccountUI();
+      }
+      throw new Error(data.error || `HTTP ${response.status}`);
+    }
+    if (data.user) {
+      currentUser = data.user;
+      updateAccountUI();
+    }
+    pollChatImageJob(data.id, assistantMessageId, Number(data.pointCost || requiredPoints));
+  } catch (error) {
+    const target = chatMessages.find((message) => message.id === assistantMessageId);
+    if (target) {
+      target.pending = false;
+      target.error = true;
+      target.content = `图片生成失败：${cleanErrorMessage(error.message || '请稍后重试')}`;
+    }
+    chatStatus('图片生成失败');
+    updateChatCostText();
+    renderChatMessages();
+    setChatSending(false);
   }
 }
 
@@ -9267,6 +9525,7 @@ function bindEvents() {
   els.copyRestartBtn?.addEventListener('click', handleCopyRestartClick);
   els.copyPageCopyBtn?.addEventListener('click', copyPageText);
   els.chatSendBtn?.addEventListener('click', sendChatMessage);
+  els.chatImageBtn?.addEventListener('click', generateChatImage);
   els.chatClearBtn?.addEventListener('click', clearChatMessages);
   els.chatCopyBtn?.addEventListener('click', copyLastChatAnswer);
   els.chatPromptInput?.addEventListener('input', fitChatPromptInput);
