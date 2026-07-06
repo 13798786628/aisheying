@@ -5673,13 +5673,37 @@ function chatContextReferenceImages(extraImages = []) {
   return refs.slice(-CHAT_REFERENCE_LIMIT);
 }
 
+function chatImageLooksLikeStoryboardRequest(text = '') {
+  return /(故事板|分镜|storyboard|镜头板|脚本图|视频画面|每张图|每张图片|连续画面|四宫格|六宫格|九宫格)/i.test(String(text || ''));
+}
+
+function buildChatImageVisualGuard(latest = '', referenceCount = 0) {
+  const storyboard = chatImageLooksLikeStoryboardRequest(latest);
+  const rules = [
+    '硬性视觉规则：最终输出必须是可直接看的婚礼视觉图片，不要生成说明页、表格页、时间轴页、教程页、PPT页或带文字的信息图。',
+    '绝对不要把对话里的脚本、字幕、旁白、时间码、镜头说明、中文文案、英文文案、logo、水印、UI、二维码画进图片里。',
+    '除非用户明确要求出现讲解员、主持人或模特，否则不要新增站在画面前介绍的真人；如果参考图没有人物，不要凭空加入人物。',
+    referenceCount ? '参考图只用于保持婚礼场景、色系、空间、布幔、花艺、灯光和材质，不要复制参考图里的社媒界面、边框、水印或文字。' : '',
+  ];
+  if (storyboard) {
+    rules.push(
+      '故事板/分镜请求的处理方式：可以生成一张由 4-6 个真实电影画面组成的干净分镜拼图，但每一格都只能是画面本身。',
+      '分镜里不要出现左侧时间栏、表格线、标题栏、字幕栏、说明文字或大块色块；如需分隔画面，只能用很细的留白或自然边界。',
+      '所有分镜画面必须保持同一个婚礼场地、同一套绿色森林系布置、同一色调、同一光线方向和一致的镜头质感。',
+      '如果画面中确实需要人物，人物的脸、发型、服装、身高比例和气质必须前后一致；如果不是必须，不要新增人物。'
+    );
+  }
+  return rules.filter(Boolean).join('\n');
+}
+
 function buildChatImagePrompt(currentInstruction = '', referenceCount = 0) {
   const context = chatMessages
     .filter((message) => !message.error && (message.role === 'user' || message.role === 'assistant') && String(message.content || '').trim())
     .slice(-14)
     .map((message) => `${message.role === 'user' ? '用户' : '助手'}：${String(message.content || '').trim()}`)
-    .join('\n');
-  const latest = String(currentInstruction || '').trim() || '请根据当前对话上下文生成一张婚礼视觉图片。';
+    .join('\n')
+    .slice(0, 1200);
+  const latest = (String(currentInstruction || '').trim() || '请根据当前对话上下文生成一张婚礼视觉图片。').slice(0, 700);
   return [
     '请根据以下对话上下文，生成一张可直接用于婚礼方案沟通的高质量图片。',
     '优先遵循最后一条用户要求；如果上下文里有风格、颜色、场地、花艺、灯光、材质、机位或修改意见，请合并成一个清晰画面。',
@@ -5687,6 +5711,7 @@ function buildChatImagePrompt(currentInstruction = '', referenceCount = 0) {
     `本次生成要求：${latest}`,
     '画面要求：真实、完整、商业可用、高级婚礼审美、空间逻辑可信，不要水印、不要界面、不要随机文字、不要乱码。',
     context ? `对话上下文：\n${context}` : '',
+    buildChatImageVisualGuard(`${latest}\n${context}`, referenceCount),
   ].filter(Boolean).join('\n').slice(0, 2800);
 }
 
